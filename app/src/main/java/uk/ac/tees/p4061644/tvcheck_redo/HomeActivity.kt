@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx
 import uk.ac.tees.p4061644.tvcheck_redo.utils.AsyncTasker
 import uk.ac.tees.p4061644.tvcheck_redo.utils.BottomNavigationBarHelper
@@ -16,6 +17,7 @@ class HomeActivity : Activity(){
 	private var TAG: String = "HomeActivity"
 	private val activity_Num: Int = 0
 
+
 	//private var db: DatabaseManager = DatabaseManager();
 
 
@@ -25,6 +27,7 @@ class HomeActivity : Activity(){
 		setContentView(R.layout.activity_home)
 		navbar = findViewById(R.id.bottomNavViewBar) as BottomNavigationViewEx
 		setupBottomnavigatioView()
+
 	}
 
 	private fun setupBottomnavigatioView(){

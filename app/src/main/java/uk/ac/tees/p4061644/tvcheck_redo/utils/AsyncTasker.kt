@@ -10,45 +10,49 @@ import com.omertron.themoviedbapi.model.tv.TVSeasonInfo
 import com.omertron.themoviedbapi.results.ResultList
 import uk.ac.tees.p4061644.tvcheck_redo.models.Show
 import android.provider.Settings.Global.getString
+import android.util.Log
 import uk.ac.tees.p4061644.tvcheck_redo.R
 
 
 /**
  * Created by Craig on 01/02/2018.
  */
+
 class AsyncTasker {
 
 	private val api: TheMovieDbApi = TheMovieDbApi("484e1ff4932e21df205102c405aaf440")
-	private var list: ResultList<TVBasic>? = null
+	private var list: List<TVBasic>? = null
 	private var show: TVInfo? = null
 	private var season: TVSeasonInfo? = null
 	private var episode: TVEpisodeInfo? = null
 	private var showModel: Show? = null
 
-	fun searchShows(search: String){
+	fun searchShows(search: String): List<TVBasic>? {
 		reset()
-		searchShowsTask(search).execute()
+		setList(searchShowsTask(search).execute().get())
+		Log.d("ListCheck1", list.toString())
+		return list
 	}
 
 	fun getShow(id : Int): TVInfo {
 		show = null
-		getShowTask(id).execute()
+		setShow(getShowTask(id).execute().get())
 		return show!!
 	}
 
-	fun getSeason(id: Int): TVSeasonInfo {
+	fun getSeason(num: Int): TVSeasonInfo {
 		season = null
-		getSeasonTask(id).execute()
+		setSeason(getSeasonTask(num).execute().get())
 		return season!!
 	}
 
 	fun getEpisode(EpNum: Int?): TVEpisodeInfo {
 		episode = null
-		getEpisodeTask(EpNum).execute()
+		setEpisode(getEpisodeTask(EpNum).execute().get())
 		return episode!!
 	}
 
-	private fun setList(list: ResultList<TVBasic>?){
+	private fun setList(list: List<TVBasic>?){
 		this.list = list
 	}
 
@@ -63,8 +67,6 @@ class AsyncTasker {
 	private fun setEpisode(episodeInfo: TVEpisodeInfo){
 		this.episode = episodeInfo
 	}
-
-
 	fun reset(){
 		list = null
 		show = null
@@ -73,49 +75,41 @@ class AsyncTasker {
 		showModel = null
 	}
 
-	internal inner class searchShowsTask constructor(search:String) : AsyncTask<Void, Void, ResultList<TVBasic>>() {
+
+	internal inner class searchShowsTask constructor(search:String) : AsyncTask<Void, Void, List<TVBasic>>() {
 		private var api: TheMovieDbApi? = this@AsyncTasker.api
-		var list : ResultList<TVBasic>? = null
-
-
 		var term: String? = null
-
 		init{
 			term = search
 		}
-
-		override fun doInBackground(vararg voids: Void): ResultList<TVBasic>? {
-			list = api!!.searchTV(term,1,"en",1950, SearchType.PHRASE)
-
-			return list
+		override fun doInBackground(vararg voids: Void): List<TVBasic> {
+			var list: List<TVBasic> = api!!.searchTV(term,1,"en",null, SearchType.PHRASE).results
+			return list!!
 		}
 
-		override fun onPostExecute(result: ResultList<TVBasic>?) {
+		override fun onPostExecute(result: List<TVBasic>?) {
 			super.onPostExecute(result)
-			this@AsyncTasker.setList(result)
 		}
 	}
 
-	internal inner class getShowTask constructor(id: Int) : AsyncTask<Void, Void, TVInfo>() {
+	internal inner class getShowTask constructor(TVid: Int) : AsyncTask<Void, Void, TVInfo>() {
 		private var api:  TheMovieDbApi? = this@AsyncTasker.api
 		var info : TVInfo? = null
 
-		var id: Int? = null
+		var TVid: Int? = null
 
 		init{
-			this.id = id
+			this.TVid = TVid
 		}
 
 		override fun doInBackground(vararg voids: Void): TVInfo? {
-			info = api!!.getTVInfo(id!!,"en")
+			info = api!!.getTVInfo(TVid!!,"en")
 
 			return info
 		}
 
 		override fun onPostExecute(result: TVInfo) {
 			super.onPostExecute(result)
-			this@AsyncTasker.setShow(result)
-
 		}
 	}
 
@@ -136,8 +130,6 @@ class AsyncTasker {
 
 		override fun onPostExecute(result: TVSeasonInfo) {
 			super.onPostExecute(result)
-			this@AsyncTasker.setSeason(result)
-
 		}
 	}
 
@@ -152,14 +144,12 @@ class AsyncTasker {
 		}
 
 		override fun doInBackground(vararg voids: Void): TVEpisodeInfo? {
-			info = api!!.getEpisodeInfo(show!!.id,season!!.id,epNum!!,"en")
+			info = api!!.getEpisodeInfo(show!!.id,season!!.seasonNumber,epNum!!,"en")
 			return info
 		}
 
 		override fun onPostExecute(result: TVEpisodeInfo) {
 			super.onPostExecute(result)
-			this@AsyncTasker.setEpisode(result)
-
 		}
 	}
 
