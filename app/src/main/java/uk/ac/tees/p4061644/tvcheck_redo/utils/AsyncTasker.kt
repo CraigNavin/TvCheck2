@@ -40,15 +40,15 @@ class AsyncTasker {
 		return show!!
 	}
 
-	fun getSeason(num: Int): TVSeasonInfo {
-		season = null
-		setSeason(getSeasonTask(num).execute().get())
+	fun getSeason(num: Int, TVid: Int): TVSeasonInfo {
+
+		setSeason(getSeasonTask(num,TVid).execute().get())
 		return season!!
 	}
 
-	fun getEpisode(EpNum: Int?): TVEpisodeInfo {
+	fun getEpisode(EpNum: Int,TVid: Int,seasonNum: Int): TVEpisodeInfo {
 		episode = null
-		setEpisode(getEpisodeTask(EpNum).execute().get())
+		setEpisode(getEpisodeTask(EpNum,seasonNum,TVid).execute().get())
 		return episode!!
 	}
 
@@ -113,18 +113,20 @@ class AsyncTasker {
 		}
 	}
 
-	internal inner class getSeasonTask constructor(seasonNum: Int?) : AsyncTask<Void, Void, TVSeasonInfo>() {
+	internal inner class getSeasonTask constructor(seasonNum: Int, TVid: Int) : AsyncTask<Void, Void, TVSeasonInfo>() {
 		private var api:  TheMovieDbApi? = this@AsyncTasker.api
 		var info : TVSeasonInfo? = null
 
 		var seasonNum: Int? = null
+		var TVid: Int? = null
 
 		init{
 			this.seasonNum = seasonNum
+			this.TVid = TVid
 		}
 
 		override fun doInBackground(vararg voids: Void): TVSeasonInfo? {
-			info = api!!.getSeasonInfo(show!!.id,seasonNum!!,"en")
+			info = api!!.getSeasonInfo(TVid!!,seasonNum!!,"en")
 			return info
 		}
 
@@ -133,18 +135,22 @@ class AsyncTasker {
 		}
 	}
 
-	internal inner class getEpisodeTask constructor(epNum: Int?) : AsyncTask<Void, Void, TVEpisodeInfo>() {
+	internal inner class getEpisodeTask constructor(epNum: Int,seasonNum: Int,TVid: Int) : AsyncTask<Void, Void, TVEpisodeInfo>() {
 		private var api:  TheMovieDbApi? = this@AsyncTasker.api
 		var info : TVEpisodeInfo? = null
 
 		var epNum: Int? = null
+		var seasonNum: Int? = null
+		var TVid: Int? = null
 
 		init{
 			this.epNum = epNum
+			this.seasonNum = seasonNum
+			this.TVid = TVid
 		}
 
 		override fun doInBackground(vararg voids: Void): TVEpisodeInfo? {
-			info = api!!.getEpisodeInfo(show!!.id,season!!.seasonNumber,epNum!!,"en")
+			info = api!!.getEpisodeInfo(TVid!!,seasonNum!!,epNum!!,"en")
 			return info
 		}
 

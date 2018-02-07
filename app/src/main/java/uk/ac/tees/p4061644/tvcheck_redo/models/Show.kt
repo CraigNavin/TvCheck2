@@ -6,5 +6,5 @@ import com.omertron.themoviedbapi.model.artwork.Artwork
 /**
  * Created by Craig on 01/02/2018.
  */
-data class Show (val name: String, val overview: String, val seasons: ArrayList<Season>?, val images: List<Artwork>?,val PosterPath : String, override var watched: Boolean): Watched{
+data class Show (val id: Int, val name: String, val overview: String, val seasons: ArrayList<Season>?, val images: List<Artwork>?,val PosterPath : String?, override var watched: Boolean): Watched{
 }

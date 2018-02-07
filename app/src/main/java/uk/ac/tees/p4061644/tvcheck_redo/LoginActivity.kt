@@ -43,19 +43,21 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 		findViewById(R.id.Login_TVsignUp).setOnClickListener(this)
 		findViewById(R.id.Login_Btn).setOnClickListener(this)
 
-		var rl: List<TVBasic>? = Async.searchShows("marvel")
+		var rl: List<TVBasic>? = Async.searchShows("how i met")
 		var con : Converter = Converter()
-		var show1: TVInfo? = Async.getShow(rl!![3].id)
-		var season: TVSeasonInfo? = Async.getSeason(show1!!.seasons[0].seasonNumber)
-		var episode: TVEpisodeInfo? = Async.getEpisode(3)
+		var show1: TVInfo? = Async.getShow(rl!![0].id)
+		var season: TVSeasonInfo? = Async.getSeason(show1!!.seasons[8].seasonNumber,show1.id)
+		var episode: TVEpisodeInfo? = Async.getEpisode(0,show1.id,season!!.seasonNumber)
+		Log.d("SHOW",show1.toString())
+		Log.d("SEASON",season.toString())
+		Log.d("EPISODE",episode.toString())
 
 		var conShow: Show = con.convert(show1)
-		var conSeason: Season = con.convert(season!!)
-		var conEpisode: Episode = con.convert(episode!!)
+		var conSeason: Season = con.convert(season,show1.id)
 
 		Log.d("CONVERSION",conShow.toString())
 		Log.d("CONVERSION",conSeason.toString())
-        Log.d("CONVERSION",conEpisode.toString())
+        //Log.d("CONVERSION",conEpisode.toString())
 	}
 
 	private fun login() {

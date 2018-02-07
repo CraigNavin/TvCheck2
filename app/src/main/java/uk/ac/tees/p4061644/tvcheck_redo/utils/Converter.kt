@@ -1,5 +1,6 @@
 package uk.ac.tees.p4061644.tvcheck_redo.utils
 
+import android.util.Log
 import com.omertron.themoviedbapi.model.tv.*
 import uk.ac.tees.p4061644.tvcheck_redo.models.Episode
 import uk.ac.tees.p4061644.tvcheck_redo.models.Season
@@ -14,23 +15,35 @@ class Converter {
 
 	fun convert(TVInfo: TVInfo): Show{
 		var seasonList: ArrayList<Season> = ArrayList()
-
-		for (s in TVInfo.seasons){
-			seasonList.add(convert(s!!))
+		if(TVInfo.seasons.size != 0){
+			for (s in TVInfo.seasons){
+				seasonList.add(convert(s!!,TVInfo.id))
+				Log.d("SEASON ADDED","Season:" + s.seasonNumber.toString() + " Added")
+			}
 		}
 
-		return Show(TVInfo.name,TVInfo.overview, null,
+		return Show(TVInfo.id,TVInfo.name,TVInfo.overview, seasonList,
 				TVInfo.images,TVInfo.posterPath,false)
 	}
 
-	fun convert(TVSeason: TVSeasonBasic): Season{
-		var TVSeasonInfo = tasker.getSeason(TVSeason.seasonNumber)
+	fun convert(TVSeason: TVSeasonBasic,TVid: Int): Season{
+
+
+		var TVSeasonInfo = tasker.getSeason(TVSeason.seasonNumber,TVid)
+
 		var episodeList: ArrayList<Episode> = ArrayList()
-		for (e in TVSeasonInfo.episodes){
-			episodeList.add(convert(e))
+		if (TVSeasonInfo.episodes != null){
+			if (TVSeasonInfo.episodes.size != 0){
+
+				for (e in TVSeasonInfo.episodes){
+
+					episodeList.add(convert(e))
+				}
+			}
 		}
 
-		return Season(TVSeasonInfo.overview,episodeList,
+
+		return Season(TVSeasonInfo.overview,episodeList, TVSeasonInfo.seasonNumber,
 				TVSeasonInfo.images,TVSeasonInfo.posterPath,false)
 
 	}
@@ -38,8 +51,7 @@ class Converter {
 	fun convert(TVEpisodeInfo: TVEpisodeInfo):Episode{
 
 		return Episode(TVEpisodeInfo.name,TVEpisodeInfo.seasonNumber,TVEpisodeInfo.episodeNumber,
-				TVEpisodeInfo.images,TVEpisodeInfo.posterPath,false)
-
+					TVEpisodeInfo.images,TVEpisodeInfo.posterPath,false)
 	}
 
 /*	fun fullConvert(TVInfo: TVInfo): Show{
