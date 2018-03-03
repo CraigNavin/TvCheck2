@@ -1,9 +1,8 @@
 package uk.ac.tees.p4061644.tvcheck_redo
 
 import android.content.Intent
-import android.os.AsyncTask
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.util.Patterns
 import android.view.View
@@ -12,13 +11,7 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
-import com.omertron.themoviedbapi.model.tv.*
-import com.omertron.themoviedbapi.results.ResultList
-import uk.ac.tees.p4061644.tvcheck_redo.models.Episode
-import uk.ac.tees.p4061644.tvcheck_redo.models.Season
-import uk.ac.tees.p4061644.tvcheck_redo.models.Show
-import uk.ac.tees.p4061644.tvcheck_redo.utils.AsyncTasker
-import uk.ac.tees.p4061644.tvcheck_redo.utils.Converter
+import uk.ac.tees.p4061644.tvcheck_redo.utils.DatabaseHandler
 
 
 class LoginActivity : AppCompatActivity(), View.OnClickListener {
@@ -27,7 +20,8 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 	var editTextPassword: EditText? = null
 	var progressBar: ProgressBar? = null
 	private var mAuth: FirebaseAuth? = null
-	private val Async : AsyncTasker = AsyncTasker()
+
+
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -42,22 +36,10 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 		editTextEmail!!.requestFocus()
 		findViewById(R.id.Login_TVsignUp).setOnClickListener(this)
 		findViewById(R.id.Login_Btn).setOnClickListener(this)
+		Log.d("STRING CHECK", applicationContext.resources.getString(R.string.Api_key))
 
-		var rl: List<TVBasic>? = Async.searchShows("how i met")
-		var con : Converter = Converter()
-		var show1: TVInfo? = Async.getShow(rl!![0].id)
-		var season: TVSeasonInfo? = Async.getSeason(show1!!.seasons[8].seasonNumber,show1.id)
-		var episode: TVEpisodeInfo? = Async.getEpisode(0,show1.id,season!!.seasonNumber)
-		Log.d("SHOW",show1.toString())
-		Log.d("SEASON",season.toString())
-		Log.d("EPISODE",episode.toString())
 
-		var conShow: Show = con.convert(show1)
-		var conSeason: Season = con.convert(season,show1.id)
 
-		Log.d("CONVERSION",conShow.toString())
-		Log.d("CONVERSION",conSeason.toString())
-        //Log.d("CONVERSION",conEpisode.toString())
 	}
 
 	private fun login() {
@@ -85,7 +67,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 		progressBar!!.visibility = View.VISIBLE
 
 		mAuth!!.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
-			progressBar!!.visibility = View.GONE
+
 			if (task.isSuccessful) {
 				Toast.makeText(applicationContext, "Login Successful", Toast.LENGTH_SHORT).show()
 				val user = mAuth!!.currentUser
@@ -93,8 +75,10 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 				val i = Intent(baseContext, HomeActivity::class.java)
 				i.putExtra("UID", UID)
 				startActivity(i)
+				progressBar!!.visibility = View.GONE
 			}
 			else {
+				progressBar!!.visibility = View.GONE
 				Toast.makeText(applicationContext, "Authentication Failed", Toast.LENGTH_SHORT).show()
 			}
 		}

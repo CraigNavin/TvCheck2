@@ -1,5 +1,6 @@
 package uk.ac.tees.p4061644.tvcheck_redo.utils
 
+import android.content.Context
 import android.util.Log
 import com.omertron.themoviedbapi.model.tv.*
 import uk.ac.tees.p4061644.tvcheck_redo.models.Episode
@@ -9,9 +10,12 @@ import uk.ac.tees.p4061644.tvcheck_redo.models.Show
 /**
  * Created by Craig on 01/02/2018.
  */
-class Converter {
-	private val tasker: AsyncTasker = AsyncTasker()
+class Converter() {
+	private val tasker = AsyncTasker()
 
+	fun initapiCon(context: Context){
+		tasker.initApi(context)
+	}
 
 	fun convert(TVInfo: TVInfo): Show{
 		var seasonList: ArrayList<Season> = ArrayList()
@@ -22,14 +26,13 @@ class Converter {
 			}
 		}
 
-		return Show(TVInfo.id,TVInfo.name,TVInfo.overview, seasonList,
-				TVInfo.images,TVInfo.posterPath,false)
+		return Show(TVInfo.id,TVInfo.name,TVInfo.overview, seasonList,TVInfo.posterPath,false)
 	}
 
 	fun convert(TVSeason: TVSeasonBasic,TVid: Int): Season{
 
 
-		var TVSeasonInfo = tasker.getSeason(TVSeason.seasonNumber,TVid)
+		var TVSeasonInfo = tasker.getSeasonAsync(TVSeason.seasonNumber,TVid)
 
 		var episodeList: ArrayList<Episode> = ArrayList()
 		if (TVSeasonInfo.episodes != null){
@@ -44,14 +47,14 @@ class Converter {
 
 
 		return Season(TVSeasonInfo.overview,episodeList, TVSeasonInfo.seasonNumber,
-				TVSeasonInfo.images,TVSeasonInfo.posterPath,false)
+				TVSeasonInfo.posterPath,false)
 
 	}
 
 	fun convert(TVEpisodeInfo: TVEpisodeInfo):Episode{
 
-		return Episode(TVEpisodeInfo.name,TVEpisodeInfo.seasonNumber,TVEpisodeInfo.episodeNumber,
-					TVEpisodeInfo.images,TVEpisodeInfo.posterPath,false)
+		return Episode(TVEpisodeInfo.name,TVEpisodeInfo.seasonNumber,TVEpisodeInfo.overview, TVEpisodeInfo.episodeNumber
+				,TVEpisodeInfo.posterPath,false)
 	}
 
 /*	fun fullConvert(TVInfo: TVInfo): Show{
