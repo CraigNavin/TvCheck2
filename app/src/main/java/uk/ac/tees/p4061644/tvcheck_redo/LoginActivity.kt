@@ -3,7 +3,6 @@ package uk.ac.tees.p4061644.tvcheck_redo
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.util.Patterns
 import android.view.View
 import android.widget.EditText
@@ -11,6 +10,8 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
+import uk.ac.tees.p4061644.tvcheck_redo.models.ListModel
+import uk.ac.tees.p4061644.tvcheck_redo.models.User
 import uk.ac.tees.p4061644.tvcheck_redo.utils.DatabaseHandler
 
 
@@ -20,12 +21,15 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 	var editTextPassword: EditText? = null
 	var progressBar: ProgressBar? = null
 	private var mAuth: FirebaseAuth? = null
+	private var dbh: DatabaseHandler? = null
 
 
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_login)
+
+		dbh = DatabaseHandler(applicationContext)
 
 		editTextEmail = findViewById(R.id.Login_email) as EditText
 		editTextPassword= findViewById(R.id.Login_Pass) as EditText
@@ -36,10 +40,6 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 		editTextEmail!!.requestFocus()
 		findViewById(R.id.Login_TVsignUp).setOnClickListener(this)
 		findViewById(R.id.Login_Btn).setOnClickListener(this)
-		Log.d("STRING CHECK", applicationContext.resources.getString(R.string.Api_key))
-
-
-
 	}
 
 	private fun login() {
@@ -71,9 +71,8 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 			if (task.isSuccessful) {
 				Toast.makeText(applicationContext, "Login Successful", Toast.LENGTH_SHORT).show()
 				val user = mAuth!!.currentUser
-				val UID = user!!.uid
 				val i = Intent(baseContext, HomeActivity::class.java)
-				i.putExtra("UID", UID)
+				i.putExtra("UID", user!!.uid)
 				startActivity(i)
 				progressBar!!.visibility = View.GONE
 			}

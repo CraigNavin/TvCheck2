@@ -20,7 +20,7 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener {
 	internal var editTextPasswordConfirm: EditText? = null
 	internal var progressBar: ProgressBar? = null
 	private var mAuth: FirebaseAuth? = null
-	private var dbh : DatabaseHandler = DatabaseHandler()
+	private var dbh : DatabaseHandler? = null
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -32,6 +32,7 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener {
 		progressBar = findViewById(R.id.SignUp_progressbar) as ProgressBar
 
 		mAuth = FirebaseAuth.getInstance()
+		dbh = DatabaseHandler(applicationContext)
 
 		findViewById(R.id.Sign_Up_Btn).setOnClickListener(this)
 		findViewById(R.id.Sign_Up_TVLogin).setOnClickListener(this)
@@ -87,13 +88,13 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener {
 		mAuth!!.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
 			progressBar!!.visibility = View.GONE
 			if (task.isSuccessful) {
-				dbh.setup(applicationContext)
-				dbh.insert(User(mAuth!!.currentUser!!.uid,ArrayList()))
+				dbh!!.setup(applicationContext)
+				dbh!!.insert(User(mAuth!!.currentUser!!.uid,ArrayList()))
 				Toast.makeText(applicationContext, "User Registration Successful", Toast.LENGTH_SHORT).show()
 				startActivity(Intent(baseContext, LoginActivity::class.java))
 			}
 			else {
-				Toast.makeText(applicationContext, "Some Error Occurred", Toast.LENGTH_SHORT).show()
+				Toast.makeText(applicationContext, "Some Error Occurred" + task.exception!!.message, Toast.LENGTH_SHORT).show()
 			}
 		}
 

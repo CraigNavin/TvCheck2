@@ -17,7 +17,7 @@ import uk.ac.tees.p4061644.tvcheck_redo.models.User
  * Created by Craig on 01/02/2018.
  */
 
-class AsyncTasker() {
+class AsyncTasker(context: Context) {
 
 	private var api : TheMovieDbApi? = null
 	private var list: List<TVBasic>? = null
@@ -25,6 +25,9 @@ class AsyncTasker() {
 	private var season: TVSeasonInfo? = null
 	private var episode: TVEpisodeInfo? = null
 
+	init {
+		initApi(context)
+	}
 
 	fun initApi(context: Context){
 		api = TheMovieDbApi(context.resources.getString(R.string.Api_key))
@@ -177,7 +180,7 @@ class AsyncTasker() {
 
 	internal inner class saveDoc constructor(user: User) : AsyncTask<Void, Void, Void>(){
 
-		var dbh = DatabaseHandler()
+
 		var user : User? = null
 
 		init {
@@ -186,7 +189,6 @@ class AsyncTasker() {
 
 
 		override fun doInBackground(vararg params: Void?): Void? {
-			dbh.insert(user!!)
 
 			return null
 		}

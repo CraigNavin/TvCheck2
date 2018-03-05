@@ -10,12 +10,8 @@ import uk.ac.tees.p4061644.tvcheck_redo.models.Show
 /**
  * Created by Craig on 01/02/2018.
  */
-class Converter() {
-	private val tasker = AsyncTasker()
-
-	fun initapiCon(context: Context){
-		tasker.initApi(context)
-	}
+class Converter(context: Context) {
+	private val tasker = AsyncTasker(context)
 
 	fun convert(TVInfo: TVInfo): Show{
 		var seasonList: ArrayList<Season> = ArrayList()

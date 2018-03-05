@@ -6,6 +6,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.parse.*
 import com.parse.ParseQuery.getQuery
+import org.w3c.dom.UserDataHandler
 import uk.ac.tees.p4061644.tvcheck_redo.R
 import uk.ac.tees.p4061644.tvcheck_redo.models.ListModel
 import uk.ac.tees.p4061644.tvcheck_redo.models.User
@@ -15,10 +16,13 @@ import uk.ac.tees.p4061644.tvcheck_redo.models.User
  * Created by Craig on 27/02/2018.
  */
 
-class DatabaseHandler {
+class DatabaseHandler(context: Context) {
 	val gson = Gson()
 	var user : User? = null
 
+	init {
+		setup(context)
+	}
 
 	fun setup(context: Context){
 		Parse.initialize(Parse.Configuration.Builder(context)
@@ -36,36 +40,10 @@ class DatabaseHandler {
 		userobj.put("UserId",user.UserID)
 		userobj.put("Lists",gson.toJson(user.list))
 		userobj.saveInBackground()
-		Log.d("SAVE TEST","SAVE FUNCTIONS DONE")
+		Log.d("INSERT","SAVE FUNCTIONS DONE")
 	}
 
 	inline fun <reified T> Gson.fromJson(json: String) = this.fromJson<T>(json, object: TypeToken<T>() {}.type)
-
-	fun count(UserId: String): Int{
-		var query : ParseQuery<ParseObject> = getQuery("UserData")
-		query.whereEqualTo("UserId",UserId)
-
-		return query.countInBackground().result
-	}
-
-	fun retrieve(UserId: String): User{
-
-		var query : ParseQuery<ParseObject> = getQuery("UserData")
-		query.whereEqualTo("UserId",UserId)
-		var obj = query.first
-
-		query.getFirstInBackground({ `object`, _ ->
-			if (`object` == null){
-				Log.d("RETRIEVE", "NOTHING FOUND")
-			}else{
-				Log.d("CHECK RETRIEVE", `object`.get("UserId").toString())
-				val list: ArrayList<ListModel> = gson.fromJson(`object`.get("Lists").toString())
-				user =  User(`object`.get("UserId").toString(),list)
-
-			}
-		})
-		return user!!
-	}
 
 	fun retrievefirst(UserId: String): User?{
 
@@ -74,7 +52,7 @@ class DatabaseHandler {
 		var obj = query.first
 
 		if (obj == null){
-			Log.d("RETRIEVE CHECK","NOTHING FOUND")
+			Log.d("RETRIEVEFIRST","NOTHING FOUND")
 			return null
 		}else{
 			val list: ArrayList<ListModel> = gson.fromJson(obj.get("Lists").toString())
@@ -82,12 +60,42 @@ class DatabaseHandler {
 		}
 	}
 
-	fun checkUser(UserId: String): Boolean{
-		return retrievefirst(UserId) != null
+
+
+	fun userExists(UserId: String): Boolean{
+		var exists = false
+		var query : ParseQuery<ParseObject> = getQuery("UserData")
+		query.whereEqualTo("UserId",UserId)
+		query.getFirstInBackground({ UserData, e ->
+			if (e == null) {
+				exists = true
+				Log.d("CHECKUSER", "USER EXISTS")
+			}else{
+				exists = false
+				Log.d("CHECKUSER", "USER DOES NOT EXIST " + e.message)
+				}
+			}
+		)
+		return exists
 	}
 
-	fun update(UserId: String){
-
+	fun update(user: User){
+		var query: ParseQuery<ParseObject> = getQuery("UserData")
+		query.whereEqualTo("UserId",user.UserID)
+		query.getFirstInBackground( { userdata, e ->
+			Log.d("UPDATE","UPDATE START " + userdata.get("UserId"))
+			if (e == null){
+				userdata.put("Lists",gson.toJson(user.list))
+				userdata.saveInBackground()
+				Log.d("UPDATE ","UPDATE DONE")
+			}else{
+				if (e.code == ParseException.OBJECT_NOT_FOUND){
+					Log.d("UPDATE","USER NOT FOUND " + e.message)
+				}else{
+					Log.d("UPDATE",e.code.toString()+ " OTHER ERROR " + e.message)
+				}
+			}
+		})
 	}
 
 }
