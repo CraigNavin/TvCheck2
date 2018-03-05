@@ -38,16 +38,40 @@ class HomeActivity : Activity(){
 		var user = dbh!!.retrievefirst(intent.getStringExtra("UID"))
 		listCheck(user!!)
 
-		//testBlock()
+		Log.d(TAG,user.checkListContainsShow("Altered Carbon","NAME").toString())
+		Log.d(TAG,user.checkListContainsShow("Altered Carbon","NAME2").toString())
+		Log.d(TAG,user.getShow(user.getList("NAME2")!!.list!!,"Altered Carbon").toString())
+
 	}
 
 	fun listCheck(user: User){
 
 		var strings: ArrayList<String> = ArrayList()
-		user!!.list!!.forEach { it.list!!.forEach { strings.add(it.name) } }
-		for (String in strings){
-			Log.d("RETRIEVE CHECK",String )
+		var string: String = ""
+		var int = 0
+		user!!.list!!.forEach {
+			int++
+			string = it.name
+			it.list!!.forEach {
+				string = string +" "  + it.name + " " + int.toString()
+				strings.add(string)
+				string = ""
+			}
 		}
+		for (String in strings){
+			Log.d("RETRIEVE CHECK",String)
+		}
+	}
+
+	fun updateCheck(user: User){
+		var rl: List<TVBasic>? = Async!!.searchShows("altered Carbon")
+		var con = Converter(applicationContext)
+		var show1: TVInfo = Async!!.getShowAsync(rl!![0].id)
+		var conShow: Show = con.convert(show1)
+
+		user.list!![0].list!!.add(conShow)
+		dbh!!.update(user)
+		listCheck(user)
 	}
 
 
