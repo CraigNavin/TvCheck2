@@ -16,4 +16,9 @@
     <string name="back4app_app_id">odh0gNyGiahDHq4WOUANScJyquexK7BwZUyWort7</string>
     <string name="back4app_client_key">9Bgz5McJAqWxRGbgovrzPI1ldkKtO40RH2HC3pbc</string>
     <string name="Parse_server_url">mongodb://admin:YVM5iacvCRANhFU9B7a5jFW6@mongodb7.back4app.com:27017/42a615fd04304e09af914dee9bb8d775?ssl=true</string>
+    <string name="app_label">TvCheck</string>
+    <string name="search_hint">Search Tv Shows</string>
+    <string name="search_title">Search</string>
+
+
 </resources>

@@ -14,6 +14,8 @@ class User (val UserID: String){
 		this.list = list
 	}
 
+	//Some of these are for convenience for now. Will know what i need when im near completion
+
 	fun getList(string:String): ListModel?{
 		return list!!.find { it.name == string }
 	}

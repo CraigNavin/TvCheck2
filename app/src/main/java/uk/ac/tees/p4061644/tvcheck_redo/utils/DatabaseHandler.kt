@@ -34,7 +34,6 @@ class DatabaseHandler(context: Context) {
 
 	}
 
-
 	fun insert(user: User) {
 		var userobj = ParseObject("UserData")
 		userobj.put("UserId",user.UserID)
@@ -55,12 +54,11 @@ class DatabaseHandler(context: Context) {
 			Log.d("RETRIEVEFIRST","NOTHING FOUND")
 			return null
 		}else{
+			Log.d("RETRIEVEFIRST","GOT USER")
 			val list: ArrayList<ListModel> = gson.fromJson(obj.get("Lists").toString())
 			return User(obj.getString("UserId"),list)
 		}
 	}
-
-
 
 	fun userExists(UserId: String): Boolean{
 		var exists = false
@@ -97,5 +95,4 @@ class DatabaseHandler(context: Context) {
 			}
 		})
 	}
-
 }

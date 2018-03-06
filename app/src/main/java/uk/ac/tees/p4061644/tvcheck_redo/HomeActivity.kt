@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx
 import com.omertron.themoviedbapi.model.tv.TVBasic
 import com.omertron.themoviedbapi.model.tv.TVEpisodeInfo
@@ -25,6 +27,8 @@ class HomeActivity : Activity(){
 	private val activity_Num: Int = 0
 	private var Async : AsyncTasker? = null
 	private var dbh : DatabaseHandler? = null
+	private var gson = Gson()
+	private var user : User? = null
 
 
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,19 +39,26 @@ class HomeActivity : Activity(){
 		setupBottomnavigatioView()
 		Async = AsyncTasker(applicationContext)
 		dbh = DatabaseHandler(applicationContext)
-		var user = dbh!!.retrievefirst(intent.getStringExtra("UID"))
+		setUser()
+		Log.d("USERGSONCHECK",user!!.UserID)
 		listCheck(user!!)
 
-		Log.d(TAG,user.checkListContainsShow("Altered Carbon","NAME").toString())
+		/*Log.d(TAG,user.checkListContainsShow("Altered Carbon","NAME").toString())
 		Log.d(TAG,user.checkListContainsShow("Altered Carbon","NAME2").toString())
-		Log.d(TAG,user.getShow(user.getList("NAME2")!!.list!!,"Altered Carbon").toString())
-
+		Log.d(TAG,user.getShow(user.getList("NAME2")!!.list!!,"Altered Carbon").toString())*/
 	}
 
+	inline fun <reified T> Gson.fromJson(json: String) = this.fromJson<T>(json, object: TypeToken<T>() {}.type)
+	fun setUser(){
+		user = gson.fromJson(intent.getStringExtra("User"))
+	}
+
+
+	//here for convenience
 	fun listCheck(user: User){
 
 		var strings: ArrayList<String> = ArrayList()
-		var string: String = ""
+		var string: String
 		var int = 0
 		user!!.list!!.forEach {
 			int++
@@ -55,8 +66,8 @@ class HomeActivity : Activity(){
 			it.list!!.forEach {
 				string = string +" "  + it.name + " " + int.toString()
 				strings.add(string)
-				string = ""
 			}
+			string = it.name
 		}
 		for (String in strings){
 			Log.d("RETRIEVE CHECK",String)
@@ -79,10 +90,10 @@ class HomeActivity : Activity(){
 
 		var rl: List<TVBasic>? = Async!!.searchShows("how i met")
 		var con = Converter(applicationContext)
-
 		var show1: TVInfo? = Async!!.getShowAsync(rl!![0].id)
 		var season: TVSeasonInfo? = Async!!.getSeasonAsync(show1!!.seasons[8].seasonNumber,show1.id)
 		var episode: TVEpisodeInfo? = Async!!.getEpisodeAsync(0,show1.id,season!!.seasonNumber)
+
 		Log.d("SHOW",show1.toString())
 		Log.d("SEASON",season.toString())
 		Log.d("EPISODE",episode.toString())
@@ -104,16 +115,13 @@ class HomeActivity : Activity(){
 
 		user!!.list!!.add(arlist1)
 		dbh!!.update(user)
-		//dbh!!.update(user)
 		Log.d("PUNISHER","PUNISHER")
-
-
 	}
 
 	private fun setupBottomnavigatioView(){
 		Log.d(TAG,"setupBottomNavigationView")
 		BottomNavigationBarHelper.setupBottomNavigationBar(navbar)
-		BottomNavigationBarHelper.enableNavigation(applicationContext, navbar)
+		BottomNavigationBarHelper.enableNavigation(applicationContext, navbar,intent.getStringExtra("User"))
 		val menu: Menu? = navbar?.menu
 		val menuI: MenuItem? = menu?.getItem(activity_Num)
 		menuI?.isChecked = true

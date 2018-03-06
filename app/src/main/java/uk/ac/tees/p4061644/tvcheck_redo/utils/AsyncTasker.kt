@@ -11,6 +11,8 @@ import com.omertron.themoviedbapi.model.tv.TVInfo
 import com.omertron.themoviedbapi.model.tv.TVSeasonInfo
 import uk.ac.tees.p4061644.tvcheck_redo.R
 import uk.ac.tees.p4061644.tvcheck_redo.models.User
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 /**
@@ -33,11 +35,15 @@ class AsyncTasker(context: Context) {
 		api = TheMovieDbApi(context.resources.getString(R.string.Api_key))
 	}
 
-	fun searchShows(search: String): List<TVBasic>? {
+	fun searchShows(search: String): ArrayList<TVBasic>? {
 		reset()
 		setList(searchShowsTask(search).execute().get())
 		Log.d("ListCheck1", list.toString())
-		return list
+		if (list == null){
+			return ArrayList()
+		}else{
+			return ArrayList(list)
+		}
 	}
 
 	fun saveDocfun(user: User){

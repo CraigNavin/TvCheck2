@@ -10,6 +10,7 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.gson.Gson
 import uk.ac.tees.p4061644.tvcheck_redo.models.ListModel
 import uk.ac.tees.p4061644.tvcheck_redo.models.User
 import uk.ac.tees.p4061644.tvcheck_redo.utils.DatabaseHandler
@@ -70,9 +71,10 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
 			if (task.isSuccessful) {
 				Toast.makeText(applicationContext, "Login Successful", Toast.LENGTH_SHORT).show()
-				val user = mAuth!!.currentUser
+				val user = dbh!!.retrievefirst(mAuth!!.currentUser!!.uid)
 				val i = Intent(baseContext, HomeActivity::class.java)
-				i.putExtra("UID", user!!.uid)
+				val gson = Gson()
+				i.putExtra("User", gson.toJson(user))
 				startActivity(i)
 				progressBar!!.visibility = View.GONE
 			}
