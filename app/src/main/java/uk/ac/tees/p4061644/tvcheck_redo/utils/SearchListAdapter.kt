@@ -9,20 +9,23 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import com.omertron.themoviedbapi.model.tv.TVBasic
+import com.squareup.picasso.Picasso
 import uk.ac.tees.p4061644.tvcheck_redo.R
+import uk.ac.tees.p4061644.tvcheck_redo.models.Show
 import java.io.InputStream
 import java.net.URL
 
 /**
  * Created by Craig on 05/03/2018.
  */
-class SearchListAdapter(private var activity: Activity,private var items: ArrayList<TVBasic>): BaseAdapter(){
+class SearchListAdapter(private var activity: Activity,private var results: ArrayList<TVBasic>?, private var items: ArrayList<Show>?,private var context: Context): BaseAdapter(){
 
-	private class ViewHolder(row: View?){
+	class ViewHolder(row: View?){
 		var txtName: TextView? = null
 		var txtComment: TextView? = null
 		var imgView: ImageView? = null
@@ -47,23 +50,40 @@ class SearchListAdapter(private var activity: Activity,private var items: ArrayL
 			view = convertView
 			viewHolder = view.tag as ViewHolder
 		}
-
-		var TVBasic = items[position]
-		var rating = "User Rating: " + TVBasic.voteAverage
-		viewHolder.txtName!!.text = TVBasic.name
-		viewHolder.txtComment!!.text = rating
-		if (TVBasic.posterPath!= null){
-			DownloadImageTask(viewHolder.imgView!!).execute(TVBasic.posterPath)
-			//TRY THIS TOMORROW FOO
-			//Glide.with(activity).load(base_address + TVBasic.posterPath).into(viewHolder.imgView)
+		if (results!! != null) {
+			handleResults(viewHolder,position)
+		}else{
+			handleItems(viewHolder,position)
 		}
-
 
 		return view
 	}
 
+	fun handleItems(holder:ViewHolder,position: Int): ViewHolder{
+		var Show = items!![position]
+		holder.txtName!!.text = Show.name
+		holder.txtComment!!.text
+		Picasso.with(context).load(base_address + Show.PosterPath)
+				.placeholder(R.drawable.ic_default_search_image)
+				.into(holder.imgView!!)
+		return holder
+
+	}
+
+	fun handleResults(holder: ViewHolder,position: Int): ViewHolder{
+		var TVBasic = results!![position]
+		var rating = "User Rating: " + TVBasic.voteAverage
+		holder.txtName!!.text = TVBasic.name
+		holder.txtComment!!.text = rating
+		Picasso.with(context).load(base_address + TVBasic.posterPath)
+				.placeholder(R.drawable.ic_default_search_image)
+				.into(holder.imgView!!)
+		return holder
+	}
+
+
 	override fun getItem(position: Int): TVBasic{
-		return items[position]
+		return results!![position]
 	}
 
 	override fun getItemId(position: Int): Long {
@@ -71,10 +91,17 @@ class SearchListAdapter(private var activity: Activity,private var items: ArrayL
 	}
 
 	override fun getCount(): Int {
-		return items.size
+		return results!!.size
 	}
 
 	private class DownloadImageTask(bmImage: ImageView): AsyncTask<String, Void, Bitmap>() {
+
+		var bmImage: ImageView?
+
+		init {
+			this.bmImage = bmImage
+		}
+
 		override fun doInBackground(vararg params: String?): Bitmap {
 			val base_address = "https://image.tmdb.org/t/p/w185"
 			var urlDisplay = params[0]
@@ -90,18 +117,8 @@ class SearchListAdapter(private var activity: Activity,private var items: ArrayL
 			return mIcon!!
 		}
 
-		var bmImage: ImageView?
-
-		init {
-			this.bmImage = bmImage
-		}
-
 		override fun onPostExecute(result: Bitmap?) {
 			bmImage!!.setImageBitmap(result)
 		}
-
-
-
-
 	}
 }

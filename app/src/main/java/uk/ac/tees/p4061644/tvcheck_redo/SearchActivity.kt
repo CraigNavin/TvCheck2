@@ -1,25 +1,21 @@
 package uk.ac.tees.p4061644.tvcheck_redo
 
-import android.app.SearchManager
 import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx
-import com.omertron.themoviedbapi.model.tv.TVBasic
-import uk.ac.tees.p4061644.tvcheck_redo.utils.AsyncTasker
-import uk.ac.tees.p4061644.tvcheck_redo.utils.BottomNavigationBarHelper
-import android.content.Intent
 import android.view.View
+import android.view.ViewParent
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx
+import com.squareup.picasso.Picasso
+import uk.ac.tees.p4061644.tvcheck_redo.utils.AsyncTasker
+import uk.ac.tees.p4061644.tvcheck_redo.utils.BottomNavigationBarHelper
 import uk.ac.tees.p4061644.tvcheck_redo.utils.SearchListAdapter
-import java.util.*
-import android.view.inputmethod.InputMethodManager.HIDE_NOT_ALWAYS
-
-
 
 
 class SearchActivity : AppCompatActivity(), View.OnClickListener {
@@ -45,12 +41,14 @@ class SearchActivity : AppCompatActivity(), View.OnClickListener {
 		searchButton!!.setOnClickListener(this)
 		setupBottomnavigatioView()
 		navbar!!.bringChildToFront(findViewById(R.id.bottomNavViewBar))
+
 	}
 
 	fun search(term: String){
 		var results = Async!!.searchShows(searchField!!.text.toString())
-		var adapter = SearchListAdapter(this,results!!)
+		var adapter = SearchListAdapter(this,results!!,null,applicationContext)
 		listView!!.adapter = adapter
+		//Toast.makeText(applicationContext,listView!!.getItemAtPosition(i)!!.toString(),Toast.LENGTH_LONG)
 		adapter!!.notifyDataSetChanged()
 	}
 
