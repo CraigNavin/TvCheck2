@@ -13,6 +13,7 @@ import android.widget.AdapterView
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import com.google.gson.Gson
 import com.omertron.themoviedbapi.model.tv.TVBasic
 import com.squareup.picasso.Picasso
 import uk.ac.tees.p4061644.tvcheck_redo.R
@@ -23,12 +24,14 @@ import java.net.URL
 /**
  * Created by Craig on 05/03/2018.
  */
-class SearchListAdapter(private var activity: Activity,private var results: ArrayList<TVBasic>?, private var items: ArrayList<Show>?,private var context: Context): BaseAdapter(){
-
+class SearchListAdapter(private var activity: Activity, private var results: ArrayList<TVBasic>?, private var items: ArrayList<Show>?,private var context: Context): BaseAdapter(){
+	val gson = Gson()
 	class ViewHolder(row: View?){
 		var txtName: TextView? = null
 		var txtComment: TextView? = null
 		var imgView: ImageView? = null
+
+
 		init {
 			this.txtName = row?.findViewById(R.id.txtName) as TextView?
 			this.txtComment = row?.findViewById(R.id.txtComment) as TextView?
@@ -50,11 +53,13 @@ class SearchListAdapter(private var activity: Activity,private var results: Arra
 			view = convertView
 			viewHolder = view.tag as ViewHolder
 		}
-		if (results!! != null) {
+		if (results != null) {
 			handleResults(viewHolder,position)
 		}else{
 			handleItems(viewHolder,position)
 		}
+
+		viewHolder
 
 		return view
 	}
@@ -62,7 +67,6 @@ class SearchListAdapter(private var activity: Activity,private var results: Arra
 	fun handleItems(holder:ViewHolder,position: Int): ViewHolder{
 		var Show = items!![position]
 		holder.txtName!!.text = Show.name
-		holder.txtComment!!.text
 		Picasso.with(context).load(base_address + Show.PosterPath)
 				.placeholder(R.drawable.ic_default_search_image)
 				.into(holder.imgView!!)
@@ -72,6 +76,7 @@ class SearchListAdapter(private var activity: Activity,private var results: Arra
 
 	fun handleResults(holder: ViewHolder,position: Int): ViewHolder{
 		var TVBasic = results!![position]
+
 		var rating = "User Rating: " + TVBasic.voteAverage
 		holder.txtName!!.text = TVBasic.name
 		holder.txtComment!!.text = rating
@@ -82,8 +87,12 @@ class SearchListAdapter(private var activity: Activity,private var results: Arra
 	}
 
 
-	override fun getItem(position: Int): TVBasic{
-		return results!![position]
+	override fun getItem(position: Int): String{
+		if (results != null) {
+			return gson.toJson(results!![position])
+		}else{
+			return gson.toJson(items!![position])
+		}
 	}
 
 	override fun getItemId(position: Int): Long {
@@ -91,34 +100,12 @@ class SearchListAdapter(private var activity: Activity,private var results: Arra
 	}
 
 	override fun getCount(): Int {
-		return results!!.size
+		if (results != null) {
+			return results!!.size
+		}else{
+			return items!!.size
+		}
+
 	}
 
-	private class DownloadImageTask(bmImage: ImageView): AsyncTask<String, Void, Bitmap>() {
-
-		var bmImage: ImageView?
-
-		init {
-			this.bmImage = bmImage
-		}
-
-		override fun doInBackground(vararg params: String?): Bitmap {
-			val base_address = "https://image.tmdb.org/t/p/w185"
-			var urlDisplay = params[0]
-			var mIcon : Bitmap? = null
-
-			try{
-				var input: InputStream = URL(base_address+urlDisplay).openStream()
-				mIcon = BitmapFactory.decodeStream(input)
-				input.close()
-			} catch (e: Exception){
-				Log.e("IMAGETASKERROR",e.message)
-			}
-			return mIcon!!
-		}
-
-		override fun onPostExecute(result: Bitmap?) {
-			bmImage!!.setImageBitmap(result)
-		}
-	}
 }

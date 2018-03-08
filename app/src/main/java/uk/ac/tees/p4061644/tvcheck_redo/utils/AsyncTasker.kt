@@ -11,7 +11,6 @@ import com.omertron.themoviedbapi.model.tv.TVInfo
 import com.omertron.themoviedbapi.model.tv.TVSeasonInfo
 import uk.ac.tees.p4061644.tvcheck_redo.R
 import uk.ac.tees.p4061644.tvcheck_redo.models.User
-import java.util.*
 import kotlin.collections.ArrayList
 
 
@@ -46,10 +45,6 @@ class AsyncTasker(context: Context) {
 		}
 	}
 
-	fun saveDocfun(user: User){
-		saveDoc(user).execute()
-	}
-
 	fun getShow():TVInfo{
 		return show!!
 	}
@@ -60,22 +55,17 @@ class AsyncTasker(context: Context) {
 		return show!!
 	}
 
-	fun getShowAsync(id : Int): TVInfo {
-		show = null
-		setShow(getShowTask(id).execute().get())
-		return show!!
+	fun getShowAsync(id:Int): TVInfo {
+		return getShowTask(id).execute().get()
 	}
 
 	fun getSeasonAsync(num: Int, TVid: Int): TVSeasonInfo {
 
-		setSeason(getSeasonTask(num,TVid).execute().get())
-		return season!!
+		return getSeasonTask(num,TVid).execute().get()
 	}
 
 	fun getEpisodeAsync(EpNum: Int,TVid: Int,seasonNum: Int): TVEpisodeInfo {
-		episode = null
-		setEpisode(getEpisodeTask(EpNum,seasonNum,TVid).execute().get())
-		return episode!!
+		return getEpisodeTask(EpNum,seasonNum,TVid).execute().get()
 	}
 
 	private fun setList(list: List<TVBasic>?){
