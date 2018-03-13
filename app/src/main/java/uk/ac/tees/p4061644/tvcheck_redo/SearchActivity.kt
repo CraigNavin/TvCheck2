@@ -57,17 +57,15 @@ class SearchActivity : AppCompatActivity(), View.OnClickListener {
 		var adapter = SearchListAdapter(this,results!!,null,applicationContext)
 		listView!!.adapter = adapter
 		var user: User = Gson().fromJson(intent.getStringExtra("User"))
-		Toast.makeText(applicationContext,user.UserID,Toast.LENGTH_SHORT).show()
 		listView!!.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
 			val item = parent.getItemAtPosition(position) as String
 			val show : TVBasic = Gson().fromJson(item)
 			var seasons = Async!!.getShowAsync(show.id).seasons
-			Toast.makeText(applicationContext,seasons.toString(),Toast.LENGTH_SHORT).show()
+			//Toast.makeText(applicationContext,seasons.toString(),Toast.LENGTH_SHORT).show()
 			val intent = Intent(applicationContext,ShowActivity::class.java)//activity_Num 1
 			intent.putExtra("Show",item)
 			intent.putExtra("User",Gson().toJson(user))
 			applicationContext.startActivity(intent)
-			//Toast.makeText(applicationContext,item.name,Toast.LENGTH_SHORT).show()
 		}
 		adapter.notifyDataSetChanged()
 	}

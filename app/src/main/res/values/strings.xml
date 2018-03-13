@@ -19,7 +19,9 @@
     <string name="app_label">TvCheck</string>
     <string name="search_hint">Search Tv Shows</string>
     <string name="search_title">Search</string>
-    <string name="base_address">https://image.tmdb.org/t/p/w185</string>
+    <string name="base_address_w185">https://image.tmdb.org/t/p/w185</string>
+    <string name="base_address_w500">https://image.tmdb.org/t/p/w500</string>
+    <string name="base_address_original">https://image.tmdb.org/t/p/original</string>
 
 
 </resources>

@@ -67,7 +67,7 @@ class SearchListAdapter(private var activity: Activity, private var results: Arr
 	fun handleItems(holder:ViewHolder,position: Int): ViewHolder{
 		var Show = items!![position]
 		holder.txtName!!.text = Show.name
-		Picasso.with(context).load(base_address + Show.PosterPath)
+		Picasso.with(context).load(context.getString(R.string.base_address_w185) + Show.PosterPath)
 				.placeholder(R.drawable.ic_default_search_image)
 				.into(holder.imgView!!)
 		return holder

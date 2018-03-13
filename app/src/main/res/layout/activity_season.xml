@@ -19,20 +19,12 @@
 
         <ListView
             android:layout_width="match_parent"
-            android:id="@+id/season_list"
+            android:id="@+id/episodes_list"
             android:addStatesFromChildren="false"
             android:layout_height="332dp"
             android:layout_below="@+id/PosterView"
             android:layout_alignParentStart="true"/>
 
-        <TextView
-            android:text="TextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:id="@+id/Rating_TV"
-            android:layout_alignBottom="@+id/PosterView"
-            android:layout_toEndOf="@+id/PosterView"/>
 
         <ImageView
             android:layout_width="250px"
@@ -45,7 +37,7 @@
             android:text="TextView"
             android:layout_width="230dp"
             android:layout_height="wrap_content"
-            android:id="@+id/ShowName_TV"
+            android:id="@+id/SeasonNum_TV"
             android:textSize="26sp"
             android:maxWidth="230dp"
             android:layout_alignParentTop="true"
@@ -58,9 +50,9 @@
             android:id="@+id/Overview_TV"
             android:textSize="16sp"
             android:maxWidth="230dp"
-            android:maxLines="5"
+            android:maxLines="6"
             android:ellipsize="end"
-            android:layout_below="@+id/ShowName_TV"
+            android:layout_below="@+id/SeasonNum_TV"
             android:layout_alignParentEnd="true"
             android:layout_toEndOf="@+id/PosterView"/>
 

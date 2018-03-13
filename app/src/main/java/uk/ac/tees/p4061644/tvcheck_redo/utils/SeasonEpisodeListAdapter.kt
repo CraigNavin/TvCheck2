@@ -34,7 +34,6 @@ class SeasonEpisodeListAdapter(private var activity: Activity, private var seaso
 		}
 	}
 
-	val base_address = "https://image.tmdb.org/t/p/w185"
 	override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
 		val view: View?
 		val viewHolder: ViewHolder
@@ -64,7 +63,7 @@ class SeasonEpisodeListAdapter(private var activity: Activity, private var seaso
 		var episodeCount = TVSeasonBasic.episodeCount.toString() + " Episodes"
 		holder.txtName?.text = seasonNum
 		holder.txtEpisodes!!.text = episodeCount
-		Picasso.with(context).load(base_address + TVSeasonBasic.posterPath)
+		Picasso.with(context).load(context.resources.getString(R.string.base_address_w185).toString() + TVSeasonBasic.posterPath)
 				.placeholder(R.drawable.ic_default_search_image)
 				.into(holder.image)
 		return holder
@@ -74,8 +73,9 @@ class SeasonEpisodeListAdapter(private var activity: Activity, private var seaso
 		var episode = episodes!![position]
 		holder.txtName!!.text = episode.name
 		holder.txtEpisodes!!.text = episode.airDate
-		Picasso.with(context).load(base_address + episode.posterPath)
+		Picasso.with(context).load(context.resources.getString(R.string.base_address_w500).toString() + episode.stillPath)
 				.placeholder(R.drawable.ic_default_search_image)
+				.
 				.into(holder.image)
 		return holder
 	}
