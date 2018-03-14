@@ -75,7 +75,6 @@ class SeasonEpisodeListAdapter(private var activity: Activity, private var seaso
 		holder.txtEpisodes!!.text = episode.airDate
 		Picasso.with(context).load(context.resources.getString(R.string.base_address_w500).toString() + episode.stillPath)
 				.placeholder(R.drawable.ic_default_search_image)
-				.
 				.into(holder.image)
 		return holder
 	}

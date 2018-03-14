@@ -89,4 +89,12 @@ class SeasonActivity : AppCompatActivity() {
 		val menuI: MenuItem? = menu?.getItem(activity_Num)
 		menuI?.isChecked = true
 	}
+
+	override fun onDestroy() {
+		//android.os.Process.killProcess(android.os.Process.myPid());
+
+		super.onDestroy()
+		Runtime.getRuntime().gc()
+
+	}
 }

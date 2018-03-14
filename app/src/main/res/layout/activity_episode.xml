@@ -24,7 +24,7 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
-            android:layout_height="550px"/>
+            android:layout_height="650px"/>
 
         <TextView
             android:text="TextView"
@@ -48,6 +48,14 @@
             android:layout_below="@+id/EPName_TV"
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"/>
+
+        <Switch
+            android:text="Watched"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/watched_switch"
+            android:layout_below="@+id/Overview_TV"
+            android:layout_alignParentStart="true"/>
 
     </RelativeLayout>
 

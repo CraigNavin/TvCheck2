@@ -7,6 +7,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.ListView
+import android.widget.Switch
 import android.widget.TextView
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -24,6 +25,8 @@ class EpisodeActivity : AppCompatActivity() {
 	private var EpisodeView: TextView? = null
 	private var OverViewView: TextView? = null
 	private var posterView: ImageView? = null
+	private var watched: Switch? = null
+	var episode: TVEpisodeInfo? = null
 
 
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,12 +37,21 @@ class EpisodeActivity : AppCompatActivity() {
 
 	fun setView(episode: TVEpisodeInfo){
 		EpisodeView!!.text = episode.name
-		OverViewView!!.text = episode.overview
+		if (episode.overview == null || episode.overview == ""){
+			OverViewView!!.text = "No Overview"
+		}else{
+			OverViewView!!.text = episode.overview
+		}
 		Picasso.with(applicationContext).load(applicationContext.getString(R.string.base_address_original) + episode.stillPath)
 				.placeholder(R.drawable.ic_default_search_image)
 				.fit()
 				.into(posterView)
-
+		watched!!.setOnCheckedChangeListener { buttonView, isChecked ->
+			if (isChecked){
+				episode
+			}
+		}
+		
 
 	}
 
@@ -47,10 +59,12 @@ class EpisodeActivity : AppCompatActivity() {
 		EpisodeView = findViewById(R.id.EPName_TV) as TextView
 		OverViewView = findViewById(R.id.Overview_TV) as TextView
 		posterView = findViewById(R.id.PosterView) as ImageView
+		watched = findViewById(R.id.watched_switch) as Switch
 		navbar = findViewById(R.id.bottomNavViewBar) as BottomNavigationViewEx
 		setupBottomnavigatioView()
-		var episode: TVEpisodeInfo = Gson().fromJson(intent.getStringExtra("Episode"))
-		setView(episode)
+
+		episode = Gson().fromJson(intent.getStringExtra("Episode"))
+		setView(episode!!)
 	}
 
 	inline fun <reified T> Gson.fromJson(json: String) = this.fromJson<T>(json, object: TypeToken<T>() {}.type)
@@ -62,6 +76,14 @@ class EpisodeActivity : AppCompatActivity() {
 		val menu: Menu? = navbar?.menu
 		val menuI: MenuItem? = menu?.getItem(activity_Num)
 		menuI?.isChecked = true
+	}
+
+	override fun onDestroy() {
+		//android.os.Process.killProcess(android.os.Process.myPid());
+
+		super.onDestroy()
+		Runtime.getRuntime().gc()
+
 	}
 
 }

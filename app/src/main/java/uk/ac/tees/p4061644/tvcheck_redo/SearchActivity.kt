@@ -91,4 +91,11 @@ class SearchActivity : AppCompatActivity(), View.OnClickListener {
 			}
 		}
 	}
+	override fun onDestroy() {
+		//android.os.Process.killProcess(android.os.Process.myPid());
+
+		super.onDestroy()
+		Runtime.getRuntime().gc()
+
+	}
 }
