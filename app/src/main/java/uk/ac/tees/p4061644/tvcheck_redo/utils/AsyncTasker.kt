@@ -5,11 +5,15 @@ import android.os.AsyncTask
 import android.util.Log
 import com.omertron.themoviedbapi.TheMovieDbApi
 import com.omertron.themoviedbapi.enumeration.SearchType
+import com.omertron.themoviedbapi.enumeration.TVEpisodeMethod
+import com.omertron.themoviedbapi.model.person.ExternalID
 import com.omertron.themoviedbapi.model.tv.TVBasic
 import com.omertron.themoviedbapi.model.tv.TVEpisodeInfo
 import com.omertron.themoviedbapi.model.tv.TVInfo
 import com.omertron.themoviedbapi.model.tv.TVSeasonInfo
 import uk.ac.tees.p4061644.tvcheck_redo.R
+import uk.ac.tees.p4061644.tvcheck_redo.models.ListModel
+import uk.ac.tees.p4061644.tvcheck_redo.models.Show
 import uk.ac.tees.p4061644.tvcheck_redo.models.User
 import kotlin.collections.ArrayList
 
@@ -36,8 +40,7 @@ class AsyncTasker(context: Context) {
 
 	fun searchShows(search: String): ArrayList<TVBasic>? {
 		reset()
-		setList(searchShowsTask(search).execute().get())
-		Log.d("ListCheck1", list.toString())
+		var list = searchShowsTask(search).execute().get()
 		if (list == null){
 			return ArrayList()
 		}else{
@@ -55,7 +58,16 @@ class AsyncTasker(context: Context) {
 		return show!!
 	}
 
-	fun getShowAsync(id:Int): TVInfo {
+	fun getCustomList(list: ArrayList<Show>):ArrayList<TVBasic>{
+		var retList = ArrayList<TVBasic>()
+		list!!.forEach { retList.add(getShowBasicAsync(it.id)) }
+		return  retList
+	}
+
+	fun getShowInfoAsync(id:Int): TVInfo {
+		return getShowTask(id).execute().get()
+	}
+	fun getShowBasicAsync(id:Int): TVBasic {
 		return getShowTask(id).execute().get()
 	}
 
@@ -174,26 +186,5 @@ class AsyncTasker(context: Context) {
 		}
 	}
 
-	internal inner class saveDoc constructor(user: User) : AsyncTask<Void, Void, Void>(){
-
-
-		var user : User? = null
-
-		init {
-			this.user = user
-		}
-
-
-		override fun doInBackground(vararg params: Void?): Void? {
-
-			return null
-		}
-
-		override fun onPostExecute(result: Void?) {
-
-			Log.d("SAVE CHECK","Save Complete")
-		}
-
-	}
 
 }

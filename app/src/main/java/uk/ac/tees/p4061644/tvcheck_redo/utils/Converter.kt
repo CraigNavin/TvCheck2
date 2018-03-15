@@ -22,7 +22,7 @@ class Converter(context: Context) {
 			}
 		}
 
-		return Show(TVInfo.id,TVInfo.name,TVInfo.overview, seasonList,TVInfo.posterPath,false)
+		return Show(TVInfo.id,seasonList,false)
 	}
 
 	fun convert(TVSeason: TVSeasonBasic,TVid: Int): Season{
@@ -36,21 +36,19 @@ class Converter(context: Context) {
 
 				for (e in TVSeasonInfo.episodes){
 
-					episodeList.add(convert(e))
+					episodeList.add(convert())
 				}
 			}
 		}
 
 
-		return Season(TVSeasonInfo.overview,episodeList, TVSeasonInfo.seasonNumber,
-				TVSeasonInfo.posterPath,false)
+		return Season(TVid,episodeList,TVSeasonInfo.seasonNumber,false)
 
 	}
 
-	fun convert(TVEpisodeInfo: TVEpisodeInfo):Episode{
+	fun convert():Episode{
 
-		return Episode(TVEpisodeInfo.name,TVEpisodeInfo.seasonNumber,TVEpisodeInfo.overview, TVEpisodeInfo.episodeNumber
-				,TVEpisodeInfo.posterPath,false)
+		return Episode(false)
 	}
 
 /*	fun fullConvert(TVInfo: TVInfo): Show{

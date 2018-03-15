@@ -14,6 +14,8 @@ import com.google.gson.reflect.TypeToken
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx
 import com.omertron.themoviedbapi.model.tv.TVEpisodeInfo
 import com.squareup.picasso.Picasso
+import uk.ac.tees.p4061644.tvcheck_redo.models.Show
+import uk.ac.tees.p4061644.tvcheck_redo.models.User
 import uk.ac.tees.p4061644.tvcheck_redo.utils.AsyncTasker
 import uk.ac.tees.p4061644.tvcheck_redo.utils.BottomNavigationBarHelper
 
@@ -26,7 +28,8 @@ class EpisodeActivity : AppCompatActivity() {
 	private var OverViewView: TextView? = null
 	private var posterView: ImageView? = null
 	private var watched: Switch? = null
-	var episode: TVEpisodeInfo? = null
+	private var episode: TVEpisodeInfo? = null
+	private var user: User? = null
 
 
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,14 +38,38 @@ class EpisodeActivity : AppCompatActivity() {
 		setup()
 	}
 
-	fun setView(episode: TVEpisodeInfo){
-		EpisodeView!!.text = episode.name
-		if (episode.overview == null || episode.overview == ""){
+	fun listsContainShow(): Show? {
+		var listolists = user!!.list
+
+
+		for (list in listolists!!){
+			for ((id) in list.list!!){
+				if(user!!.checkListContainsShow(id,list.name)){
+					return list.list!!.find { it.id == id }
+				}else{
+					return null
+				}
+			}
+		}
+		return null
+	}
+
+	fun setView(){
+		EpisodeView!!.text = episode!!.name
+		var bool: Boolean = false
+
+		if (listsContainShow() != null){
+			bool = listsContainShow()!!.seasons!![episode!!.seasonNumber - 1].episodes[episode!!.episodeNumber - 1].watched
+			watched!!.text = "From List"
+		}
+		watched!!.isChecked = bool
+
+		if (episode!!.overview == null || episode!!.overview == ""){
 			OverViewView!!.text = "No Overview"
 		}else{
-			OverViewView!!.text = episode.overview
+			OverViewView!!.text = episode!!.overview
 		}
-		Picasso.with(applicationContext).load(applicationContext.getString(R.string.base_address_original) + episode.stillPath)
+		Picasso.with(applicationContext).load(applicationContext.getString(R.string.base_address_original) + episode!!.stillPath)
 				.placeholder(R.drawable.ic_default_search_image)
 				.fit()
 				.into(posterView)
@@ -61,10 +88,11 @@ class EpisodeActivity : AppCompatActivity() {
 		posterView = findViewById(R.id.PosterView) as ImageView
 		watched = findViewById(R.id.watched_switch) as Switch
 		navbar = findViewById(R.id.bottomNavViewBar) as BottomNavigationViewEx
+		user =  Gson().fromJson(intent.getStringExtra("User"))
 		setupBottomnavigatioView()
 
 		episode = Gson().fromJson(intent.getStringExtra("Episode"))
-		setView(episode!!)
+		setView()
 	}
 
 	inline fun <reified T> Gson.fromJson(json: String) = this.fromJson<T>(json, object: TypeToken<T>() {}.type)

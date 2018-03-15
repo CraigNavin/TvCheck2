@@ -42,7 +42,7 @@ class ShowActivity : AppCompatActivity() {
 
 	fun setView(){
 		var basic : TVBasic = Gson().fromJson(intent.getStringExtra("Show"))
-		var show = Async!!.getShowAsync(basic.id)
+		var show = Async!!.getShowInfoAsync(basic.id)
 
 		NameView!!.text = show.name
 		OverViewView!!.text = show.overview

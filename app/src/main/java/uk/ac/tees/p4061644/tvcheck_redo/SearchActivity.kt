@@ -53,14 +53,14 @@ class SearchActivity : AppCompatActivity(), View.OnClickListener {
 	}
 	inline fun <reified T> Gson.fromJson(json: String) = this.fromJson<T>(json, object: TypeToken<T>() {}.type)
 	fun search(term: String){
-		var results = Async!!.searchShows(searchField!!.text.toString())
-		var adapter = SearchListAdapter(this,results!!,null,applicationContext)
-		listView!!.adapter = adapter
 		var user: User = Gson().fromJson(intent.getStringExtra("User"))
+		var results = Async!!.searchShows(searchField!!.text.toString())
+		var adapter = SearchListAdapter(this,Async!!.getCustomList(user!!.list!![0].list!!),applicationContext)
+		listView!!.adapter = adapter
 		listView!!.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
 			val item = parent.getItemAtPosition(position) as String
 			val show : TVBasic = Gson().fromJson(item)
-			var seasons = Async!!.getShowAsync(show.id).seasons
+			var seasons = Async!!.getShowInfoAsync(show.id).seasons
 			//Toast.makeText(applicationContext,seasons.toString(),Toast.LENGTH_SHORT).show()
 			val intent = Intent(applicationContext,ShowActivity::class.java)//activity_Num 1
 			intent.putExtra("Show",item)

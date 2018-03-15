@@ -42,6 +42,8 @@ class HomeActivity : Activity(){
 		setUser()
 		Log.d("USERGSONCHECK",user!!.UserID)
 		listCheck(user!!)
+		Log.d(TAG,"BREAK")
+		//updateCheck(user!!)
 
 		/*Log.d(TAG,user.checkListContainsShow("Altered Carbon","NAME").toString())
 		Log.d(TAG,user.checkListContainsShow("Altered Carbon","NAME2").toString())
@@ -64,7 +66,7 @@ class HomeActivity : Activity(){
 			int++
 			string = it.name
 			it.list!!.forEach {
-				string = string +" "  + it.name + " " + int.toString()
+				string = string + " "  + it.id + " " + int.toString()
 				strings.add(string)
 			}
 			string = it.name
@@ -77,7 +79,7 @@ class HomeActivity : Activity(){
 	fun updateCheck(user: User){
 		var rl: List<TVBasic>? = Async!!.searchShows("altered Carbon")
 		var con = Converter(applicationContext)
-		var show1: TVInfo = Async!!.getShowAsync(rl!![0].id)
+		var show1: TVInfo = Async!!.getShowInfoAsync(rl!![0].id)
 		var conShow: Show = con.convert(show1)
 
 		user.list!![0].list!!.add(conShow)
@@ -90,7 +92,7 @@ class HomeActivity : Activity(){
 
 		var rl: List<TVBasic>? = Async!!.searchShows("how i met")
 		var con = Converter(applicationContext)
-		var show1: TVInfo? = Async!!.getShowAsync(rl!![0].id)
+		var show1: TVInfo? = Async!!.getShowInfoAsync(rl!![0].id)
 		var season: TVSeasonInfo? = Async!!.getSeasonAsync(show1!!.seasons[8].seasonNumber,show1.id)
 		var episode: TVEpisodeInfo? = Async!!.getEpisodeAsync(0,show1.id,season!!.seasonNumber)
 
@@ -100,14 +102,14 @@ class HomeActivity : Activity(){
 
 		var conShow: Show = con.convert(show1)
 
-		val user = dbh!!.retrievefirst(intent.getStringExtra("UID"))
+		val user = dbh!!.retrievefirst(user!!.UserID)
 		var arlist1 = ListModel("NAME")
 		var arlist2 = ListModel("NAME2")
 		arlist1.list!!.add(conShow)
 
 		Log.d("HIMYM","HIMYM")
 		rl = Async!!.searchShows("Punisher")
-		show1 = Async!!.getShowAsync(rl!![0].id)
+		show1 = Async!!.getShowInfoAsync(rl!![0].id)
 		conShow = con.convert(show1)
 		arlist2.list!!.add(conShow)
 		arlist1.list!!.add(conShow)
@@ -117,6 +119,7 @@ class HomeActivity : Activity(){
 		dbh!!.update(user)
 		Log.d("PUNISHER","PUNISHER")
 	}
+
 
 	private fun setupBottomnavigatioView(){
 		Log.d(TAG,"setupBottomNavigationView")

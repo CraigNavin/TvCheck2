@@ -30,6 +30,7 @@ class SeasonActivity : AppCompatActivity() {
 	private var RatingView: TextView? = null
 	private var posterView: ImageView? = null
 	private var listView: ListView? = null
+	private var id: Int? = null
 
 
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,13 +51,14 @@ class SeasonActivity : AppCompatActivity() {
 		var adapter = SeasonEpisodeListAdapter(this,null,season.episodes,applicationContext)
 		listView!!.adapter = adapter
 		var user: User = Gson().fromJson(intent.getStringExtra("User"))
-		listView!!.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+		listView!!.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, ids ->
 			val item = parent.getItemAtPosition(position) as String
 			val episode: TVEpisodeInfo = Gson().fromJson(item)
 			Toast.makeText(applicationContext,episode.name,Toast.LENGTH_SHORT).show()
 			val intent = Intent(applicationContext,EpisodeActivity::class.java)//activity_Num 1
 			intent.putExtra("Episode",item)
 			intent.putExtra("User",Gson().toJson(user))
+			intent.putExtra("TVID",id)
 			applicationContext.startActivity(intent)
 		}
 	}
@@ -73,10 +75,10 @@ class SeasonActivity : AppCompatActivity() {
 		posterView = findViewById(R.id.PosterView) as ImageView
 		Async = AsyncTasker(applicationContext)
 		navbar = findViewById(R.id.bottomNavViewBar) as BottomNavigationViewEx
+		id = intent.extras.get("TVID") as Int
 
-		var id = intent.extras.get("TVID") as Int
 
-		setView(getSeasonInfo(id))
+		setView(getSeasonInfo(id!!))
 	}
 
 	inline fun <reified T> Gson.fromJson(json: String) = this.fromJson<T>(json, object: TypeToken<T>() {}.type)

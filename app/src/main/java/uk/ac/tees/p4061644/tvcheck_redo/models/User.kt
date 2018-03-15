@@ -20,8 +20,8 @@ class User (val UserID: String){
 		return list!!.find { it.name == string }
 	}
 
-	fun getShow(list: ArrayList<Show>, name: String): Show?{
-		return list.find { it.name == name }
+	fun getShow(list: ArrayList<Show>, id: Int): Show?{
+		return list.find { it.id == id }
 	}
 
 	//Not sure if I will need this. Put this here for convenience for the time being
@@ -33,9 +33,9 @@ class User (val UserID: String){
 		return list!!.any { it.name == string }
 	}
 
-	fun checkListContainsShow(showname: String,listname: String): Boolean{
+	fun checkListContainsShow(id: Int,listname: String): Boolean{
 		var ListModel: ListModel = list!!.find { it.name == listname}!!
-		return ListModel.list!!.any { it.name == showname }
+		return ListModel.list!!.any { it.id == id }
 
 	}
 }

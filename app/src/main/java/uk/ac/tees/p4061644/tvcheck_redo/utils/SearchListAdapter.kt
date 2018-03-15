@@ -15,6 +15,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.google.gson.Gson
 import com.omertron.themoviedbapi.model.tv.TVBasic
+import com.omertron.themoviedbapi.model.tv.TVInfo
 import com.squareup.picasso.Picasso
 import uk.ac.tees.p4061644.tvcheck_redo.R
 import uk.ac.tees.p4061644.tvcheck_redo.models.Show
@@ -24,7 +25,7 @@ import java.net.URL
 /**
  * Created by Craig on 05/03/2018.
  */
-class SearchListAdapter(private var activity: Activity, private var results: ArrayList<TVBasic>?, private var items: ArrayList<Show>?,private var context: Context): BaseAdapter(){
+class SearchListAdapter(private var activity: Activity, private var results: ArrayList<TVBasic>?,private var context: Context): BaseAdapter(){
 	val gson = Gson()
 	class ViewHolder(row: View?){
 		var txtName: TextView? = null
@@ -53,25 +54,10 @@ class SearchListAdapter(private var activity: Activity, private var results: Arr
 			view = convertView
 			viewHolder = view.tag as ViewHolder
 		}
-		if (results != null) {
-			handleResults(viewHolder,position)
-		}else{
-			handleItems(viewHolder,position)
-		}
 
-		viewHolder
+		handleResults(viewHolder,position)
 
 		return view
-	}
-
-	fun handleItems(holder:ViewHolder,position: Int): ViewHolder{
-		var Show = items!![position]
-		holder.txtName!!.text = Show.name
-		Picasso.with(context).load(context.getString(R.string.base_address_w185) + Show.PosterPath)
-				.placeholder(R.drawable.ic_default_search_image)
-				.into(holder.imgView!!)
-		return holder
-
 	}
 
 	fun handleResults(holder: ViewHolder,position: Int): ViewHolder{
@@ -88,11 +74,8 @@ class SearchListAdapter(private var activity: Activity, private var results: Arr
 
 
 	override fun getItem(position: Int): String{
-		if (results != null) {
-			return gson.toJson(results!![position])
-		}else{
-			return gson.toJson(items!![position])
-		}
+		return gson.toJson(results!![position])
+
 	}
 
 	override fun getItemId(position: Int): Long {
@@ -100,12 +83,7 @@ class SearchListAdapter(private var activity: Activity, private var results: Arr
 	}
 
 	override fun getCount(): Int {
-		if (results != null) {
-			return results!!.size
-		}else{
-			return items!!.size
-		}
-
+		return results!!.size
 	}
 
 }
