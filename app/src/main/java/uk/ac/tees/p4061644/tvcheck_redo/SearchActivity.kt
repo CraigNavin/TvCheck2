@@ -21,19 +21,15 @@ import uk.ac.tees.p4061644.tvcheck_redo.models.User
 import uk.ac.tees.p4061644.tvcheck_redo.utils.AsyncTasker
 import uk.ac.tees.p4061644.tvcheck_redo.utils.BottomNavigationBarHelper
 import uk.ac.tees.p4061644.tvcheck_redo.utils.SearchListAdapter
+import kotlinx.android.synthetic.main.activity_search.*
+import kotlinx.android.synthetic.main.layout_bottom_navigation_view.*
 
 
 class SearchActivity : AppCompatActivity(), View.OnClickListener {
 
-
-	private var navbar: BottomNavigationViewEx? = null
 	private var Async : AsyncTasker? = null
 	private val activity_Num: Int = 1
 	private val TAG: String = "SearchActivity"
-	private var listView: ListView? = null
-	private var searchButton: ImageButton? = null
-	private var searchField: EditText? = null
-
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -43,21 +39,21 @@ class SearchActivity : AppCompatActivity(), View.OnClickListener {
 	}
 
 	fun setup(){
-		navbar = findViewById(R.id.bottomNavViewBar) as BottomNavigationViewEx
+
 		Async = AsyncTasker(applicationContext)
-		listView = findViewById(R.id.result_list_view) as ListView
-		searchButton = findViewById(R.id.search_button) as ImageButton
-		searchField = findViewById(R.id.search_text_field) as EditText
-		searchButton!!.setOnClickListener(this)
-		navbar!!.bringChildToFront(findViewById(R.id.bottomNavViewBar))
+
+
+
+		search_button.setOnClickListener(this)
+		bottomNavViewBar.bringChildToFront(this.bottomNavViewBar)
 	}
 	inline fun <reified T> Gson.fromJson(json: String) = this.fromJson<T>(json, object: TypeToken<T>() {}.type)
 	fun search(term: String){
 		var user: User = Gson().fromJson(intent.getStringExtra("User"))
-		var results = Async!!.searchShows(searchField!!.text.toString())
+		var results = Async!!.searchShows(search_text_field.text.toString())
 		var adapter = SearchListAdapter(this,Async!!.getCustomList(user!!.list!![0].list!!),applicationContext)
-		listView!!.adapter = adapter
-		listView!!.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+		result_list_view.adapter = adapter
+		result_list_view.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
 			val item = parent.getItemAtPosition(position) as String
 			val show : TVBasic = Gson().fromJson(item)
 			var seasons = Async!!.getShowInfoAsync(show.id).seasons
@@ -72,19 +68,19 @@ class SearchActivity : AppCompatActivity(), View.OnClickListener {
 
 	private fun setupBottomnavigatioView(){
 		Log.d(TAG,"setupBottomNavigationView")
-		BottomNavigationBarHelper.setupBottomNavigationBar(navbar)
-		BottomNavigationBarHelper.enableNavigation(applicationContext, navbar,intent.getStringExtra("User"))
-		val menu: Menu? = navbar?.menu
+		BottomNavigationBarHelper.setupBottomNavigationBar(bottomNavViewBar)
+		BottomNavigationBarHelper.enableNavigation(applicationContext, bottomNavViewBar,intent.getStringExtra("User"))
+		val menu: Menu? = bottomNavViewBar.menu
 		val menuI: MenuItem? = menu?.getItem(activity_Num)
 		menuI?.isChecked = true
 	}
 
 	override fun onClick(v: View?) {
 		when(v!!.id){
-			R.id.search_button -> if (searchField!!.text.toString() == ""){
+			R.id.search_button -> if (search_text_field.text.toString() == ""){
 				Toast.makeText(applicationContext,"No Search Entered",Toast.LENGTH_LONG).show()
 			}else{
-				search(searchField!!.text.toString())
+				search(search_text_field.text.toString())
 				val inputManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
 				inputManager.hideSoftInputFromWindow(currentFocus!!.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)

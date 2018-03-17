@@ -19,10 +19,11 @@ import uk.ac.tees.p4061644.tvcheck_redo.utils.AsyncTasker
 import uk.ac.tees.p4061644.tvcheck_redo.utils.BottomNavigationBarHelper
 import uk.ac.tees.p4061644.tvcheck_redo.utils.Converter
 import uk.ac.tees.p4061644.tvcheck_redo.utils.DatabaseHandler
+import kotlinx.android.synthetic.main.activity_home.*
+import kotlinx.android.synthetic.main.layout_bottom_navigation_view.*
 
 class HomeActivity : Activity(){
 
-	private var navbar: BottomNavigationViewEx? = null
 	private var TAG: String = "HomeActivity"
 	private val activity_Num: Int = 0
 	private var Async : AsyncTasker? = null
@@ -35,7 +36,6 @@ class HomeActivity : Activity(){
 		Log.d(TAG,"OnCreate")
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_home)
-		navbar = findViewById(R.id.bottomNavViewBar) as BottomNavigationViewEx
 		setupBottomnavigatioView()
 		Async = AsyncTasker(applicationContext)
 		dbh = DatabaseHandler(applicationContext)
@@ -123,9 +123,9 @@ class HomeActivity : Activity(){
 
 	private fun setupBottomnavigatioView(){
 		Log.d(TAG,"setupBottomNavigationView")
-		BottomNavigationBarHelper.setupBottomNavigationBar(navbar)
-		BottomNavigationBarHelper.enableNavigation(applicationContext, navbar,intent.getStringExtra("User"))
-		val menu: Menu? = navbar?.menu
+		BottomNavigationBarHelper.setupBottomNavigationBar(bottomNavViewBar)
+		BottomNavigationBarHelper.enableNavigation(applicationContext, bottomNavViewBar,intent.getStringExtra("User"))
+		val menu: Menu? = bottomNavViewBar.menu
 		val menuI: MenuItem? = menu?.getItem(activity_Num)
 		menuI?.isChecked = true
 	}

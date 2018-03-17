@@ -10,11 +10,12 @@ import com.google.gson.reflect.TypeToken
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx
 import uk.ac.tees.p4061644.tvcheck_redo.models.User
 import uk.ac.tees.p4061644.tvcheck_redo.utils.BottomNavigationBarHelper
+import kotlinx.android.synthetic.main.activity_profile.*
+import kotlinx.android.synthetic.main.layout_bottom_navigation_view.*
 
 class ProfileActivity : AppCompatActivity() {
 
 	private val TAG = "ProfileActivity"
-	private var navbar: BottomNavigationViewEx? = null
 	private val activity_Num: Int = 2
 	private var user : User? = null
 	private var gson = Gson()
@@ -23,7 +24,6 @@ class ProfileActivity : AppCompatActivity() {
 		Log.d(TAG, "OnCreate")
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_profile)
-		navbar = findViewById(R.id.bottomNavViewBar) as BottomNavigationViewEx
 		setupBottomnavigatioView()
 		setUser()
 		Log.d("USERGSONCHECK",user!!.UserID)
@@ -37,9 +37,9 @@ class ProfileActivity : AppCompatActivity() {
 
 	private fun setupBottomnavigatioView(){
 		Log.d(TAG,"setupBottomNavigationView")
-		BottomNavigationBarHelper.setupBottomNavigationBar(navbar)
-		BottomNavigationBarHelper.enableNavigation(applicationContext, navbar,intent.getStringExtra("User"))
-		val menu: Menu? = navbar?.menu
+		BottomNavigationBarHelper.setupBottomNavigationBar(bottomNavViewBar)
+		BottomNavigationBarHelper.enableNavigation(applicationContext, bottomNavViewBar,intent.getStringExtra("User"))
+		val menu: Menu? = bottomNavViewBar.menu
 		val menuI: MenuItem? = menu?.getItem(activity_Num)
 		menuI?.setChecked(true)
 	}

@@ -1,35 +1,24 @@
 package uk.ac.tees.p4061644.tvcheck_redo
 
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.support.v7.app.AppCompatActivity
 import android.util.Patterns
 import android.view.View
-import android.widget.EditText
-import android.widget.ProgressBar
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.android.synthetic.main.activity_sign_up.*
 import uk.ac.tees.p4061644.tvcheck_redo.models.User
 import uk.ac.tees.p4061644.tvcheck_redo.utils.DatabaseHandler
 
 class SignUpActivity : AppCompatActivity(), View.OnClickListener {
 
-	internal var editTextEmail: EditText? = null
-	internal var editTextPassword: EditText? = null
-	internal var editTextPasswordConfirm: EditText? = null
-	internal var progressBar: ProgressBar? = null
 	private var mAuth: FirebaseAuth? = null
 	private var dbh : DatabaseHandler? = null
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_sign_up)
-
-		editTextEmail = findViewById(R.id.SIgn_Up_Email) as EditText
-		editTextPassword = findViewById(R.id.Sign_Up_Pass1) as EditText
-		editTextPasswordConfirm = findViewById(R.id.Sign_Up_Pass2) as EditText
-		progressBar = findViewById(R.id.SignUp_progressbar) as ProgressBar
 
 		mAuth = FirebaseAuth.getInstance()
 		dbh = DatabaseHandler(applicationContext)
@@ -39,54 +28,54 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener {
 	}
 
 	private fun RegisterUser() {
-		val email = editTextEmail!!.text.toString()
-		val password = editTextPassword!!.text.toString()
-		val confirmPassword = editTextPasswordConfirm!!.text.toString()
+		val email = SIgn_Up_Email.text.toString()
+		val password = Sign_Up_Pass1.text.toString()
+		val confirmPassword = Sign_Up_Pass2.text.toString()
 
 
 		removeWhiteSpace(email)
 		removeWhiteSpace(password)
 		removeWhiteSpace(confirmPassword)
 		if (email.isNullOrEmpty()) {
-			editTextEmail!!.error = "Email is required"
-			editTextEmail!!.requestFocus()
+			SIgn_Up_Email.error = "Email is required"
+			SIgn_Up_Email.requestFocus()
 			return
 		}
 
 		if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-			editTextEmail!!.error = "Please enter a valid email"
-			editTextEmail!!.requestFocus()
+			SIgn_Up_Email.error = "Please enter a valid email"
+			SIgn_Up_Email.requestFocus()
 			return
 		}
 
 		if (password.isNullOrEmpty()) {
-			editTextPassword!!.error = "Password is required"
-			editTextPassword!!.requestFocus()
+			Sign_Up_Pass1.error = "Password is required"
+			Sign_Up_Pass1.requestFocus()
 			return
 		}
 
 		if (password.length < 6) {
-			editTextPassword!!.error = "Minimum length of password should be 6"
-			editTextPassword!!.requestFocus()
+			Sign_Up_Pass1.error = "Minimum length of password should be 6"
+			Sign_Up_Pass1.requestFocus()
 			return
 		}
 		if (confirmPassword.isNullOrEmpty()) {
-			editTextPasswordConfirm!!.error = "Please Confirm Password"
-			editTextPasswordConfirm!!.requestFocus()
+			Sign_Up_Pass2.error = "Please Confirm Password"
+			Sign_Up_Pass2.requestFocus()
 			return
 		}
 
 		if (confirmPassword != password) {
 			Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show()
-			editTextPasswordConfirm!!.setText("")
-			editTextPasswordConfirm!!.requestFocus()
+			Sign_Up_Pass2.setText("")
+			Sign_Up_Pass2.requestFocus()
 			return
 		}
 
-		progressBar!!.visibility = View.VISIBLE
+		SignUp_progressbar.visibility = View.VISIBLE
 
 		mAuth!!.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
-			progressBar!!.visibility = View.GONE
+			SignUp_progressbar.visibility = View.GONE
 			if (task.isSuccessful) {
 				dbh!!.setup(applicationContext)
 				dbh!!.insert(User(mAuth!!.currentUser!!.uid,ArrayList()))

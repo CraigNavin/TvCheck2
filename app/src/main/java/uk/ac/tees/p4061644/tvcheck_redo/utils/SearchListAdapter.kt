@@ -2,25 +2,16 @@ package uk.ac.tees.p4061644.tvcheck_redo.utils
 
 import android.app.Activity
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.os.AsyncTask
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import com.google.gson.Gson
 import com.omertron.themoviedbapi.model.tv.TVBasic
-import com.omertron.themoviedbapi.model.tv.TVInfo
 import com.squareup.picasso.Picasso
 import uk.ac.tees.p4061644.tvcheck_redo.R
-import uk.ac.tees.p4061644.tvcheck_redo.models.Show
-import java.io.InputStream
-import java.net.URL
 
 /**
  * Created by Craig on 05/03/2018.
