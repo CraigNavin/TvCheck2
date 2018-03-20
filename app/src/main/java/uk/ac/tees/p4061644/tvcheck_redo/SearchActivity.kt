@@ -58,7 +58,7 @@ class SearchActivity : AppCompatActivity(){
 		var user: User = Gson().fromJson(intent.getStringExtra("User"))
 		var results = Async!!.searchShows(search_text_field.text.toString())
 		var adapter = SearchListAdapter(this,results,applicationContext)
-		var userListadapter = SearchListAdapter(this,Async!!.getUserList(user.list!![0].list!!),applicationContext)
+		//var userListadapter = SearchListAdapter(this,Async!!.getUserList(user.list!![0].list!!),applicationContext)
 		result_list_view.adapter = adapter
 		result_list_view.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
 			val item = parent.getItemAtPosition(position) as String

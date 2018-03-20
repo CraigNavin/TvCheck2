@@ -20,13 +20,10 @@ import com.omertron.themoviedbapi.model.tv.TVInfo
 import com.omertron.themoviedbapi.model.tv.TVSeasonBasic
 import com.squareup.picasso.Picasso
 import uk.ac.tees.p4061644.tvcheck_redo.models.User
-import uk.ac.tees.p4061644.tvcheck_redo.utils.AsyncTasker
-import uk.ac.tees.p4061644.tvcheck_redo.utils.BottomNavigationBarHelper
-import uk.ac.tees.p4061644.tvcheck_redo.utils.SeasonEpisodeListAdapter
 import kotlinx.android.synthetic.main.activity_show.*
 import kotlinx.android.synthetic.main.layout_bottom_navigation_view.*
 import uk.ac.tees.p4061644.tvcheck_redo.models.ListModel
-import uk.ac.tees.p4061644.tvcheck_redo.utils.Converter
+import uk.ac.tees.p4061644.tvcheck_redo.utils.*
 
 
 class ShowActivity : AppCompatActivity() {
@@ -128,8 +125,18 @@ class ShowActivity : AppCompatActivity() {
 				user!!.list!!.add(ListModel(listName))
 
 			}
-			in nameList -> user!!.list!!.find { it.name == listName }!!.list!!.add(converter!!.convert(show!!))
-
+		}
+		if (nameList.contains(item.title)){
+			var chosenList = user!!.list!!.find { it.name == item.title }
+			if (user!!.checkListContainsShow(show!!.id,chosenList!!.name)){
+				Toast.makeText(applicationContext,"This list already contains this show. Choose another list",Toast.LENGTH_SHORT).show()
+			}else{
+				chosenList!!.list!!.add(converter!!.convert(show!!))
+				DatabaseHandler(applicationContext).update(user!!)
+				Toast.makeText(applicationContext,show!!.id.toString() + " added to list " + chosenList.name,Toast.LENGTH_SHORT).show()
+			}
+		}else{
+			Toast.makeText(applicationContext,"List does not exist",Toast.LENGTH_SHORT).show()
 		}
 		return super.onContextItemSelected(item)
 	}
@@ -183,9 +190,7 @@ class ShowActivity : AppCompatActivity() {
 
 	override fun onDestroy() {
 		//android.os.Process.killProcess(android.os.Process.myPid());
-
 		super.onDestroy()
 		Runtime.getRuntime().gc()
-
 	}
 }

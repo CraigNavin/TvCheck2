@@ -24,11 +24,6 @@ class User (val UserID: String){
 		return list.find { it.id == id }
 	}
 
-	//Not sure if I will need this. Put this here for convenience for the time being
-	fun checkListExists(string: String): Boolean{
-		return list!!.any { it.name == string }
-	}
-
 	fun checkNameTaken(string: String): Boolean{
 		return list!!.any { it.name == string }
 	}
@@ -44,7 +39,6 @@ class User (val UserID: String){
 		list!!.forEach { retlist.add(it.name) }
 		return retlist
 	}
-
 
 	fun checkListContainsShow(id: Int,listname: String): Boolean{
 		var ListModel: ListModel = list!!.find { it.name == listname}!!

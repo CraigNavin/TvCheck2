@@ -17,7 +17,7 @@ import uk.ac.tees.p4061644.tvcheck_redo.utils.BottomNavigationBarHelper
 
 class EpisodeActivity : AppCompatActivity() {
 
-	private val TAG: String = "SeasonActivity"
+	private val TAG: String = "EpisodeActivity"
 	private val activity_Num: Int = 1
 	private var episode: TVEpisodeInfo? = null
 	private var user: User? = null
@@ -31,16 +31,8 @@ class EpisodeActivity : AppCompatActivity() {
 
 	fun listsContainShow(): Show? {
 		var listolists = user!!.list
-
-		for (list in listolists!!){
-			for ((id) in list.list!!){
-				if(user!!.checkListContainsShow(id,list.name)){
-					return list.list!!.find { it.id == id }
-				}else{
-					return null
-				}
-			}
-		}
+		var TVID = intent.extras.get("TVID")
+		listolists!!.forEach { it.list!!.forEach { if (it.id == TVID){ return it } }}
 		return null
 	}
 
@@ -73,11 +65,9 @@ class EpisodeActivity : AppCompatActivity() {
 	}
 
 	fun setup(){
-
-
+		Log.d(TAG,intent.extras.get("TVID").toString())
 		user =  Gson().fromJson(intent.getStringExtra("User"))
 		setupBottomnavigatioView()
-
 		episode = Gson().fromJson(intent.getStringExtra("Episode"))
 		setView()
 	}
