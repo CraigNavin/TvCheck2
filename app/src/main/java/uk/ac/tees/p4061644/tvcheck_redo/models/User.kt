@@ -32,6 +32,19 @@ class User (val UserID: String){
 	fun checkNameTaken(string: String): Boolean{
 		return list!!.any { it.name == string }
 	}
+	fun checkListsContainsShow(id: Int): Boolean{
+		list!!.forEach {
+			return it.list!!.any { it.id == id }
+		}
+		return false
+	}
+
+	fun getListNames():ArrayList<String>{
+		var retlist = ArrayList<String>()
+		list!!.forEach { retlist.add(it.name) }
+		return retlist
+	}
+
 
 	fun checkListContainsShow(id: Int,listname: String): Boolean{
 		var ListModel: ListModel = list!!.find { it.name == listname}!!

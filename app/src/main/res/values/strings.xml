@@ -22,6 +22,8 @@
     <string name="base_address_w185">https://image.tmdb.org/t/p/w185</string>
     <string name="base_address_w500">https://image.tmdb.org/t/p/w500</string>
     <string name="base_address_original">https://image.tmdb.org/t/p/original</string>
+    <string name="New_List...">New List...</string>
+    <string name="list_name">Enter list name:</string>
 
 
 </resources>

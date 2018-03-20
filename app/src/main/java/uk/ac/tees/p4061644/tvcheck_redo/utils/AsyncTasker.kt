@@ -25,10 +25,6 @@ import kotlin.collections.ArrayList
 class AsyncTasker(context: Context) {
 
 	private var api : TheMovieDbApi? = null
-	private var list: List<TVBasic>? = null
-	private var show: TVInfo? = null
-	private var season: TVSeasonInfo? = null
-	private var episode: TVEpisodeInfo? = null
 
 	init {
 		initApi(context)
@@ -39,7 +35,6 @@ class AsyncTasker(context: Context) {
 	}
 
 	fun searchShows(search: String): ArrayList<TVBasic>? {
-		reset()
 		var list = searchShowsTask(search).execute().get()
 		if (list == null){
 			return ArrayList()
@@ -48,19 +43,9 @@ class AsyncTasker(context: Context) {
 		}
 	}
 
-	fun getShow():TVInfo{
-		return show!!
-	}
-	fun getSeason():TVInfo{
-		return show!!
-	}
-	fun getEpisode():TVInfo{
-		return show!!
-	}
-
-	fun getCustomList(list: ArrayList<Show>):ArrayList<TVBasic>{
+	fun getUserList(list: ArrayList<Show>):ArrayList<TVBasic>{
 		var retList = ArrayList<TVBasic>()
-		list!!.forEach { retList.add(getShowBasicAsync(it.id)) }
+		list.forEach { retList.add(getShowBasicAsync(it.id)) }
 		return  retList
 	}
 
@@ -80,27 +65,6 @@ class AsyncTasker(context: Context) {
 		return getEpisodeTask(EpNum,seasonNum,TVid).execute().get()
 	}
 
-	private fun setList(list: List<TVBasic>?){
-		this.list = list
-	}
-
-	private fun setShow(showInfo: TVInfo?){
-		this.show = showInfo
-	}
-
-	private fun setSeason(seasonInfo: TVSeasonInfo){
-		this.season = seasonInfo
-	}
-
-	private fun setEpisode(episodeInfo: TVEpisodeInfo){
-		this.episode = episodeInfo
-	}
-	fun reset(){
-		list = null
-		show = null
-		season = null
-		episode = null
-	}
 
 
 	internal inner class searchShowsTask constructor(search:String) : AsyncTask<Void, Void, List<TVBasic>>() {

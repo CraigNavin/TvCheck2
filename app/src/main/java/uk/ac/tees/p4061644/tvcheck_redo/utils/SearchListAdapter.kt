@@ -17,7 +17,6 @@ import uk.ac.tees.p4061644.tvcheck_redo.R
  * Created by Craig on 05/03/2018.
  */
 class SearchListAdapter(private var activity: Activity, private var results: ArrayList<TVBasic>?,private var context: Context): BaseAdapter(){
-	val gson = Gson()
 	class ViewHolder(row: View?){
 		var txtName: TextView? = null
 		var txtComment: TextView? = null
@@ -31,7 +30,6 @@ class SearchListAdapter(private var activity: Activity, private var results: Arr
 		}
 	}
 
-	val base_address = "https://image.tmdb.org/t/p/w185"
 	override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
 		val view: View?
 		val viewHolder: ViewHolder
@@ -57,7 +55,7 @@ class SearchListAdapter(private var activity: Activity, private var results: Arr
 		var rating = "User Rating: " + TVBasic.voteAverage
 		holder.txtName!!.text = TVBasic.name
 		holder.txtComment!!.text = rating
-		Picasso.with(context).load(base_address + TVBasic.posterPath)
+		Picasso.with(context).load(context.resources.getString(R.string.base_address_w185).toString() + TVBasic.posterPath)
 				.placeholder(R.drawable.ic_default_search_image)
 				.into(holder.imgView!!)
 		return holder
@@ -65,7 +63,7 @@ class SearchListAdapter(private var activity: Activity, private var results: Arr
 
 
 	override fun getItem(position: Int): String{
-		return gson.toJson(results!![position])
+		return Gson().toJson(results!![position])
 
 	}
 

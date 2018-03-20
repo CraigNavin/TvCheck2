@@ -23,10 +23,9 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 		setContentView(R.layout.activity_login)
 
 		dbh = DatabaseHandler(applicationContext)
-
-
 		FirebaseApp.initializeApp(applicationContext)
 		mAuth = FirebaseAuth.getInstance()
+		Login_email.requestFocus()
 
 		findViewById(R.id.Login_TVsignUp).setOnClickListener(this)
 		findViewById(R.id.Login_Btn).setOnClickListener(this)
