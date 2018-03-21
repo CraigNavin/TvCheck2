@@ -62,7 +62,9 @@ class HomeActivity : Activity(){
 		var showindex = Random().nextInt(user!!.list!![listindex].list!!.size)
 		return user!!.list!![listindex].list!![showindex]
 	}
+	fun githubCheck(){
 
+	}
 
 
 	private fun setupBottomnavigatioView(){
