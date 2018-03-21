@@ -24,6 +24,8 @@
     <string name="base_address_original">https://image.tmdb.org/t/p/original</string>
     <string name="New_List...">New List...</string>
     <string name="list_name">Enter list name:</string>
+    <string name="popular_TV">Popular TV</string>
+    <string name="top_rated_TV">Top Rated TV</string>
 
 
 </resources>

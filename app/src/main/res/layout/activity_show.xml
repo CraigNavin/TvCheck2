@@ -71,6 +71,15 @@
             android:layout_alignParentEnd="true"
             android:id="@+id/save_float_btn"/>
 
+        <ProgressBar
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/Rating_TV"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/save_progress_bar"
+            tools:visibility="invisible"/>
+
     </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

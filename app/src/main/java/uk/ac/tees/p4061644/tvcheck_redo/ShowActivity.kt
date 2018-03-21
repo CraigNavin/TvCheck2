@@ -1,10 +1,7 @@
 package uk.ac.tees.p4061644.tvcheck_redo
 
-import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
@@ -22,6 +19,7 @@ import com.squareup.picasso.Picasso
 import uk.ac.tees.p4061644.tvcheck_redo.models.User
 import kotlinx.android.synthetic.main.activity_show.*
 import kotlinx.android.synthetic.main.layout_bottom_navigation_view.*
+import uk.ac.tees.p4061644.tvcheck_redo.Adapters.SeasonEpisodeListAdapter
 import uk.ac.tees.p4061644.tvcheck_redo.models.ListModel
 import uk.ac.tees.p4061644.tvcheck_redo.utils.*
 
@@ -82,13 +80,13 @@ class ShowActivity : AppCompatActivity() {
 		user = Gson().fromJson(intent.getStringExtra("User"))
 		basic = Gson().fromJson(intent.getStringExtra("Show"))
 		converter = Converter(applicationContext)
+		save_progress_bar.visibility = View.GONE
 		show = Async!!.getShowInfoAsync(basic!!.id)
 		if (user!!.checkListsContainsShow(basic!!.id)){
 			save_float_btn.setImageDrawable(getDrawable(R.drawable.ic_love))
 		}else{
 			save_float_btn.setImageDrawable(getDrawable(R.drawable.ic_addlist_icon))
 		}
-		var rootView = window.decorView.rootView
 		registerForContextMenu(save_float_btn)
 
 		save_float_btn.setOnClickListener {
@@ -99,9 +97,13 @@ class ShowActivity : AppCompatActivity() {
 				AlertDialog.Builder(this)
 						.setTitle("Confirm Remove")
 						.setMessage("Are you sure you want to remove " + basic!!.name  +" from your lists?")
-						.setPositiveButton("Remove",DialogInterface.OnClickListener { dialog, which -> user!!.list!!.forEach { it.list!!.removeIf { it.id == basic!!.id } }
+						.setPositiveButton("Remove", { dialog, which ->
+							user!!.list!!.forEach { it.list!!.removeIf { it.id == basic!!.id } }
+							user = DatabaseHandler(applicationContext).update(user!!)
 							save_float_btn.setImageDrawable(getDrawable(R.drawable.ic_addlist_icon))
-							Toast.makeText(applicationContext,"Show Removed",Toast.LENGTH_SHORT).show() })
+							Toast.makeText(applicationContext,"Show Removed",Toast.LENGTH_SHORT).show()
+
+						})
 						.setNegativeButton("Cancel",null).show()
 			}
 		}
@@ -131,8 +133,11 @@ class ShowActivity : AppCompatActivity() {
 			if (user!!.checkListContainsShow(show!!.id,chosenList!!.name)){
 				Toast.makeText(applicationContext,"This list already contains this show. Choose another list",Toast.LENGTH_SHORT).show()
 			}else{
-				chosenList!!.list!!.add(converter!!.convert(show!!))
-				DatabaseHandler(applicationContext).update(user!!)
+				save_progress_bar.visibility = View.VISIBLE
+				save_progress_bar.bringToFront()
+				chosenList.list!!.add(converter!!.convert(show!!))
+				user = DatabaseHandler(applicationContext).update(user!!)
+				save_progress_bar.visibility = View.GONE
 				Toast.makeText(applicationContext,show!!.id.toString() + " added to list " + chosenList.name,Toast.LENGTH_SHORT).show()
 			}
 		}else{
@@ -152,25 +157,23 @@ class ShowActivity : AppCompatActivity() {
 		val promptInput = prompt.findViewById(R.id.editTextDialogUserInput) as EditText
 
 		builder.setCancelable(false)
-				.setPositiveButton("Create",
-						DialogInterface.OnClickListener { dialog, which ->
-							result = promptInput.text.toString()
-							 if (result.isNullOrEmpty()){
-								 Toast.makeText(applicationContext, "Please enter a list name",Toast.LENGTH_SHORT).show()
-								 result =""
-								 promptInput.setText("")
-							 }else if(user.checkNameTaken(result)){
-								 Toast.makeText(applicationContext,"A list with this name already exists. Please choose a different name",Toast.LENGTH_SHORT).show()
-								 result = ""
-								 promptInput.setText("")
-							 }else{
-								 dialog.dismiss()
-							 }
-						}
-				).setNegativeButton("Cancel",
-						DialogInterface.OnClickListener { dialog, which -> dialog.cancel() })
+				.setPositiveButton("Create", { dialog, which ->
+					result = promptInput.text.toString()
+					 if (result.isNullOrEmpty()){
+						 Toast.makeText(applicationContext, "Please enter a list name",Toast.LENGTH_SHORT).show()
+						 result =""
+						 promptInput.setText("")
+					 }else if(user.checkNameTaken(result)){
+						 Toast.makeText(applicationContext,"A list with this name already exists. Please choose a different name",Toast.LENGTH_SHORT).show()
+						 result = ""
+						 promptInput.setText("")
+					 }else{
+						 dialog.dismiss()
+					 }
+				}
+				).setNegativeButton("Cancel", { dialog, which -> dialog.cancel() })
 
-		var dialog = builder.create()
+		val dialog = builder.create()
 
 		dialog.show()
 

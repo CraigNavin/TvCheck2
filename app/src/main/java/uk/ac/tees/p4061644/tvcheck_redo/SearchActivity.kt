@@ -7,19 +7,17 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.Toast
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.omertron.themoviedbapi.model.tv.TVBasic
 import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.android.synthetic.main.layout_bottom_navigation_view.*
 import uk.ac.tees.p4061644.tvcheck_redo.models.User
 import uk.ac.tees.p4061644.tvcheck_redo.utils.AsyncTasker
 import uk.ac.tees.p4061644.tvcheck_redo.utils.BottomNavigationBarHelper
-import uk.ac.tees.p4061644.tvcheck_redo.utils.SearchListAdapter
+import uk.ac.tees.p4061644.tvcheck_redo.Adapters.SearchListAdapter
 
 
 class SearchActivity : AppCompatActivity(){

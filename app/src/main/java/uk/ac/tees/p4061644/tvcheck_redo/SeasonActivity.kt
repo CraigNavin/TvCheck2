@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.layout_bottom_navigation_view.*
 import uk.ac.tees.p4061644.tvcheck_redo.models.User
 import uk.ac.tees.p4061644.tvcheck_redo.utils.AsyncTasker
 import uk.ac.tees.p4061644.tvcheck_redo.utils.BottomNavigationBarHelper
-import uk.ac.tees.p4061644.tvcheck_redo.utils.SeasonEpisodeListAdapter
+import uk.ac.tees.p4061644.tvcheck_redo.Adapters.SeasonEpisodeListAdapter
 
 class SeasonActivity : AppCompatActivity() {
 

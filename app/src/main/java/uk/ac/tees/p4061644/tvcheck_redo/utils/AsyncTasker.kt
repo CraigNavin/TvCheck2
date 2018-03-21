@@ -15,6 +15,7 @@ import uk.ac.tees.p4061644.tvcheck_redo.R
 import uk.ac.tees.p4061644.tvcheck_redo.models.ListModel
 import uk.ac.tees.p4061644.tvcheck_redo.models.Show
 import uk.ac.tees.p4061644.tvcheck_redo.models.User
+import java.util.*
 import kotlin.collections.ArrayList
 
 
@@ -27,10 +28,6 @@ class AsyncTasker(context: Context) {
 	private var api : TheMovieDbApi? = null
 
 	init {
-		initApi(context)
-	}
-
-	fun initApi(context: Context){
 		api = TheMovieDbApi(context.resources.getString(R.string.Api_key))
 	}
 
@@ -42,6 +39,16 @@ class AsyncTasker(context: Context) {
 			return ArrayList(list)
 		}
 	}
+
+	fun fillhome(getType:Int, TVid: Int?): ArrayList<TVBasic>?{
+		var list: List<TVBasic> = populateHomeTask(getType,TVid).execute().get()
+		if (list.isEmpty()){
+			return ArrayList()
+		}else{
+			return ArrayList(list)
+		}
+	}
+
 
 	fun getUserList(list: ArrayList<Show>):ArrayList<TVBasic>{
 		var retList = ArrayList<TVBasic>()
@@ -150,5 +157,27 @@ class AsyncTasker(context: Context) {
 		}
 	}
 
+	internal inner class populateHomeTask(val getType: Int,val TVid: Int?)  : AsyncTask<Void, Void, List<TVBasic>>() {
+		private var api: TheMovieDbApi? = this@AsyncTasker.api
+
+		override fun doInBackground(vararg voids: Void): List<TVBasic> {
+			var list: List<TVBasic>
+			when(getType){
+				1 -> list = api!!.getTVPopular(1,"en").results
+				2 -> list = api!!.getTVTopRated(1,"en").results
+				3 -> if (TVid != null){
+					list = api!!.getTVSimilar(TVid,1,"en").results
+				}else{
+					list = Collections.emptyList()
+				}
+				else -> list = Collections.emptyList()
+			}
+			return list
+		}
+
+		override fun onPostExecute(result: List<TVBasic>?) {
+			super.onPostExecute(result)
+		}
+	}
 
 }

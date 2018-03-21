@@ -1,6 +1,7 @@
 package uk.ac.tees.p4061644.tvcheck_redo.utils
 
 import android.content.Context
+import android.os.AsyncTask
 import android.util.Log
 import com.omertron.themoviedbapi.model.tv.*
 import uk.ac.tees.p4061644.tvcheck_redo.models.Episode
@@ -13,6 +14,7 @@ import uk.ac.tees.p4061644.tvcheck_redo.models.Show
 class Converter(context: Context) {
 	private val tasker = AsyncTasker(context)
 
+
 	fun convert(TVInfo: TVInfo): Show{
 		var seasonList: ArrayList<Season> = ArrayList()
 		if(TVInfo.seasons.size != 0){
@@ -21,13 +23,10 @@ class Converter(context: Context) {
 				Log.d("SEASON ADDED","Season:" + s.seasonNumber.toString() + " Added")
 			}
 		}
-
 		return Show(TVInfo.id,seasonList,false)
 	}
 
 	fun convert(TVSeason: TVSeasonBasic,TVid: Int): Season{
-
-
 		var TVSeasonInfo = tasker.getSeasonAsync(TVSeason.seasonNumber,TVid)
 
 		var episodeList: ArrayList<Episode> = ArrayList()
@@ -40,26 +39,10 @@ class Converter(context: Context) {
 				}
 			}
 		}
-
-
 		return Season(TVid,episodeList,TVSeasonInfo.seasonNumber,false)
-
 	}
 
 	fun convert():Episode{
-
 		return Episode(false)
 	}
-
-/*	fun fullConvert(TVInfo: TVInfo): Show{
-		var seasonList: ArrayList<Season> = ArrayList()
-
-		for (s in TVInfo.seasons){
-			seasonList.add(convert(s))
-		}
-
-		return Show(TVInfo.name,TVInfo.overview,seasonList,TVInfo.images,false)
-
-	}*/
-
 }

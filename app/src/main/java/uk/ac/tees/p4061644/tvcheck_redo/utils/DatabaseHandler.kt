@@ -77,22 +77,27 @@ class DatabaseHandler(context: Context) {
 		return exists
 	}
 
-	fun update(user: User){
+	fun update(user: User):User {
 		var query: ParseQuery<ParseObject> = getQuery("UserData")
-		query.whereEqualTo("UserId",user.UserID)
-		query.getFirstInBackground( { userdata, e ->
-			Log.d("UPDATE","UPDATE START " + userdata.get("UserId"))
-			if (e == null){
-				userdata.put("Lists",gson.toJson(user.list))
+		query.whereEqualTo("UserId", user.UserID)
+		query.getFirstInBackground({ userdata, e ->
+			Log.d("UPDATE", "UPDATE START " + userdata.get("UserId"))
+			if (e == null) {
+				userdata.put("Lists", gson.toJson(user.list))
 				userdata.saveInBackground()
-				Log.d("UPDATE ","UPDATE DONE")
-			}else{
-				if (e.code == ParseException.OBJECT_NOT_FOUND){
-					Log.d("UPDATE","USER NOT FOUND " + e.message)
-				}else{
-					Log.d("UPDATE",e.code.toString()+ " OTHER ERROR " + e.message)
+				Log.d("UPDATE ", "UPDATE DONE")
+			}
+			else {
+				if (e.code == ParseException.OBJECT_NOT_FOUND) {
+					Log.d("UPDATE", "USER NOT FOUND " + e.message)
+				}
+				else {
+					Log.d("UPDATE", e.code.toString() + " OTHER ERROR " + e.message)
 				}
 			}
 		})
+		return retrievefirst(user.UserID)!!
 	}
+
+
 }
