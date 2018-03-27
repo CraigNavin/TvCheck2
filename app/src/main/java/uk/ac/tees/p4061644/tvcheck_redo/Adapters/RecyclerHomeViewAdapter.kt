@@ -9,14 +9,16 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.omertron.themoviedbapi.model.tv.TVBasic
 import com.squareup.picasso.Picasso
-import org.w3c.dom.Text
 import uk.ac.tees.p4061644.tvcheck_redo.R
 
 /**
  * Created by Craig on 21/03/2018.
  */
-class RecyclerViewAdapter(private val context: Context, private val shows: ArrayList<TVBasic>): RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {
+class RecyclerHomeViewAdapter(private val context: Context, private val shows: ArrayList<TVBasic>, private val listener: OnItemClickListener): RecyclerView.Adapter<RecyclerHomeViewAdapter.ViewHolder>() {
 
+	interface OnItemClickListener {
+		fun onItemClick(position: Int)
+	}
 
 	override fun getItemCount(): Int {
 		return shows.size
@@ -29,19 +31,24 @@ class RecyclerViewAdapter(private val context: Context, private val shows: Array
 
 	override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
 		var show = shows!![position]
-		Picasso.with(context).load(context.getString(R.string.base_address_w500) + show.posterPath)
-				.placeholder(R.drawable.ic_default_search_image)
-				.into(holder!!.imgView)
-		holder.showName!!.text = show.name
+		holder!!.itemView.setOnClickListener { View.OnClickListener { listener.onItemClick(position) } }
+		holder!!.bind(show,listener)
 	}
 
 	class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
 		var imgView: ImageView? = null
 		var showName: TextView? = null
-
 		init{
 			imgView = view.findViewById(R.id.imageView) as ImageView?
-			showName = view.findViewById(R.id.showName) as TextView?
+			showName = view.findViewById(R.id.Name) as TextView?
 		}
+
+		fun bind(show:TVBasic, listener: OnItemClickListener){
+			Picasso.with(itemView.context).load(itemView.context.getString(R.string.base_address_w500) + show.posterPath)
+					.placeholder(R.drawable.ic_default_search_image)
+					.into(imgView)
+			showName!!.text = show.name
+		}
+
 	}
 }

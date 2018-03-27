@@ -2,15 +2,18 @@ package uk.ac.tees.p4061644.tvcheck_redo
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.omertron.themoviedbapi.model.tv.TVEpisodeInfo
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_episode.*
 import kotlinx.android.synthetic.main.layout_bottom_navigation_view.*
+import uk.ac.tees.p4061644.tvcheck_redo.Adapters.RecyclerPeopleViewAdapter
 import uk.ac.tees.p4061644.tvcheck_redo.models.Show
 import uk.ac.tees.p4061644.tvcheck_redo.models.User
 import uk.ac.tees.p4061644.tvcheck_redo.utils.BottomNavigationBarHelper
@@ -39,7 +42,12 @@ class EpisodeActivity : AppCompatActivity() {
 	fun setView(){
 		EPName_TV!!.text = episode!!.name
 		var bool: Boolean = false
-
+		var personlayoutManager = LinearLayoutManager (this, LinearLayoutManager.HORIZONTAL,false)
+		person_recycler.apply {
+			layoutManager = personlayoutManager
+			adapter = RecyclerPeopleViewAdapter(applicationContext,ArrayList(episode!!.credits.cast))
+			visibility = View.VISIBLE
+		}
 		if (listsContainShow() != null){
 			bool = listsContainShow()!!.seasons!![episode!!.seasonNumber - 1].episodes[episode!!.episodeNumber - 1].watched
 			watched_switch!!.text = "From List"
@@ -57,10 +65,10 @@ class EpisodeActivity : AppCompatActivity() {
 				.into(PosterView)
 		watched_switch!!.setOnCheckedChangeListener { buttonView, isChecked ->
 			if (isChecked){
-				episode
 			}
 		}
-		
+
+
 
 	}
 

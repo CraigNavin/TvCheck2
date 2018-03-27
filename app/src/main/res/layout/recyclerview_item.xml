@@ -14,9 +14,9 @@
         android:layout_height="375px"/>
 
     <TextView
-        android:id="@+id/showName"
+        android:id="@+id/Name"
         android:layout_width="match_parent"
-        android:maxLines="2"
+        android:maxLines="1"
         android:textSize="15sp"
         android:textColor="@color/colorPrimary"
         android:layout_weight="1.20"
