@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.Toast
@@ -32,10 +33,26 @@ class SearchActivity : AppCompatActivity(){
 		setup()
 		setupBottomnavigatioView()
 	}
+	inline fun <reified T> Gson.fromJson(json: String) = this.fromJson<T>(json, object: TypeToken<T>() {}.type)
 
 	fun setup(){
-
 		Async = AsyncTasker(applicationContext)
+		var user: User = Gson().fromJson(intent.getStringExtra("User"))
+		if (intent.extras.get("List") != null){
+			search_button.visibility = View.GONE
+			search_text_field . visibility = View.GONE
+			var list = Async!!.getUserList(user.getList(intent.getStringExtra("List"))!!.list!!)
+			var adapter = SearchListAdapter(this,list,applicationContext)
+			result_list_view.adapter = adapter
+		}
+		result_list_view.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
+			val item = parent.getItemAtPosition(position) as String
+			val intent = Intent(applicationContext,ShowActivity::class.java)//activity_Num 1
+			intent.putExtra("Show",item)
+			intent.putExtra("User",Gson().toJson(user))
+			applicationContext.startActivity(intent)
+		}
+
 		search_button.setOnClickListener({
 			when(it!!.id){
 				R.id.search_button -> if (search_text_field.text.toString() == ""){
@@ -51,20 +68,11 @@ class SearchActivity : AppCompatActivity(){
 		bottomNavViewBar.bringChildToFront(this.bottomNavViewBar)
 	}
 
-	inline fun <reified T> Gson.fromJson(json: String) = this.fromJson<T>(json, object: TypeToken<T>() {}.type)
+
 	fun search(term: String){
-		var user: User = Gson().fromJson(intent.getStringExtra("User"))
-		var results = Async!!.searchShows(search_text_field.text.toString())
+		var results = Async!!.searchShows(term)
 		var adapter = SearchListAdapter(this,results,applicationContext)
-		//var userListadapter = SearchListAdapter(this,Async!!.getUserList(user.list!![0].list!!),applicationContext)
 		result_list_view.adapter = adapter
-		result_list_view.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
-			val item = parent.getItemAtPosition(position) as String
-			val intent = Intent(applicationContext,ShowActivity::class.java)//activity_Num 1
-			intent.putExtra("Show",item)
-			intent.putExtra("User",Gson().toJson(user))
-			applicationContext.startActivity(intent)
-		}
 		adapter.notifyDataSetChanged()
 	}
 
@@ -77,18 +85,7 @@ class SearchActivity : AppCompatActivity(){
 		menuI?.isChecked = true
 	}
 
-/*	override fun onClick(v: View?) {
-		when(v!!.id){
-			R.id.search_button -> if (search_text_field.text.toString() == ""){
-				Toast.makeText(applicationContext,"No Search Entered",Toast.LENGTH_LONG).show()
-			}else{
-				search(search_text_field.text.toString())
-				val inputManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
-				inputManager.hideSoftInputFromWindow(currentFocus!!.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
-			}
-		}
-	}*/
 	override fun onDestroy() {
 		//android.os.Process.killProcess(android.os.Process.myPid());
 

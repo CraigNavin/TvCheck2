@@ -28,10 +28,14 @@ class User (val UserID: String){
 		return list!!.any { it.name == string }
 	}
 	fun checkListsContainsShow(id: Int): Boolean{
-		list!!.forEach {
+		list!!.forEach { it.list!!.forEach { return it.id == id } }
+
+		return false
+
+/*		list!!.forEach {
 			return it.list!!.any { it.id == id }
 		}
-		return false
+		return false*/
 	}
 
 	fun getListNames():ArrayList<String>{
