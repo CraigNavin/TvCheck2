@@ -26,6 +26,7 @@
     <string name="list_name">Enter list name:</string>
     <string name="popular_TV">Popular TV</string>
     <string name="top_rated_TV">Top Rated TV</string>
+    <string name="watched">Watched</string>
 
 
 </resources>

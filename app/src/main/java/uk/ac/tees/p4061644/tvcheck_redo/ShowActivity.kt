@@ -43,9 +43,6 @@ class ShowActivity : AppCompatActivity() {
 	}
 
 	fun setView(){
-
-
-
 		ShowName_TV!!.text = show!!.name
 		Overview_TV!!.text = show!!.overview
 		Rating_TV!!.text = show!!.voteAverage.toString()
@@ -55,7 +52,7 @@ class ShowActivity : AppCompatActivity() {
 		setupBottomnavigatioView()
 		//navbar!!.bringChildToFront(findViewById(R.id.bottomNavViewBar))
 		var seasons = show!!.seasons
-		var adapter = SeasonEpisodeListAdapter(this,seasons,null,applicationContext)
+		var adapter = SeasonEpisodeListAdapter(this,seasons,null,applicationContext,user!!,show!!.id)
 		season_list!!.adapter = adapter
 
 		season_list!!.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
@@ -99,7 +96,7 @@ class ShowActivity : AppCompatActivity() {
 						.setMessage("Are you sure you want to remove " + basic!!.name  +" from your lists?")
 						.setPositiveButton("Remove", { dialog, which ->
 							user!!.list!!.forEach { it.list!!.removeIf { it.id == basic!!.id } }
-							user = DatabaseHandler(applicationContext).update(user!!)
+							DatabaseHandler(applicationContext).update(user!!)
 							save_float_btn.setImageDrawable(getDrawable(R.drawable.ic_addlist_icon))
 							Toast.makeText(applicationContext,"Show Removed",Toast.LENGTH_SHORT).show()
 
@@ -136,7 +133,7 @@ class ShowActivity : AppCompatActivity() {
 				save_progress_bar.visibility = View.VISIBLE
 				save_progress_bar.bringToFront()
 				chosenList.list!!.add(converter!!.convert(show!!))
-				user = DatabaseHandler(applicationContext).update(user!!)
+				DatabaseHandler(applicationContext).update(user!!)
 				save_progress_bar.visibility = View.GONE
 				Toast.makeText(applicationContext,show!!.id.toString() + " added to list " + chosenList.name,Toast.LENGTH_SHORT).show()
 			}

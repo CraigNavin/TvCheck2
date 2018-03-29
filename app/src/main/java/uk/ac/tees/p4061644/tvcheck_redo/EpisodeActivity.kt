@@ -1,5 +1,7 @@
 package uk.ac.tees.p4061644.tvcheck_redo
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
@@ -7,6 +9,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.omertron.themoviedbapi.model.tv.TVEpisodeInfo
@@ -17,6 +20,7 @@ import uk.ac.tees.p4061644.tvcheck_redo.Adapters.RecyclerPeopleViewAdapter
 import uk.ac.tees.p4061644.tvcheck_redo.models.Show
 import uk.ac.tees.p4061644.tvcheck_redo.models.User
 import uk.ac.tees.p4061644.tvcheck_redo.utils.BottomNavigationBarHelper
+import uk.ac.tees.p4061644.tvcheck_redo.utils.DatabaseHandler
 
 class EpisodeActivity : AppCompatActivity() {
 
@@ -32,7 +36,7 @@ class EpisodeActivity : AppCompatActivity() {
 		setup()
 	}
 
-	fun listsContainShow(): Show? {
+	fun getShowFromLists(): Show? {
 		var listolists = user!!.list
 		var TVID = intent.extras.get("TVID")
 		listolists!!.forEach { it.list!!.forEach { if (it.id == TVID){ return it } }}
@@ -48,11 +52,11 @@ class EpisodeActivity : AppCompatActivity() {
 			adapter = RecyclerPeopleViewAdapter(applicationContext,ArrayList(episode!!.credits.cast))
 			visibility = View.VISIBLE
 		}
-		if (listsContainShow() != null){
-			bool = listsContainShow()!!.seasons!![episode!!.seasonNumber - 1].episodes[episode!!.episodeNumber - 1].watched
-			watched_switch!!.text = "From List"
+		if (getShowFromLists() != null){
+			bool = getShowFromLists()!!.seasons!![episode!!.seasonNumber - 1].episodes[episode!!.episodeNumber - 1].watched
+			watched_txt!!.text = "From List"
 		}
-		watched_switch!!.isChecked = bool
+		watched_box!!.isChecked = bool
 
 		if (episode!!.overview == null || episode!!.overview == ""){
 			Overview_TV!!.text = "No Overview"
@@ -63,9 +67,11 @@ class EpisodeActivity : AppCompatActivity() {
 				.placeholder(R.drawable.ic_default_search_image)
 				.fit()
 				.into(PosterView)
-		watched_switch!!.setOnCheckedChangeListener { buttonView, isChecked ->
-			if (isChecked){
-			}
+		watched_box!!.setOnCheckedChangeListener { buttonView, isChecked ->
+			getShowFromLists()!!.seasons!![episode!!.seasonNumber -1].episodes[episode!!.episodeNumber -1].watched = isChecked
+			DatabaseHandler(applicationContext).update(user!!)
+
+			Toast.makeText(applicationContext,"Show Removed", Toast.LENGTH_SHORT).show()
 		}
 
 

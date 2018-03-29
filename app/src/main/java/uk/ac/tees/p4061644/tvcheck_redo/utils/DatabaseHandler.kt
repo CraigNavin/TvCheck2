@@ -77,7 +77,7 @@ class DatabaseHandler(context: Context) {
 		return exists
 	}
 
-	fun update(user: User):User {
+	fun update(user: User){
 		var query: ParseQuery<ParseObject> = getQuery("UserData")
 		query.whereEqualTo("UserId", user.UserID)
 		query.getFirstInBackground({ userdata, e ->
@@ -96,7 +96,6 @@ class DatabaseHandler(context: Context) {
 				}
 			}
 		})
-		return retrievefirst(user.UserID)!!
 	}
 
 

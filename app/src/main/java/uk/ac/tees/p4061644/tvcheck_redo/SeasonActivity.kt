@@ -37,6 +37,7 @@ class SeasonActivity : AppCompatActivity() {
 
 	fun setView(season: TVSeasonInfo){
 		var seasonNum = "Season " + season.seasonNumber
+		var user: User = Gson().fromJson(intent.getStringExtra("User"))
 		SeasonNum_TV.text = seasonNum
 		Overview_TV.text = season.overview
 		Picasso.with(applicationContext).load(applicationContext.getString(R.string.base_address_w185) + season.posterPath)
@@ -44,9 +45,9 @@ class SeasonActivity : AppCompatActivity() {
 				.into(PosterView)
 		setupBottomnavigatioView()
 		bottomNavViewBar.bringChildToFront(bottomNavViewBar)
-		var adapter = SeasonEpisodeListAdapter(this,null,season.episodes,applicationContext)
+		var adapter = SeasonEpisodeListAdapter(this,null,season.episodes,applicationContext,user,id!!)
 		episodes_list.adapter = adapter
-		var user: User = Gson().fromJson(intent.getStringExtra("User"))
+
 		episodes_list.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, ids ->
 			val item = parent.getItemAtPosition(position) as String
 			val episode: TVEpisodeInfo = Gson().fromJson(item)
@@ -54,7 +55,7 @@ class SeasonActivity : AppCompatActivity() {
 			val intent = Intent(applicationContext,EpisodeActivity::class.java)//activity_Num 1
 			intent.putExtra("Episode",item)
 			intent.putExtra("User",Gson().toJson(user))
-			intent.putExtra("TVID",id)
+			intent.putExtra("TVID",id!!)
 			applicationContext.startActivity(intent)
 		}
 	}
