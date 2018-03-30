@@ -19,6 +19,7 @@ import uk.ac.tees.p4061644.tvcheck_redo.utils.AsyncTasker
 import uk.ac.tees.p4061644.tvcheck_redo.utils.BottomNavigationBarHelper
 import uk.ac.tees.p4061644.tvcheck_redo.utils.DatabaseHandler
 import java.util.*
+import kotlin.collections.ArrayList
 
 class HomeActivity : Activity(),RecyclerHomeViewAdapter.OnItemClickListener{
 
@@ -48,18 +49,25 @@ class HomeActivity : Activity(),RecyclerHomeViewAdapter.OnItemClickListener{
 		var poplayoutManager = LinearLayoutManager (this,LinearLayoutManager.HORIZONTAL,false)
 		var toplayoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
 		var popular = Async!!.fillhome(1,null)!!
-		var show = getRandomShowFromLists()
-		var random = Async!!.fillhome(2,show.id)!!
+		var show :Show? = null
+		var similar : ArrayList<TVBasic>? = null
+		if (!user!!.list!!.any{ it.list!!.count() == 0}){
+			show = getRandomShowFromLists()
+			similar = Async!!.fillhome(3,show.id)!!
+			top_rated_TV.text = "Because you watched " + Async!!.getShowBasicAsync(show.id).name
+		}else{
+			top_rated_TV.text = "Top Rated"
+			similar = Async!!.fillhome(2,null)!!
+		}
+
 		recycle_popular.apply {
 			layoutManager = poplayoutManager
 			adapter = RecyclerHomeViewAdapter(applicationContext,popular,this@HomeActivity)
 		}
 
-		top_rated_TV.text = "Because you watched " + Async!!.getShowBasicAsync(show.id).name
-
 		recycle_top_rated.apply {
 			layoutManager = toplayoutManager
-			adapter= RecyclerHomeViewAdapter(applicationContext,random,this@HomeActivity)
+			adapter= RecyclerHomeViewAdapter(applicationContext,similar!!,this@HomeActivity)
 		}
 	}
 
@@ -81,7 +89,7 @@ class HomeActivity : Activity(),RecyclerHomeViewAdapter.OnItemClickListener{
 	private fun setupBottomnavigatioView(){
 		Log.d(TAG,"setupBottomNavigationView")
 		BottomNavigationBarHelper.setupBottomNavigationBar(bottomNavViewBar)
-		BottomNavigationBarHelper.enableNavigation(applicationContext, bottomNavViewBar,intent.getStringExtra("User"))
+		BottomNavigationBarHelper.enableNavigation(applicationContext, bottomNavViewBar,Gson().toJson(user))
 		val menu: Menu? = bottomNavViewBar.menu
 		val menuI: MenuItem? = menu?.getItem(activity_Num)
 		menuI?.isChecked = true

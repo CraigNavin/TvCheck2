@@ -22,20 +22,20 @@ class ProfileActivity : AppCompatActivity() {
 	private val TAG = "ProfileActivity"
 	private val activity_Num: Int = 2
 	private var user : User? = null
-	private var gson = Gson()
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		Log.d(TAG, "OnCreate")
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_profile)
-		setupBottomnavigatioView()
 		setup()
+		setupBottomnavigatioView()
 		Log.d("USERGSONCHECK",user!!.UserID)
+
 
 	}
 
 	fun setup(){
-		user = gson.fromJson(intent.getStringExtra("User"))
+		user = Gson().fromJson(intent.getStringExtra("User"))
 		var name_list = user!!.getListNames()
 		//user!!.list!!.forEach { name_list.add(it.name) }
 
@@ -47,6 +47,12 @@ class ProfileActivity : AppCompatActivity() {
 			intent.putExtra("User",Gson().toJson(user))
 			applicationContext.startActivity(intent)
 		}
+
+		newList_btn.setOnClickListener {
+			val intent = Intent(applicationContext,NewListActivity::class.java)
+			intent.putExtra("User",Gson().toJson(user))
+			applicationContext.startActivity(intent)
+		}
 	}
 
 
@@ -55,7 +61,7 @@ class ProfileActivity : AppCompatActivity() {
 	private fun setupBottomnavigatioView(){
 		Log.d(TAG,"setupBottomNavigationView")
 		BottomNavigationBarHelper.setupBottomNavigationBar(bottomNavViewBar)
-		BottomNavigationBarHelper.enableNavigation(applicationContext, bottomNavViewBar,intent.getStringExtra("User"))
+		BottomNavigationBarHelper.enableNavigation(applicationContext, bottomNavViewBar,Gson().toJson(user))
 		val menu: Menu? = bottomNavViewBar.menu
 		val menuI: MenuItem? = menu?.getItem(activity_Num)
 		menuI?.setChecked(true)

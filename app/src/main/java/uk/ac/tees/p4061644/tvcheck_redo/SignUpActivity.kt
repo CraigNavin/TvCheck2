@@ -8,8 +8,10 @@ import android.view.View
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_sign_up.*
+import uk.ac.tees.p4061644.tvcheck_redo.models.ListModel
 import uk.ac.tees.p4061644.tvcheck_redo.models.User
 import uk.ac.tees.p4061644.tvcheck_redo.utils.DatabaseHandler
+import java.util.*
 
 class SignUpActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -78,7 +80,7 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener {
 			SignUp_progressbar.visibility = View.GONE
 			if (task.isSuccessful) {
 				dbh!!.setup(applicationContext)
-				dbh!!.insert(User(mAuth!!.currentUser!!.uid,ArrayList()))
+				dbh!!.insert(User(mAuth!!.currentUser!!.uid,ArrayList(Arrays.asList(ListModel("Watched"), ListModel("Watching"),ListModel("Going To Watch")))))
 				Toast.makeText(applicationContext, "User Registration Successful", Toast.LENGTH_SHORT).show()
 				startActivity(Intent(baseContext, LoginActivity::class.java))
 			}

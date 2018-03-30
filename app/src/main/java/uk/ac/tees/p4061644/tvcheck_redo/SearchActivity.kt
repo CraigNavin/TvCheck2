@@ -26,6 +26,7 @@ class SearchActivity : AppCompatActivity(){
 	private var Async : AsyncTasker? = null
 	private val activity_Num: Int = 1
 	private val TAG: String = "SearchActivity"
+	private var user: User? = null
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -36,12 +37,12 @@ class SearchActivity : AppCompatActivity(){
 	inline fun <reified T> Gson.fromJson(json: String) = this.fromJson<T>(json, object: TypeToken<T>() {}.type)
 
 	fun setup(){
+		user = Gson().fromJson(intent.getStringExtra("User"))
 		Async = AsyncTasker(applicationContext)
-		var user: User = Gson().fromJson(intent.getStringExtra("User"))
 		if (intent.extras.get("List") != null){
 			search_button.visibility = View.GONE
 			search_text_field . visibility = View.GONE
-			var list = Async!!.getUserList(user.getList(intent.getStringExtra("List"))!!.list!!)
+			var list = Async!!.getUserList(user!!.getList(intent.getStringExtra("List"))!!.list!!)
 			var adapter = SearchListAdapter(this,list,applicationContext)
 			result_list_view.adapter = adapter
 		}
@@ -79,7 +80,7 @@ class SearchActivity : AppCompatActivity(){
 	private fun setupBottomnavigatioView(){
 		Log.d(TAG,"setupBottomNavigationView")
 		BottomNavigationBarHelper.setupBottomNavigationBar(bottomNavViewBar)
-		BottomNavigationBarHelper.enableNavigation(applicationContext, bottomNavViewBar,intent.getStringExtra("User"))
+		BottomNavigationBarHelper.enableNavigation(applicationContext, bottomNavViewBar,Gson().toJson(user))
 		val menu: Menu? = bottomNavViewBar.menu
 		val menuI: MenuItem? = menu?.getItem(activity_Num)
 		menuI?.isChecked = true

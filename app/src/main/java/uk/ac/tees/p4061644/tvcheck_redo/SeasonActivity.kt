@@ -27,6 +27,7 @@ class SeasonActivity : AppCompatActivity() {
 	private var Async : AsyncTasker? = null
 	private val activity_Num: Int = 1
 	private var id: Int? = null
+	private var user: User? = null
 
 
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,7 +38,7 @@ class SeasonActivity : AppCompatActivity() {
 
 	fun setView(season: TVSeasonInfo){
 		var seasonNum = "Season " + season.seasonNumber
-		var user: User = Gson().fromJson(intent.getStringExtra("User"))
+
 		SeasonNum_TV.text = seasonNum
 		Overview_TV.text = season.overview
 		Picasso.with(applicationContext).load(applicationContext.getString(R.string.base_address_w185) + season.posterPath)
@@ -45,7 +46,7 @@ class SeasonActivity : AppCompatActivity() {
 				.into(PosterView)
 		setupBottomnavigatioView()
 		bottomNavViewBar.bringChildToFront(bottomNavViewBar)
-		var adapter = SeasonEpisodeListAdapter(this,null,season.episodes,applicationContext,user,id!!)
+		var adapter = SeasonEpisodeListAdapter(this,null,season.episodes,applicationContext,user!!,id!!)
 		episodes_list.adapter = adapter
 
 		episodes_list.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, ids ->
@@ -68,6 +69,7 @@ class SeasonActivity : AppCompatActivity() {
 	fun setup(){
 		Async = AsyncTasker(applicationContext)
 		id = intent.extras.get("TVID") as Int
+		user = Gson().fromJson(intent.getStringExtra("User"))
 		setView(getSeasonInfo(id!!))
 	}
 
@@ -76,7 +78,7 @@ class SeasonActivity : AppCompatActivity() {
 	private fun setupBottomnavigatioView(){
 		Log.d(TAG,"setupBottomNavigationView")
 		BottomNavigationBarHelper.setupBottomNavigationBar(bottomNavViewBar)
-		BottomNavigationBarHelper.enableNavigation(applicationContext, bottomNavViewBar,intent.getStringExtra("User"))
+		BottomNavigationBarHelper.enableNavigation(applicationContext, bottomNavViewBar,Gson().toJson(user))
 		val menu: Menu? = bottomNavViewBar?.menu
 		val menuI: MenuItem? = menu?.getItem(activity_Num)
 		menuI?.isChecked = true

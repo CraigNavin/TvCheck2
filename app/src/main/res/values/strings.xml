@@ -27,6 +27,10 @@
     <string name="popular_TV">Popular TV</string>
     <string name="top_rated_TV">Top Rated TV</string>
     <string name="watched">Watched</string>
+    <string name="create">Create</string>
+    <string name="Cancel">Cancel</string>
+    <string name="listName">Please enter list name</string>
 
+    
 
 </resources>

@@ -35,19 +35,24 @@
         <activity android:name=".ProfileActivity">
         </activity>
         <activity android:name=".SearchActivity">
-            <!--<intent-filter>
+
+            <!--
+            <intent-filter>
                 <action android:name="android.intent.action.SEARCH"/>
             </intent-filter>
 
             <meta-data
                 android:name="android.app.searchable"
-                android:resource="@xml/searchable"/>-->
+                android:resource="@xml/searchable"/>
+            -->
         </activity>
-        <activity android:name=".ShowActivity" >
+        <activity android:name=".ShowActivity">
         </activity>
         <activity android:name=".SeasonActivity">
         </activity>
         <activity android:name=".EpisodeActivity">
+        </activity>
+        <activity android:name=".NewListActivity">
         </activity>
     </application>
 

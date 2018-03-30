@@ -28,7 +28,6 @@ class ShowActivity : AppCompatActivity() {
 
 	private val TAG: String = "ShowActivity"
 	private var Async : AsyncTasker? = null
-	private var navbar: BottomNavigationViewEx? = null
 	private val activity_Num: Int = 1
 	private var basic : TVBasic? = null
 	private var user: User? = null
@@ -50,8 +49,8 @@ class ShowActivity : AppCompatActivity() {
 				.placeholder(R.drawable.ic_default_search_image)
 				.into(PosterView)
 		setupBottomnavigatioView()
-		//navbar!!.bringChildToFront(findViewById(R.id.bottomNavViewBar))
-		var seasons = show!!.seasons
+		bottomNavViewBar.bringChildToFront(findViewById(R.id.bottomNavViewBar))
+/*		var seasons = show!!.seasons
 		var adapter = SeasonEpisodeListAdapter(this,seasons,null,applicationContext,user!!,show!!.id)
 		season_list!!.adapter = adapter
 
@@ -65,9 +64,9 @@ class ShowActivity : AppCompatActivity() {
 			//Toast.makeText(applicationContext,show.id.toString(),Toast.LENGTH_SHORT).show()
 			//Toast.makeText(applicationContext,season.seasonNumber.toString(),Toast.LENGTH_SHORT).show()
 			applicationContext.startActivity(intent)
-		}
+		}*/
 
-		adapter.notifyDataSetChanged()
+		//adapter.notifyDataSetChanged()
 	}
 
 
@@ -77,6 +76,8 @@ class ShowActivity : AppCompatActivity() {
 		user = Gson().fromJson(intent.getStringExtra("User"))
 		basic = Gson().fromJson(intent.getStringExtra("Show"))
 		converter = Converter(applicationContext)
+
+		Log.d(TAG,user.toString())
 		save_progress_bar.visibility = View.GONE
 		show = Async!!.getShowInfoAsync(basic!!.id)
 		if (user!!.checkListsContainsShow(basic!!.id)){
@@ -109,23 +110,11 @@ class ShowActivity : AppCompatActivity() {
 		super.onCreateContextMenu(menu, v, menuInfo)
 		menu!!.setHeaderTitle("Choose a list to add")
 		user!!.list!!.forEach { menu.add(it.name) }
-		menu.add(applicationContext.getString(R.string.New_List___))
 	}
 
 	override fun onContextItemSelected(item: MenuItem?): Boolean {
-		var listName : String = ""
 		var nameList = user!!.getListNames()
-		when(item!!.title){
-			applicationContext.getString(R.string.New_List___) -> {
-				do{
-					listName = createinputDialog(user!!)
-				}while(user!!.checkNameTaken(listName) || listName.isNullOrEmpty())
-
-				user!!.list!!.add(ListModel(listName))
-
-			}
-		}
-		if (nameList.contains(item.title)){
+		if (nameList.contains(item!!.title)){
 			var chosenList = user!!.list!!.find { it.name == item.title }
 			if (user!!.checkListContainsShow(show!!.id,chosenList!!.name)){
 				Toast.makeText(applicationContext,"This list already contains this show. Choose another list",Toast.LENGTH_SHORT).show()
@@ -135,7 +124,7 @@ class ShowActivity : AppCompatActivity() {
 				chosenList.list!!.add(converter!!.convert(show!!))
 				DatabaseHandler(applicationContext).update(user!!)
 				save_progress_bar.visibility = View.GONE
-				Toast.makeText(applicationContext,show!!.id.toString() + " added to list " + chosenList.name,Toast.LENGTH_SHORT).show()
+				Toast.makeText(applicationContext,show!!.name + " added to list " + chosenList.name,Toast.LENGTH_SHORT).show()
 			}
 		}else{
 			Toast.makeText(applicationContext,"List does not exist",Toast.LENGTH_SHORT).show()
@@ -143,46 +132,12 @@ class ShowActivity : AppCompatActivity() {
 		return super.onContextItemSelected(item)
 	}
 
-	fun createinputDialog(user: User):String{
-		var layoutInf = LayoutInflater.from(applicationContext)
-		var prompt = layoutInf.inflate(R.layout.input_prompt,null)
-		var builder = AlertDialog.Builder(applicationContext)
-		var result: String = ""
-
-		builder.setView(prompt)
-
-		val promptInput = prompt.findViewById(R.id.editTextDialogUserInput) as EditText
-
-		builder.setCancelable(false)
-				.setPositiveButton("Create", { dialog, which ->
-					result = promptInput.text.toString()
-					 if (result.isNullOrEmpty()){
-						 Toast.makeText(applicationContext, "Please enter a list name",Toast.LENGTH_SHORT).show()
-						 result =""
-						 promptInput.setText("")
-					 }else if(user.checkNameTaken(result)){
-						 Toast.makeText(applicationContext,"A list with this name already exists. Please choose a different name",Toast.LENGTH_SHORT).show()
-						 result = ""
-						 promptInput.setText("")
-					 }else{
-						 dialog.dismiss()
-					 }
-				}
-				).setNegativeButton("Cancel", { dialog, which -> dialog.cancel() })
-
-		val dialog = builder.create()
-
-		dialog.show()
-
-		return result
-	}
-
 	inline fun <reified T> Gson.fromJson(json: String) = this.fromJson<T>(json, object: TypeToken<T>() {}.type)
 
 	private fun setupBottomnavigatioView(){
 		Log.d(TAG,"setupBottomNavigationView")
 		BottomNavigationBarHelper.setupBottomNavigationBar(bottomNavViewBar)
-		BottomNavigationBarHelper.enableNavigation(applicationContext, bottomNavViewBar,intent.getStringExtra("User"))
+		BottomNavigationBarHelper.enableNavigation(applicationContext, bottomNavViewBar,Gson().toJson(user))
 		val menu: Menu? = bottomNavViewBar?.menu
 		val menuI: MenuItem? = menu?.getItem(activity_Num)
 		menuI?.isChecked = true

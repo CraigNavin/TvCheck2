@@ -80,7 +80,7 @@ class EpisodeActivity : AppCompatActivity() {
 
 	fun setup(){
 		Log.d(TAG,intent.extras.get("TVID").toString())
-		user =  Gson().fromJson(intent.getStringExtra("User"))
+		user = Gson().fromJson(intent.getStringExtra("User"))
 		setupBottomnavigatioView()
 		episode = Gson().fromJson(intent.getStringExtra("Episode"))
 		setView()
@@ -91,7 +91,7 @@ class EpisodeActivity : AppCompatActivity() {
 	private fun setupBottomnavigatioView(){
 		Log.d(TAG,"setupBottomNavigationView")
 		BottomNavigationBarHelper.setupBottomNavigationBar(bottomNavViewBar)
-		BottomNavigationBarHelper.enableNavigation(applicationContext, bottomNavViewBar,intent.getStringExtra("User"))
+		BottomNavigationBarHelper.enableNavigation(applicationContext, bottomNavViewBar,Gson().toJson(user))
 		val menu: Menu? = bottomNavViewBar?.menu
 		val menuI: MenuItem? = menu?.getItem(activity_Num)
 		menuI?.isChecked = true

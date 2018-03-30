@@ -61,8 +61,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 					Toast.makeText(applicationContext, "Login Successful", Toast.LENGTH_SHORT).show()
 					val user = dbh!!.retrievefirst(mAuth!!.currentUser!!.uid)
 					val i = Intent(baseContext, HomeActivity::class.java)
-					val gson = Gson()
-					i.putExtra("User", gson.toJson(user))
+					i.putExtra("User", Gson().toJson(user))
 					startActivity(i)
 					Login_progressbar.visibility = View.GONE
 				}
