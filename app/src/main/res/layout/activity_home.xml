@@ -49,7 +49,8 @@
                     android:text="TextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/Name_txt"/>
+                    android:id="@+id/Name_txt"
+                    android:textSize="18sp"/>
 
                 <TextView
                     android:text="TextView"
@@ -76,7 +77,20 @@
                 android:textSize="20sp"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentStart="true"/>
+
         </RelativeLayout>
+
+        <TextView
+            android:text="@string/emptyLists"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/emptyLists_txt"
+            android:layout_alignBottom="@+id/relLayout2"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="61dp"
+            android:textSize="20sp"
+            android:textAlignment="center"
+            android:visibility="gone"/>
 
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"

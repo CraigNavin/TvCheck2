@@ -1,7 +1,9 @@
 package uk.ac.tees.p4061644.tvcheck_redo
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.Menu
@@ -46,11 +48,9 @@ class SeasonActivity : AppCompatActivity() {
 
 	fun setView(season: TVSeasonInfo){
 		var seasonNum = "Season " + season.seasonNumber
-		var bool: Boolean
 
 		if(getShow() != null){
-			bool = getShow()!!.seasons!![seasonNum.toInt()].watched
-			watched_box!!.isChecked = bool
+			watched_box!!.isChecked = getShow()!!.seasons!![season.seasonNumber].watched
 		}
 
 		SeasonNum_TV.text = seasonNum
@@ -73,13 +73,33 @@ class SeasonActivity : AppCompatActivity() {
 			intent.putExtra("TVID",id!!)
 			applicationContext.startActivity(intent)
 		}
+
 		watched_box!!.setOnCheckedChangeListener { buttonView, isChecked ->
-			getShow()!!.seasons!![seasonNum.toInt()].watched = isChecked
-			DatabaseHandler(applicationContext).update(user!!)
+			if (user!!.checkListsContainsShow(getShow()!!.id)){
+				var season = getShow()!!.seasons!![season.seasonNumber]
+				season.watched = isChecked
 
-			Toast.makeText(applicationContext,"Season Updated",Toast.LENGTH_SHORT).show()
+				AlertDialog.Builder(this)
+						.setTitle("Watched Season?")
+						.setMessage("Do you want to set all this seasons episodes to watched?")
+						.setPositiveButton(android.R.string.yes,
+								DialogInterface.OnClickListener { dialog, which ->
+									season.episodes.forEach { it.watched = isChecked }
+									user =DatabaseHandler(applicationContext).update(user!!)
+									Toast.makeText(applicationContext,"Season and episodes Updated",Toast.LENGTH_SHORT).show()
+								}
+						)
+						.setNegativeButton(android.R.string.no,
+								DialogInterface.OnClickListener { dialog, which ->
+									user =DatabaseHandler(applicationContext).update(user!!)
+									Toast.makeText(applicationContext,"Season Updated",Toast.LENGTH_SHORT).show()
+								}
+						)
+						.show()
+			}else{
+				Toast.makeText(applicationContext,"Please add this show to a list before marking episodes as watched",Toast.LENGTH_SHORT).show()
+			}
 		}
-
 	}
 
 	fun getSeasonInfo(id: Int):TVSeasonInfo{

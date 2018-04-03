@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.omertron.themoviedbapi.model.tv.TVBasic
@@ -51,6 +52,7 @@ class HomeActivity : Activity(),RecyclerHomeViewAdapter.OnItemClickListener{
 		var poplayoutManager = LinearLayoutManager (this,LinearLayoutManager.HORIZONTAL,false)
 		var toplayoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
 		var popular = Async!!.fillhome(1,null)!!
+		var topRated = Async!!.fillhome(2,null)!!
 		var show :Show? = null
 		var tvInfo : TVInfo? = null
 		var similar : ArrayList<TVBasic>? = null
@@ -72,8 +74,8 @@ class HomeActivity : Activity(),RecyclerHomeViewAdapter.OnItemClickListener{
 			}
 
 		}else{
-			top_rated_TV.text = "Top Rated"
-			similar = Async!!.fillhome(2,null)!!
+			relLayout2.visibility = View.GONE
+			emptyLists_txt.visibility = View.VISIBLE
 		}
 
 		recycle_popular.apply {
@@ -83,7 +85,7 @@ class HomeActivity : Activity(),RecyclerHomeViewAdapter.OnItemClickListener{
 
 		recycle_top_rated.apply {
 			layoutManager = toplayoutManager
-			adapter= RecyclerHomeViewAdapter(applicationContext,similar!!,this@HomeActivity)
+			adapter= RecyclerHomeViewAdapter(applicationContext,topRated,this@HomeActivity)
 		}
 	}
 

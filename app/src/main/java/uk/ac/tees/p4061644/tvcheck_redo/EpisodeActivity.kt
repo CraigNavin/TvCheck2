@@ -63,7 +63,7 @@ class EpisodeActivity : AppCompatActivity() {
 
 		watched_box!!.setOnCheckedChangeListener { buttonView, isChecked ->
 			getShowFromLists()!!.seasons!![episode!!.seasonNumber].episodes[episode!!.episodeNumber -1].watched = isChecked
-			DatabaseHandler(applicationContext).update(user!!)
+			user = DatabaseHandler(applicationContext).update(user!!)
 
 			Toast.makeText(applicationContext,"Episode Updated", Toast.LENGTH_SHORT).show()
 		}

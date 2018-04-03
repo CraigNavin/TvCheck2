@@ -16,6 +16,7 @@ import uk.ac.tees.p4061644.tvcheck_redo.utils.BottomNavigationBarHelper
 import kotlinx.android.synthetic.main.activity_profile.*
 import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.android.synthetic.main.layout_bottom_navigation_view.*
+import uk.ac.tees.p4061644.tvcheck_redo.utils.DatabaseHandler
 
 class ProfileActivity : AppCompatActivity() {
 
@@ -36,8 +37,8 @@ class ProfileActivity : AppCompatActivity() {
 
 	fun setup(){
 		user = Gson().fromJson(intent.getStringExtra("User"))
+		user = DatabaseHandler(applicationContext).retrievefirst(user!!.UserID)
 		var name_list = user!!.getListNames()
-		//user!!.list!!.forEach { name_list.add(it.name) }
 
 		List_LV.adapter = ArrayAdapter<String>(applicationContext,android.R.layout.simple_list_item_1,name_list)
 		List_LV.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->

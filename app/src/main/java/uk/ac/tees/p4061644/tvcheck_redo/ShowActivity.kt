@@ -1,5 +1,6 @@
 package uk.ac.tees.p4061644.tvcheck_redo
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
@@ -21,6 +22,7 @@ import kotlinx.android.synthetic.main.activity_show.*
 import kotlinx.android.synthetic.main.layout_bottom_navigation_view.*
 import uk.ac.tees.p4061644.tvcheck_redo.Adapters.SeasonEpisodeListAdapter
 import uk.ac.tees.p4061644.tvcheck_redo.models.ListModel
+import uk.ac.tees.p4061644.tvcheck_redo.models.Show
 import uk.ac.tees.p4061644.tvcheck_redo.utils.*
 
 
@@ -41,10 +43,22 @@ class ShowActivity : AppCompatActivity() {
 		setView()
 	}
 
+	fun getShow(id: Int): Show?{
+
+		user!!.list!!.forEach{ it.list!!.forEach {if(it.id == id){ return it } } }
+		return null
+	}
+
 	fun setView(){
 		ShowName_TV!!.text = show!!.name
 		Overview_TV!!.text = show!!.overview
-		Rating_TV!!.text = show!!.voteAverage.toString()
+
+		if (getShow(show!!.id) != null){
+
+			watched_box.isChecked = getShow(show!!.id)!!.watched
+		}
+
+
 		Picasso.with(applicationContext).load(applicationContext.getString(R.string.base_address_w185) + show!!.posterPath)
 				.placeholder(R.drawable.ic_default_search_image)
 				.into(PosterView)
@@ -61,15 +75,42 @@ class ShowActivity : AppCompatActivity() {
 			intent.putExtra("Season",item)
 			intent.putExtra("User",Gson().toJson(user))
 			intent.putExtra("TVID",show!!.id)
-			//Toast.makeText(applicationContext,show.id.toString(),Toast.LENGTH_SHORT).show()
-			//Toast.makeText(applicationContext,season.seasonNumber.toString(),Toast.LENGTH_SHORT).show()
 			applicationContext.startActivity(intent)
 		}
 
-		//adapter.notifyDataSetChanged()
+		watched_box.setOnCheckedChangeListener { buttonView, isChecked ->
+			if (user!!.checkListsContainsShow(show!!.id)){
+				var showInList = getShow(show!!.id)
+				showInList!!.watched = isChecked
+				AlertDialog.Builder(this)
+						.setTitle("Watched Show?")
+						.setMessage("Do you want to set all this seasons and episodes to watched?")
+						.setPositiveButton(android.R.string.yes,
+								DialogInterface.OnClickListener { dialog, which ->
+									showInList!!.seasons!!.forEach { it.watched = isChecked
+									it.episodes.forEach { it.watched = isChecked
+									}
+								}
+									user = DatabaseHandler(applicationContext).update(user!!)
+									Toast.makeText(applicationContext,"Show,seasons and episodes Updated",Toast.LENGTH_SHORT).show()
+								}
+
+						)
+						.setNegativeButton(android.R.string.no,
+								DialogInterface.OnClickListener { dialog, which ->
+									user = DatabaseHandler(applicationContext).update(user!!)
+									Toast.makeText(applicationContext,"Show Updated",Toast.LENGTH_SHORT).show()
+								}
+
+						).show()
+			}else{
+				Toast.makeText(applicationContext,"Please add this show to a list before marking episodes as watched",Toast.LENGTH_SHORT).show()
+			}
+
+		}
+
+		adapter.notifyDataSetChanged()
 	}
-
-
 
 	fun setup(){
 		Async = AsyncTasker(applicationContext)
@@ -80,11 +121,13 @@ class ShowActivity : AppCompatActivity() {
 		Log.d(TAG,user.toString())
 		save_progress_bar.visibility = View.GONE
 		show = Async!!.getShowInfoAsync(basic!!.id)
+
 		if (user!!.checkListsContainsShow(basic!!.id)){
 			save_float_btn.setImageDrawable(getDrawable(R.drawable.ic_love))
 		}else{
 			save_float_btn.setImageDrawable(getDrawable(R.drawable.ic_addlist_icon))
 		}
+
 		registerForContextMenu(save_float_btn)
 
 		save_float_btn.setOnClickListener {
@@ -97,7 +140,7 @@ class ShowActivity : AppCompatActivity() {
 						.setMessage("Are you sure you want to remove " + basic!!.name  +" from your lists?")
 						.setPositiveButton("Remove", { dialog, which ->
 							user!!.list!!.forEach { it.list!!.removeIf { it.id == basic!!.id } }
-							DatabaseHandler(applicationContext).update(user!!)
+							user = DatabaseHandler(applicationContext).update(user!!)
 							save_float_btn.setImageDrawable(getDrawable(R.drawable.ic_addlist_icon))
 							Toast.makeText(applicationContext,"Show Removed",Toast.LENGTH_SHORT).show()
 

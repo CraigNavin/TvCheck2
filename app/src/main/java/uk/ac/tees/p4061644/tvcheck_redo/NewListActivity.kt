@@ -25,8 +25,9 @@ class NewListActivity : AppCompatActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_new_list)
-		setupBottomnavigatioView()
 		setup()
+		setupBottomnavigatioView()
+
 	}
 	inline fun <reified T> Gson.fromJson(json: String) = this.fromJson<T>(json, object: TypeToken<T>() {}.type)
 
