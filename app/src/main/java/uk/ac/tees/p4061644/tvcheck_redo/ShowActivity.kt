@@ -6,24 +6,27 @@ import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import android.view.*
+import android.view.ContextMenu
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
 import android.widget.AdapterView
-import android.widget.EditText
 import android.widget.Toast
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx
 import com.omertron.themoviedbapi.model.tv.TVBasic
 import com.omertron.themoviedbapi.model.tv.TVInfo
 import com.omertron.themoviedbapi.model.tv.TVSeasonBasic
 import com.squareup.picasso.Picasso
-import uk.ac.tees.p4061644.tvcheck_redo.models.User
 import kotlinx.android.synthetic.main.activity_show.*
 import kotlinx.android.synthetic.main.layout_bottom_navigation_view.*
 import uk.ac.tees.p4061644.tvcheck_redo.Adapters.SeasonEpisodeListAdapter
-import uk.ac.tees.p4061644.tvcheck_redo.models.ListModel
 import uk.ac.tees.p4061644.tvcheck_redo.models.Show
-import uk.ac.tees.p4061644.tvcheck_redo.utils.*
+import uk.ac.tees.p4061644.tvcheck_redo.models.User
+import uk.ac.tees.p4061644.tvcheck_redo.utils.AsyncTasker
+import uk.ac.tees.p4061644.tvcheck_redo.utils.BottomNavigationBarHelper
+import uk.ac.tees.p4061644.tvcheck_redo.utils.Converter
+import uk.ac.tees.p4061644.tvcheck_redo.utils.DatabaseHandler
 
 
 class ShowActivity : AppCompatActivity() {
