@@ -75,7 +75,7 @@ class SeasonActivity : AppCompatActivity() {
 		}
 
 		watched_box!!.setOnCheckedChangeListener { buttonView, isChecked ->
-			if (user!!.checkListsContainsShow(getShow()!!.id)){
+			if (inLists()){
 				var season = getShow()!!.seasons!![season.seasonNumber]
 				season.watched = isChecked
 
@@ -100,6 +100,17 @@ class SeasonActivity : AppCompatActivity() {
 				Toast.makeText(applicationContext,"Please add this show to a list before marking episodes as watched",Toast.LENGTH_SHORT).show()
 			}
 		}
+	}
+
+	fun inLists(): Boolean{
+		for (list in user!!.list!!){
+			if (user!!.checkListContainsShow(id!!,list.name)){
+				return true
+			}else{
+				return false
+			}
+		}
+		return false
 	}
 
 	fun getSeasonInfo(id: Int):TVSeasonInfo{

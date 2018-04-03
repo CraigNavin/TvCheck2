@@ -59,35 +59,6 @@ class SeasonEpisodeListAdapter(private var activity: Activity, private var seaso
 		return view
 	}
 
-	fun getUserSeason(position: Int): Season {
-		if (user.checkListsContainsShow(TVID)){
-
-			var list: ListModel? = null
-			user!!.list!!.forEach { if (user.checkListContainsShow(TVID,it.name)){
-					list = it
-				}else{
-					list = null
-				}
-			}
-			if (list != null){
-				return user.getShow(list!!.list!!,TVID)!!.seasons!![position]
-			}else{
-				return list!!
-			}
-		}
-		return null!!
-	}
-
-	fun getUserEpisode(seasonNum: Int,position: Int):Episode{
-		if (user.checkListsContainsShow(TVID)){
-			user!!.list!!.forEach { it.list!!.forEach { if(it.id == TVID){return it.seasons!![seasonNum - 1].episodes[position]} } }
-		}
-		return null!!
-	}
-
-
-
-
 	fun handleSeasons(holder: SeasonEpisodeListAdapter.ViewHolder, position: Int): SeasonEpisodeListAdapter.ViewHolder {
 		var TVSeasonBasic = seasons!![position]
 		var seasonNum = "Season " + TVSeasonBasic.seasonNumber.toString()

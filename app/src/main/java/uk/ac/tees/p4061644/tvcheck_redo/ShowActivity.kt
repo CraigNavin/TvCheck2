@@ -54,10 +54,8 @@ class ShowActivity : AppCompatActivity() {
 		Overview_TV!!.text = show!!.overview
 
 		if (getShow(show!!.id) != null){
-
 			watched_box.isChecked = getShow(show!!.id)!!.watched
 		}
-
 
 		Picasso.with(applicationContext).load(applicationContext.getString(R.string.base_address_w185) + show!!.posterPath)
 				.placeholder(R.drawable.ic_default_search_image)
@@ -79,7 +77,7 @@ class ShowActivity : AppCompatActivity() {
 		}
 
 		watched_box.setOnCheckedChangeListener { buttonView, isChecked ->
-			if (user!!.checkListsContainsShow(show!!.id)){
+			if (inLists()){
 				var showInList = getShow(show!!.id)
 				showInList!!.watched = isChecked
 				AlertDialog.Builder(this)
@@ -122,16 +120,19 @@ class ShowActivity : AppCompatActivity() {
 		save_progress_bar.visibility = View.GONE
 		show = Async!!.getShowInfoAsync(basic!!.id)
 
-		if (user!!.checkListsContainsShow(basic!!.id)){
-			save_float_btn.setImageDrawable(getDrawable(R.drawable.ic_love))
-		}else{
-			save_float_btn.setImageDrawable(getDrawable(R.drawable.ic_addlist_icon))
+		for (list in user!!.list!!){
+			if (user!!.checkListContainsShow(basic!!.id,list.name)){
+				save_float_btn.setImageDrawable(getDrawable(R.drawable.ic_love))
+				break
+			}else{
+				save_float_btn.setImageDrawable(getDrawable(R.drawable.ic_addlist_icon))
+			}
 		}
 
 		registerForContextMenu(save_float_btn)
 
 		save_float_btn.setOnClickListener {
-			if (!user!!.checkListsContainsShow(basic!!.id)){
+			if (!inLists()){
 				openContextMenu(save_float_btn)
 				save_float_btn.setImageDrawable(getDrawable(R.drawable.ic_love))
 			}else{
@@ -149,6 +150,18 @@ class ShowActivity : AppCompatActivity() {
 			}
 		}
 	}
+
+	fun inLists(): Boolean{
+		for (list in user!!.list!!){
+			if (user!!.checkListContainsShow(basic!!.id,list.name)){
+				return true
+			}else{
+				return false
+			}
+		}
+		return false
+	}
+
 	override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
 		super.onCreateContextMenu(menu, v, menuInfo)
 		menu!!.setHeaderTitle("Choose a list to add")
