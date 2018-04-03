@@ -30,12 +30,10 @@ class SeasonEpisodeListAdapter(private var activity: Activity, private var seaso
 		var txtName: TextView? = null
 		var txtEpisodes: TextView? = null
 		var image: ImageView? = null
-		var box: CheckBox? = null
 		init {
 			this.txtName = row?.findViewById(R.id.season_num) as TextView?
 			this.txtEpisodes = row?.findViewById(R.id.episodes_count) as TextView?
 			this.image = row?.findViewById(R.id.img_view) as ImageView?
-			this.box = row?.findViewWithTag(R.id.watched_box) as CheckBox?
 		}
 	}
 
@@ -97,8 +95,6 @@ class SeasonEpisodeListAdapter(private var activity: Activity, private var seaso
 		holder.txtName?.text = seasonNum
 		holder.txtEpisodes!!.text = episodeCount
 
-		holder.box!!.isChecked = getUserSeason(TVSeasonBasic.seasonNumber-1).watched
-
 		com.squareup.picasso.Picasso.with(context)
 				.load(context.resources.getString(uk.ac.tees.p4061644.tvcheck_redo.R.string.base_address_w185).toString() + TVSeasonBasic.posterPath)
 				.placeholder(uk.ac.tees.p4061644.tvcheck_redo.R.drawable.ic_default_search_image)
@@ -110,8 +106,6 @@ class SeasonEpisodeListAdapter(private var activity: Activity, private var seaso
 		var episode = episodes!![position]
 		holder.txtName!!.text = episode.name
 		holder.txtEpisodes!!.text = episode.airDate
-
-		holder.box!!.isChecked = getUserEpisode(episode.seasonNumber - 1,position).watched
 
 		com.squareup.picasso.Picasso.with(context).load(context.resources.getString(uk.ac.tees.p4061644.tvcheck_redo.R.string.base_address_w500).toString() + episode.stillPath)
 				.placeholder(R.drawable.ic_default_search_image)

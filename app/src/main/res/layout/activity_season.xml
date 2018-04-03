@@ -56,6 +56,22 @@
             android:layout_alignParentEnd="true"
             android:layout_toEndOf="@+id/PosterView"/>
 
+        <TextView
+            android:text="@string/watched"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/watched_txt"
+            android:layout_above="@+id/episodes_list"
+            android:layout_toEndOf="@+id/PosterView"/>
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/watched_box"
+            android:layout_alignBaseline="@+id/watched_txt"
+            android:layout_alignBottom="@+id/watched_txt"
+            android:layout_toEndOf="@+id/watched_txt"/>
+
     </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

@@ -10,6 +10,8 @@ import android.view.MenuItem
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.omertron.themoviedbapi.model.tv.TVBasic
+import com.omertron.themoviedbapi.model.tv.TVInfo
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.layout_bottom_navigation_view.*
 import uk.ac.tees.p4061644.tvcheck_redo.Adapters.RecyclerHomeViewAdapter
@@ -50,11 +52,25 @@ class HomeActivity : Activity(),RecyclerHomeViewAdapter.OnItemClickListener{
 		var toplayoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
 		var popular = Async!!.fillhome(1,null)!!
 		var show :Show? = null
+		var tvInfo : TVInfo? = null
 		var similar : ArrayList<TVBasic>? = null
 		if (!user!!.list!!.any{ it.list!!.count() == 0}){
 			show = getRandomShowFromLists()
 			similar = Async!!.fillhome(3,show.id)!!
-			top_rated_TV.text = "Because you watched " + Async!!.getShowBasicAsync(show.id).name
+			tvInfo = Async!!.getShowInfoAsync(similar[Random().nextInt(similar.size)].id)
+			Similar_txt.text = "Because you watched " + Async!!.getShowBasicAsync(show.id).name
+			Name_txt.text = tvInfo.name
+			OverView_txt.text = tvInfo.overview
+			Picasso.with(applicationContext).load(getString(R.string.base_address_w185) + tvInfo.posterPath)
+					.placeholder(R.drawable.ic_default_search_image)
+					.into(img_view)
+			relLayout2.setOnClickListener {
+				val intent = Intent(applicationContext,ShowActivity::class.java)
+				intent.putExtra("Show",Gson().toJson(tvInfo))
+				intent.putExtra("User",Gson().toJson(user))
+				applicationContext.startActivity(intent)
+			}
+
 		}else{
 			top_rated_TV.text = "Top Rated"
 			similar = Async!!.fillhome(2,null)!!

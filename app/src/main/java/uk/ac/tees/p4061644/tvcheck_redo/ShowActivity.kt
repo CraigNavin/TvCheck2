@@ -50,7 +50,7 @@ class ShowActivity : AppCompatActivity() {
 				.into(PosterView)
 		setupBottomnavigatioView()
 		bottomNavViewBar.bringChildToFront(findViewById(R.id.bottomNavViewBar))
-/*		var seasons = show!!.seasons
+		var seasons = show!!.seasons
 		var adapter = SeasonEpisodeListAdapter(this,seasons,null,applicationContext,user!!,show!!.id)
 		season_list!!.adapter = adapter
 
@@ -64,7 +64,7 @@ class ShowActivity : AppCompatActivity() {
 			//Toast.makeText(applicationContext,show.id.toString(),Toast.LENGTH_SHORT).show()
 			//Toast.makeText(applicationContext,season.seasonNumber.toString(),Toast.LENGTH_SHORT).show()
 			applicationContext.startActivity(intent)
-		}*/
+		}
 
 		//adapter.notifyDataSetChanged()
 	}

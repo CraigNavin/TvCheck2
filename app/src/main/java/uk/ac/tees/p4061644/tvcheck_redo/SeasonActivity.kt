@@ -20,6 +20,8 @@ import uk.ac.tees.p4061644.tvcheck_redo.models.User
 import uk.ac.tees.p4061644.tvcheck_redo.utils.AsyncTasker
 import uk.ac.tees.p4061644.tvcheck_redo.utils.BottomNavigationBarHelper
 import uk.ac.tees.p4061644.tvcheck_redo.Adapters.SeasonEpisodeListAdapter
+import uk.ac.tees.p4061644.tvcheck_redo.models.Show
+import uk.ac.tees.p4061644.tvcheck_redo.utils.DatabaseHandler
 
 class SeasonActivity : AppCompatActivity() {
 
@@ -36,8 +38,20 @@ class SeasonActivity : AppCompatActivity() {
 		setup()
 	}
 
+	fun getShow(): Show?{
+		user!!.list!!.forEach { it.list!!.forEach { if (it.id == id){ return it} } }
+		return null
+	}
+
+
 	fun setView(season: TVSeasonInfo){
 		var seasonNum = "Season " + season.seasonNumber
+		var bool: Boolean
+
+		if(getShow() != null){
+			bool = getShow()!!.seasons!![seasonNum.toInt()].watched
+			watched_box!!.isChecked = bool
+		}
 
 		SeasonNum_TV.text = seasonNum
 		Overview_TV.text = season.overview
@@ -59,6 +73,13 @@ class SeasonActivity : AppCompatActivity() {
 			intent.putExtra("TVID",id!!)
 			applicationContext.startActivity(intent)
 		}
+		watched_box!!.setOnCheckedChangeListener { buttonView, isChecked ->
+			getShow()!!.seasons!![seasonNum.toInt()].watched = isChecked
+			DatabaseHandler(applicationContext).update(user!!)
+
+			Toast.makeText(applicationContext,"Season Updated",Toast.LENGTH_SHORT).show()
+		}
+
 	}
 
 	fun getSeasonInfo(id: Int):TVSeasonInfo{

@@ -38,22 +38,4 @@
 
     </LinearLayout>
 
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_alignParentEnd="true"
-        android:id="@+id/watched_box"
-        android:checked="false"
-        android:textAlignment="center"
-        android:duplicateParentState="false"/>
-
-    <TextView
-        android:text="@string/watched"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toStartOf="@+id/watched_box"
-        android:id="@+id/textView3"/>
-
 </RelativeLayout>

@@ -37,26 +37,19 @@ class EpisodeActivity : AppCompatActivity() {
 	}
 
 	fun getShowFromLists(): Show? {
-		var listolists = user!!.list
 		var TVID = intent.extras.get("TVID")
-		listolists!!.forEach { it.list!!.forEach { if (it.id == TVID){ return it } }}
+		user!!.list!!.forEach { it.list!!.forEach { if (it.id == TVID){ return it } }}
 		return null
 	}
 
 	fun setView(){
 		EPName_TV!!.text = episode!!.name
-		var bool: Boolean = false
-		var personlayoutManager = LinearLayoutManager (this, LinearLayoutManager.HORIZONTAL,false)
-		person_recycler.apply {
-			layoutManager = personlayoutManager
-			adapter = RecyclerPeopleViewAdapter(applicationContext,ArrayList(episode!!.credits.cast))
-			visibility = View.VISIBLE
-		}
+		var bool: Boolean
 		if (getShowFromLists() != null){
-			bool = getShowFromLists()!!.seasons!![episode!!.seasonNumber - 1].episodes[episode!!.episodeNumber - 1].watched
-			watched_txt!!.text = "From List"
+			bool = getShowFromLists()!!.seasons!![episode!!.seasonNumber].episodes[episode!!.episodeNumber - 1].watched
+			watched_box!!.isChecked = bool
 		}
-		watched_box!!.isChecked = bool
+
 
 		if (episode!!.overview == null || episode!!.overview == ""){
 			Overview_TV!!.text = "No Overview"
@@ -67,15 +60,13 @@ class EpisodeActivity : AppCompatActivity() {
 				.placeholder(R.drawable.ic_default_search_image)
 				.fit()
 				.into(PosterView)
+
 		watched_box!!.setOnCheckedChangeListener { buttonView, isChecked ->
-			getShowFromLists()!!.seasons!![episode!!.seasonNumber -1].episodes[episode!!.episodeNumber -1].watched = isChecked
+			getShowFromLists()!!.seasons!![episode!!.seasonNumber].episodes[episode!!.episodeNumber -1].watched = isChecked
 			DatabaseHandler(applicationContext).update(user!!)
 
-			Toast.makeText(applicationContext,"Show Removed", Toast.LENGTH_SHORT).show()
+			Toast.makeText(applicationContext,"Episode Updated", Toast.LENGTH_SHORT).show()
 		}
-
-
-
 	}
 
 	fun setup(){
