@@ -53,7 +53,7 @@ class HomeActivity : Activity(),RecyclerHomeViewAdapter.OnItemClickListener{
 		dbh = DatabaseHandler(applicationContext)
 		user = gson.fromJson(intent.getStringExtra("User"))
 		setView()
-		setupBottomnavigatioView()
+
 	}
 
 	/**
@@ -68,10 +68,9 @@ class HomeActivity : Activity(),RecyclerHomeViewAdapter.OnItemClickListener{
 		var tvInfo : TVInfo? = null
 		var similar : ArrayList<TVBasic>? = null
 		if (!user!!.list!!.any{ it.list!!.count() == 0}){
-			show = getRandomShowFromLists()
-			similar = Async!!.fillhome(3,show.id)!!
+			similar = Async!!.fillhome(3,getRandomShowFromLists().id)!!
 			tvInfo = Async!!.getShowInfoAsync(similar[Random().nextInt(similar.size)].id)
-			Similar_txt.text = "Because you watched " + Async!!.getShowBasicAsync(show.id).name
+			Similar_txt.text = "Because you watched " + tvInfo.name
 			Name_txt.text = tvInfo.name
 			OverView_txt.text = tvInfo.overview
 			Picasso.with(applicationContext).load(getString(R.string.base_address_w185) + tvInfo.posterPath)

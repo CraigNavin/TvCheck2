@@ -1,9 +1,9 @@
 package uk.ac.tees.p4061644.tvcheck_redo.models
 
 /**
+ * This class contains a String name and an Arraylist of Show objects.
  * Created by Craig on 27/02/2018.
  */
-
 class ListModel (name: String){
 
 	var name : String

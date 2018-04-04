@@ -16,7 +16,9 @@ import uk.ac.tees.p4061644.tvcheck_redo.SearchActivity
 object BottomNavigationBarHelper {
 	private val TAG = "BottomNavigationBarHelp"
 
-
+	/**
+	 * Sets up navigation bar properties
+	 */
 	fun setupBottomNavigationBar(NavBar: BottomNavigationViewEx?) {
 		Log.d(TAG, "setupBottomNavigationBar")
 		NavBar?.enableAnimation(true)
@@ -26,7 +28,12 @@ object BottomNavigationBarHelper {
 
 	}
 
-
+	/**
+	 * Handles where each button on the navigation bar will take the user
+	 * @param [context] application context from the current activity
+	 * @param [viewEx] The navigation bar that is going to be assigned activity navigation
+	 * @param [User] A Json string of the user that is going to be passed to each activity for access across the application.
+	 */
 	fun enableNavigation(context: Context, viewEx: BottomNavigationViewEx?, User: String) {
 		viewEx?.onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
 			when (item.itemId) {

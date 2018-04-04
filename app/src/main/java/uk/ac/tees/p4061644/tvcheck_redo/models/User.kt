@@ -38,7 +38,6 @@ class User (val UserID: String){
 
 	/**
 	 * Checks if a list with desired name already exists
-	 *
 	 * @param [string] users desired list name that will be checked against current list
 	 * @return Boolean that represents if a list exists with a name that matches passed string
 	 */

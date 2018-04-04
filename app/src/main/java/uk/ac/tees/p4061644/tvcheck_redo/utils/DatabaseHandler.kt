@@ -24,6 +24,10 @@ class DatabaseHandler(context: Context) {
 		setup(context)
 	}
 
+	/**
+	 * Installs  and initialises Parse's settings on this phone so its server can be used
+	 * @param [context] application context for access to string values
+	 */
 	fun setup(context: Context){
 		Parse.initialize(Parse.Configuration.Builder(context)
 				.applicationId(context.resources.getString(R.string.back4app_app_id))
@@ -34,6 +38,11 @@ class DatabaseHandler(context: Context) {
 
 	}
 
+
+	/**
+	 * Adds a user to the database
+	 * @param [user] User object that will be added to the database
+	 */
 	fun insert(user: User) {
 		var userobj = ParseObject("UserData")
 		userobj.put("UserId",user.UserID)
@@ -44,6 +53,11 @@ class DatabaseHandler(context: Context) {
 
 	inline fun <reified T> Gson.fromJson(json: String) = this.fromJson<T>(json, object: TypeToken<T>() {}.type)
 
+	/**
+	 * Retrieves the first record in the database that matches a userID
+	 * @param [UserId] A string that is searched for inside the database
+	 * @return returns the record of the user found as a User object.
+	 */
 	fun retrievefirst(UserId: String): User?{
 
 		var query : ParseQuery<ParseObject> = getQuery("UserData")
@@ -60,23 +74,11 @@ class DatabaseHandler(context: Context) {
 		}
 	}
 
-	fun userExists(UserId: String): Boolean{
-		var exists = false
-		var query : ParseQuery<ParseObject> = getQuery("UserData")
-		query.whereEqualTo("UserId",UserId)
-		query.getFirstInBackground({ UserData, e ->
-			if (e == null) {
-				exists = true
-				Log.d("CHECKUSER", "USER EXISTS")
-			}else{
-				exists = false
-				Log.d("CHECKUSER", "USER DOES NOT EXIST " + e.message)
-				}
-			}
-		)
-		return exists
-	}
-
+	/**
+	 * Updates the current users record where the there is dirty information. Then returns a new User object that contains the new User information
+	 * @param [user] User object used for their id to find their record in the database by UserId
+	 * @return User object with new and updated information.
+	 */
 	fun update(user: User): User{
 		var query: ParseQuery<ParseObject> = getQuery("UserData")
 		var retUser : User? = null

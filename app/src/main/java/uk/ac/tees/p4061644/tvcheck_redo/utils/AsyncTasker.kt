@@ -20,17 +20,28 @@ import kotlin.collections.ArrayList
 
 
 /**
+ * This class handles all of the calls to the API. It contains methods that retrieve different
+ * data from the API.
+ * @param [context] Current activities context for access to string values
+ * @constructor Creates a AsyncTasker object for retrieval of data
  * Created by Craig on 01/02/2018.
  */
-
 class AsyncTasker(context: Context) {
 
 	private var api : TheMovieDbApi? = null
 
+	/**
+	 * Assigns api value to a TheMovieDbApi object so its methods can be used within this class
+	 */
 	init {
 		api = TheMovieDbApi(context.resources.getString(R.string.Api_key))
 	}
 
+	/**
+	 * Retrieves a list of TVBasic objects that match or closely match the term passed
+	 * @param [search] the search term that will be used to search for Tv Shows
+	 * @return ArrayList of TVBasic objects that match or closely match the search term
+	 */
 	fun searchShows(search: String): ArrayList<TVBasic>? {
 		var list = searchShowsTask(search).execute().get()
 		if (list == null){
@@ -40,6 +51,14 @@ class AsyncTasker(context: Context) {
 		}
 	}
 
+	/**
+	 * Retrives different data from API depending on the getType passed. Can return a list of
+	 * popular Tv Shows, Top rated Tv Shows or Similar Tv Shows to a passed TV ID
+	 * @param [getType] will change what the contents of the returning Arraylist is
+	 * @param [TVid] Id of a show that will be used to get similar shows to show with this id
+	 * @return Arraylist containing TVBasic objects. These can be popular shows, Top rated shows or
+	 * similar shows to the show with the id passed as a parameter
+	 */
 	fun fillhome(getType:Int, TVid: Int?): ArrayList<TVBasic>?{
 		var list: List<TVBasic> = populateHomeTask(getType,TVid).execute().get()
 		if (list.isEmpty()){
@@ -49,39 +68,57 @@ class AsyncTasker(context: Context) {
 		}
 	}
 
-
+	/**
+	 * Retrieves each show inside of a users list using each shows id
+	 * @param [list] A list containing Show Objects.
+	 * @return ArrayList containing TVBasic objects.
+	 */
 	fun getUserList(list: ArrayList<Show>):ArrayList<TVBasic>{
 		var retList = ArrayList<TVBasic>()
 		list.forEach { retList.add(getShowBasicAsync(it.id)) }
 		return  retList
 	}
 
+	/**
+	 * Retrieves a shows TVInfo object that matches an ID
+	 * @param [id] The id that will be used to retrieve the TVInfo object
+	 * @return TVInfo object that matched with ID passed
+	 */
 	fun getShowInfoAsync(id:Int): TVInfo {
 		return getShowTask(id).execute().get()
 	}
+
+	/**
+	 * Retrieves a shows TVBasic object that matches an ID
+	 * @param [id] The id that will be used to retrieve the TVBasic object
+	 * @return TVBasic object that matched with ID passed
+	 */
 	fun getShowBasicAsync(id:Int): TVBasic {
 		return getShowTask(id).execute().get()
 	}
 
+	/**
+	 * Retrieves a TVSeasonInfo object
+	 * @param [num] The season number of the show that is to be returned
+	 * @param [TVid] The id of the show that the season is from.
+	 * @return A TvSeasonInfo object
+	 */
 	fun getSeasonAsync(num: Int, TVid: Int): TVSeasonInfo {
-
 		return getSeasonTask(num,TVid).execute().get()
 	}
 
-	fun getEpisodeAsync(EpNum: Int,TVid: Int,seasonNum: Int): TVEpisodeInfo {
-		return getEpisodeTask(EpNum,seasonNum,TVid).execute().get()
-	}
 
 
-
-	internal inner class searchShowsTask constructor(search:String) : AsyncTask<Void, Void, List<TVBasic>>() {
+	/**
+	 * Class used to retrieve a List of TVBasic objects on a background thread to avoid clashes on UI thread
+	 * @param [search] The term that will be used to search for TV Shows using the API
+	 * @constructor Creates a searchShowsTask object that performs its methods on a background thread
+	 */
+	internal inner class searchShowsTask constructor(val search:String) : AsyncTask<Void, Void, List<TVBasic>>() {
 		private var api: TheMovieDbApi? = this@AsyncTasker.api
-		var term: String? = null
-		init{
-			term = search
-		}
+
 		override fun doInBackground(vararg voids: Void): List<TVBasic> {
-			var list: List<TVBasic> = api!!.searchTV(term,1,"en",null, SearchType.PHRASE).results
+			var list: List<TVBasic> = api!!.searchTV(search,1,"en",null, SearchType.PHRASE).results
 			return list
 		}
 
@@ -90,18 +127,18 @@ class AsyncTasker(context: Context) {
 		}
 	}
 
-	internal inner class getShowTask constructor(TVid: Int) : AsyncTask<Void, Void, TVInfo>() {
+	/**
+	 * Class used to retrieve a TVInfo object in the background to avoid clashes on UI Thread
+	 * @param [TVid] The ID that will be used to retrieve a shows Info
+	 * @constructor Creates a getShowTask object that performs its methods on a background thread
+	 */
+	internal inner class getShowTask constructor(val TVid: Int) : AsyncTask<Void, Void, TVInfo>() {
 		private var api:  TheMovieDbApi? = this@AsyncTasker.api
 		var info : TVInfo? = null
 
-		var TVid: Int? = null
-
-		init{
-			this.TVid = TVid
-		}
 
 		override fun doInBackground(vararg voids: Void): TVInfo? {
-			info = api!!.getTVInfo(TVid!!,"en")
+			info = api!!.getTVInfo(TVid,"en")
 
 			return info
 		}
@@ -111,20 +148,19 @@ class AsyncTasker(context: Context) {
 		}
 	}
 
-	internal inner class getSeasonTask constructor(seasonNum: Int, TVid: Int) : AsyncTask<Void, Void, TVSeasonInfo>() {
+	/**
+	 * Class used to retrieve a TVSeasonInfo object in the background to avoid clashes on UI Thread
+	 * @param [seasonNum] The season number of the season that is required to be retrieved
+	 * @param [TVid] The ID of the show that the season Info will be from
+	 * @constructor Creates a getSeasonTask object that performs its methods on a background thread
+	 */
+	internal inner class getSeasonTask constructor(val seasonNum: Int, val TVid: Int) : AsyncTask<Void, Void, TVSeasonInfo>() {
 		private var api:  TheMovieDbApi? = this@AsyncTasker.api
 		var info : TVSeasonInfo? = null
 
-		var seasonNum: Int? = null
-		var TVid: Int? = null
-
-		init{
-			this.seasonNum = seasonNum
-			this.TVid = TVid
-		}
 
 		override fun doInBackground(vararg voids: Void): TVSeasonInfo? {
-			info = api!!.getSeasonInfo(TVid!!,seasonNum!!,"en")
+			info = api!!.getSeasonInfo(TVid,seasonNum,"en")
 			return info
 		}
 
@@ -133,31 +169,13 @@ class AsyncTasker(context: Context) {
 		}
 	}
 
-	internal inner class getEpisodeTask constructor(epNum: Int,seasonNum: Int,TVid: Int) : AsyncTask<Void, Void, TVEpisodeInfo>() {
-		private var api:  TheMovieDbApi? = this@AsyncTasker.api
-		var info : TVEpisodeInfo? = null
-
-		var epNum: Int? = null
-		var seasonNum: Int? = null
-		var TVid: Int? = null
-
-		init{
-			this.epNum = epNum
-			this.seasonNum = seasonNum
-			this.TVid = TVid
-		}
-
-		override fun doInBackground(vararg voids: Void): TVEpisodeInfo? {
-			info = api!!.getEpisodeInfo(TVid!!,seasonNum!!,epNum!!,"en")
-			return info
-		}
-
-		override fun onPostExecute(result: TVEpisodeInfo) {
-			super.onPostExecute(result)
-		}
-	}
-
-	internal inner class populateHomeTask(val getType: Int,val TVid: Int?)  : AsyncTask<Void, Void, List<TVBasic>>() {
+	/**
+	 * Class used to retrieve a List of TVBasic objects in the background to avoid clashes on UI Thread
+	 * @param [getType] Integer that changes the data that is retrieved from the API
+	 * @param [TVid] Nullable Integer that will be used to get a list of similar shows to the show that this ID matches with
+	 * @constructor Creates a populateHomeTask object that performs its methods on a background thread
+	 */
+	internal inner class populateHomeTask constructor(val getType: Int, val TVid: Int?)  : AsyncTask<Void, Void, List<TVBasic>>() {
 		private var api: TheMovieDbApi? = this@AsyncTasker.api
 
 		override fun doInBackground(vararg voids: Void): List<TVBasic> {
