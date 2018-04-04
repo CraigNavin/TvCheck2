@@ -41,99 +41,24 @@ class ShowActivity : AppCompatActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_show)
-
 		setup()
-		setView()
 	}
 
-	fun getShow(id: Int): Show?{
-
-		user!!.list!!.forEach{ it.list!!.forEach {if(it.id == id){ return it } } }
+	/**
+	 * Retrieves the Show with matching ID from intent from the users List.
+	 * Show is then used to determine if episode has been watched or not
+	 * @return Show object from user list
+	 */
+	fun getShow(): Show?{
+		user!!.list!!.forEach{ it.list!!.forEach {if(it.id == show!!.id){ return it } } }
 		return null
 	}
 
-	fun setView(){
-		ShowName_TV!!.text = show!!.name
-		Overview_TV!!.text = show!!.overview
-
-		if (getShow(show!!.id) != null){
-			watched_box.isChecked = getShow(show!!.id)!!.watched
-		}
-
-		Picasso.with(applicationContext).load(applicationContext.getString(R.string.base_address_w185) + show!!.posterPath)
-				.placeholder(R.drawable.ic_default_search_image)
-				.into(PosterView)
-		setupBottomnavigatioView()
-		bottomNavViewBar.bringChildToFront(findViewById(R.id.bottomNavViewBar))
-		var seasons = show!!.seasons
-		var adapter = SeasonEpisodeListAdapter(this,seasons,null,applicationContext,user!!,show!!.id)
-		season_list!!.adapter = adapter
-
-		season_list!!.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
-			val item = parent.getItemAtPosition(position) as String
-			val season : TVSeasonBasic = Gson().fromJson(item)
-			val intent = Intent(applicationContext,SeasonActivity::class.java)//activity_Num 1
-			intent.putExtra("Season",item)
-			intent.putExtra("User",Gson().toJson(user))
-			intent.putExtra("TVID",show!!.id)
-			applicationContext.startActivity(intent)
-		}
-
-		watched_box.setOnCheckedChangeListener { buttonView, isChecked ->
-			if (inLists()){
-				var showInList = getShow(show!!.id)
-				showInList!!.watched = isChecked
-				AlertDialog.Builder(this)
-						.setTitle("Watched Show?")
-						.setMessage("Do you want to set all this seasons and episodes to watched?")
-						.setPositiveButton(android.R.string.yes,
-								DialogInterface.OnClickListener { dialog, which ->
-									showInList!!.seasons!!.forEach { it.watched = isChecked
-									it.episodes.forEach { it.watched = isChecked
-									}
-								}
-									user = DatabaseHandler(applicationContext).update(user!!)
-									Toast.makeText(applicationContext,"Show,seasons and episodes Updated",Toast.LENGTH_SHORT).show()
-								}
-
-						)
-						.setNegativeButton(android.R.string.no,
-								DialogInterface.OnClickListener { dialog, which ->
-									user = DatabaseHandler(applicationContext).update(user!!)
-									Toast.makeText(applicationContext,"Show Updated",Toast.LENGTH_SHORT).show()
-								}
-
-						).show()
-			}else{
-				Toast.makeText(applicationContext,"Please add this show to a list before marking episodes as watched",Toast.LENGTH_SHORT).show()
-			}
-
-		}
-
-		adapter.notifyDataSetChanged()
-	}
-
-	fun setup(){
-		Async = AsyncTasker(applicationContext)
-		user = Gson().fromJson(intent.getStringExtra("User"))
-		basic = Gson().fromJson(intent.getStringExtra("Show"))
-		converter = Converter(applicationContext)
-
-		Log.d(TAG,user.toString())
-		save_progress_bar.visibility = View.GONE
-		show = Async!!.getShowInfoAsync(basic!!.id)
-
-		for (list in user!!.list!!){
-			if (user!!.checkListContainsShow(basic!!.id,list.name)){
-				save_float_btn.setImageDrawable(getDrawable(R.drawable.ic_love))
-				break
-			}else{
-				save_float_btn.setImageDrawable(getDrawable(R.drawable.ic_addlist_icon))
-			}
-		}
-
+	/**
+	 *
+	 */
+	fun setupFloatBtn(){
 		registerForContextMenu(save_float_btn)
-
 		save_float_btn.setOnClickListener {
 			if (!inLists()){
 				openContextMenu(save_float_btn)
@@ -154,6 +79,113 @@ class ShowActivity : AppCompatActivity() {
 		}
 	}
 
+	/**
+	 *
+	 */
+	fun setupCheckbox(){
+		watched_box.setOnCheckedChangeListener { buttonView, isChecked ->
+			if (inLists()){
+				var showInList = getShow()
+				showInList!!.watched = isChecked
+				AlertDialog.Builder(this)
+						.setTitle("Watched Show?")
+						.setMessage("Do you want to set all this seasons and episodes to watched?")
+						.setPositiveButton(android.R.string.yes,
+								DialogInterface.OnClickListener { dialog, which ->
+									showInList!!.seasons!!.forEach { it.watched = isChecked
+										it.episodes.forEach { it.watched = isChecked
+										}
+									}
+									user = DatabaseHandler(applicationContext).update(user!!)
+									Toast.makeText(applicationContext,"Show,seasons and episodes Updated",Toast.LENGTH_SHORT).show()
+								}
+
+						)
+						.setNegativeButton(android.R.string.no,
+								DialogInterface.OnClickListener { dialog, which ->
+									user = DatabaseHandler(applicationContext).update(user!!)
+									Toast.makeText(applicationContext,"Show Updated",Toast.LENGTH_SHORT).show()
+								}
+
+						).show()
+			}else{
+				Toast.makeText(applicationContext,"Please add this show to a list before marking episodes as watched",Toast.LENGTH_SHORT).show()
+			}
+
+		}
+	}
+
+	/**
+	 *
+	 */
+	fun setupList(){
+		season_list!!.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
+			val item = parent.getItemAtPosition(position) as String
+			val intent = Intent(applicationContext,SeasonActivity::class.java)//activity_Num 1
+			intent.putExtra("Season",item)
+			intent.putExtra("User",Gson().toJson(user))
+			intent.putExtra("TVID",show!!.id)
+			applicationContext.startActivity(intent)
+		}
+	}
+
+	/**
+	 * Populates the view elements on this activity with the correct information. Calls
+	 * methods that set up parts of the activity
+	 *
+	 */
+	fun setView(){
+		ShowName_TV!!.text = show!!.name
+		Overview_TV!!.text = show!!.overview
+
+		if (getShow() != null){
+			watched_box.isChecked = getShow()!!.watched
+		}
+		Picasso.with(applicationContext).load(applicationContext.getString(R.string.base_address_w185) + show!!.posterPath)
+				.placeholder(R.drawable.ic_default_search_image)
+				.into(PosterView)
+
+		bottomNavViewBar.bringChildToFront(findViewById(R.id.bottomNavViewBar))
+		var seasons = show!!.seasons
+		var adapter = SeasonEpisodeListAdapter(this,seasons,null,applicationContext,user!!,show!!.id)
+		season_list!!.adapter = adapter
+
+		save_progress_bar.visibility = View.GONE
+		show = Async!!.getShowInfoAsync(basic!!.id)
+
+		for (list in user!!.list!!){
+			if (user!!.checkListContainsShow(basic!!.id,list.name)){
+				save_float_btn.setImageDrawable(getDrawable(R.drawable.ic_love))
+				break
+			}else{
+				save_float_btn.setImageDrawable(getDrawable(R.drawable.ic_addlist_icon))
+			}
+		}
+		setupFloatBtn()
+		setupCheckbox()
+		setupList()
+		adapter.notifyDataSetChanged()
+	}
+
+	/**
+	 * Sets up variable and calls method that handles View elements
+	 */
+	fun setup(){
+		Async = AsyncTasker(applicationContext)
+		user = Gson().fromJson(intent.getStringExtra("User"))
+		basic = Gson().fromJson(intent.getStringExtra("Show"))
+		converter = Converter(applicationContext)
+		setView()
+		setupBottomnavigatioView()
+		Log.d(TAG,user.toString())
+
+	}
+
+	/**
+	 * Checks if any of the users lists contain a show matching id passed
+	 * @return Boolean that represents if any of the users list contain a show with a matching id
+	 * to the currently selected show
+	 */
 	fun inLists(): Boolean{
 		for (list in user!!.list!!){
 			if (user!!.checkListContainsShow(basic!!.id,list.name)){
@@ -165,12 +197,22 @@ class ShowActivity : AppCompatActivity() {
 		return false
 	}
 
+	/**
+	 * Overridden function that adds each lists name to the menu list
+	 */
 	override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
 		super.onCreateContextMenu(menu, v, menuInfo)
 		menu!!.setHeaderTitle("Choose a list to add")
 		user!!.list!!.forEach { menu.add(it.name) }
 	}
 
+	/**
+	 * Overridden function that performs validation to ensure that the user cannot add
+	 * a show to a list that already contains the same show. If validation passes, the show
+	 * is added to the selected list.
+	 * @param [item] A menuItem that has a Title that represents one of the users lists
+	 * @return super.onContextItemSelected(item)
+	 *  */
 	override fun onContextItemSelected(item: MenuItem?): Boolean {
 		var nameList = user!!.getListNames()
 		if (nameList.contains(item!!.title)){
@@ -193,6 +235,9 @@ class ShowActivity : AppCompatActivity() {
 
 	inline fun <reified T> Gson.fromJson(json: String) = this.fromJson<T>(json, object: TypeToken<T>() {}.type)
 
+	/**
+	 * Instantiates the bottom navigation view and sets the menu values to the navigation bar
+	 */
 	private fun setupBottomnavigatioView(){
 		Log.d(TAG,"setupBottomNavigationView")
 		BottomNavigationBarHelper.setupBottomNavigationBar(bottomNavViewBar)
@@ -202,6 +247,9 @@ class ShowActivity : AppCompatActivity() {
 		menuI?.isChecked = true
 	}
 
+	/**
+	 * Overridden onDestroy function runs garbage collection to help keep RAM usage as low as possible
+	 */
 	override fun onDestroy() {
 		//android.os.Process.killProcess(android.os.Process.myPid());
 		super.onDestroy()

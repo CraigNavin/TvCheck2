@@ -31,6 +31,11 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 		findViewById(R.id.Login_Btn).setOnClickListener(this)
 	}
 
+	/**
+	 * Perfoms validation on all data entered and attempts to authenticate the user in if information is correct.
+	 * If authentication is passed then the user is retrieved from the database and a User object is created using this data.
+	 * The home activity is then started and displayed
+	 */
 	private fun login() {
 		val email = Login_email.text.toString()
 		val password = Login_Pass.text.toString()
@@ -76,6 +81,9 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
 	}
 
+	/**
+	 * Overridden onClick method that controls what happens when a click happens
+	 */
 	override fun onClick(view: View) {
 		when (view.id) {
 			R.id.Login_TVsignUp -> applicationContext.startActivity(Intent(this, SignUpActivity::class.java))

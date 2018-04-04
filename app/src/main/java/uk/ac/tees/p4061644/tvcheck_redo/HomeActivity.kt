@@ -40,15 +40,26 @@ class HomeActivity : Activity(),RecyclerHomeViewAdapter.OnItemClickListener{
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_home)
 		setup()
-		setupBottomnavigatioView()
+
 	}
 
 	inline fun <reified T> Gson.fromJson(json: String) = this.fromJson<T>(json, object: TypeToken<T>() {}.type)
 
+	/**
+	 * Sets up variable and calls method that handles View elements
+	 */
 	fun setup(){
 		Async = AsyncTasker(applicationContext)
 		dbh = DatabaseHandler(applicationContext)
 		user = gson.fromJson(intent.getStringExtra("User"))
+		setView()
+		setupBottomnavigatioView()
+	}
+
+	/**
+	 * Sets up view elements with top rated,Popular shows. As well as a similar show to ones in the users lists
+	 */
+	fun setView(){
 		var poplayoutManager = LinearLayoutManager (this,LinearLayoutManager.HORIZONTAL,false)
 		var toplayoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
 		var popular = Async!!.fillhome(1,null)!!
@@ -89,6 +100,10 @@ class HomeActivity : Activity(),RecyclerHomeViewAdapter.OnItemClickListener{
 		}
 	}
 
+	/**
+	 * Retrieves a random show from the users lists
+	 * @return Show object to be used to get similar Shows from API
+	 */
 	fun getRandomShowFromLists():Show{
 		var listindex = Random().nextInt(user!!.list!!.size)
 		var showindex = Random().nextInt(user!!.list!![listindex].list!!.size)
@@ -104,6 +119,9 @@ class HomeActivity : Activity(),RecyclerHomeViewAdapter.OnItemClickListener{
 		applicationContext.startActivity(intent)
 	}
 
+	/**
+	 * Instantiates the bottom navigation view and sets the menu values to the navigation bar
+	 */
 	private fun setupBottomnavigatioView(){
 		Log.d(TAG,"setupBottomNavigationView")
 		BottomNavigationBarHelper.setupBottomNavigationBar(bottomNavViewBar)
@@ -113,6 +131,9 @@ class HomeActivity : Activity(),RecyclerHomeViewAdapter.OnItemClickListener{
 		menuI?.isChecked = true
 	}
 
+	/**
+	 * Overridden onDestroy function runs garbage collection to help keep RAM usage as low as possible
+	 */
 	override fun onDestroy() {
 		super.onDestroy()
 		Runtime.getRuntime().gc()

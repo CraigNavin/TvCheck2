@@ -29,15 +29,24 @@ class ProfileActivity : AppCompatActivity() {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_profile)
 		setup()
-		setupBottomnavigatioView()
+
 		Log.d("USERGSONCHECK",user!!.UserID)
-
-
 	}
 
+	/**
+	 * Sets up variable and calls method that handles View elements
+	 */
 	fun setup(){
 		user = Gson().fromJson(intent.getStringExtra("User"))
 		user = DatabaseHandler(applicationContext).retrievefirst(user!!.UserID)
+		setView()
+		setupBottomnavigatioView()
+	}
+
+	/**
+	 * populates the view elements on this activity with the correct information
+	 */
+	fun setView(){
 		var name_list = user!!.getListNames()
 
 		List_LV.adapter = ArrayAdapter<String>(applicationContext,android.R.layout.simple_list_item_1,name_list)
@@ -59,6 +68,9 @@ class ProfileActivity : AppCompatActivity() {
 
 	inline fun <reified T> Gson.fromJson(json: String) = this.fromJson<T>(json, object: TypeToken<T>() {}.type)
 
+	/**
+	 * Instantiates the bottom navigation view and sets the menu values to the navigation bar
+	 */
 	private fun setupBottomnavigatioView(){
 		Log.d(TAG,"setupBottomNavigationView")
 		BottomNavigationBarHelper.setupBottomNavigationBar(bottomNavViewBar)

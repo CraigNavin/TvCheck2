@@ -40,12 +40,22 @@ class SeasonActivity : AppCompatActivity() {
 		setup()
 	}
 
+	/**
+	 * Retrieves the Show with matching ID from intent from the users List.
+	 * Show is then used to determine if episode has been watched or not
+	 * @return Show object from user list
+	 */
 	fun getShow(): Show?{
 		user!!.list!!.forEach { it.list!!.forEach { if (it.id == id){ return it} } }
 		return null
 	}
 
 
+	/**
+	 * Populates the view elements on this activity with the correct information
+	 * Handles what happens when the watched checkbox status changes.
+	 * @param [season] TVSeasonInfo object that is used to populate elements with information
+	 */
 	fun setView(season: TVSeasonInfo){
 		var seasonNum = "Season " + season.seasonNumber
 
@@ -58,7 +68,7 @@ class SeasonActivity : AppCompatActivity() {
 		Picasso.with(applicationContext).load(applicationContext.getString(R.string.base_address_w185) + season.posterPath)
 				.placeholder(R.drawable.ic_default_search_image)
 				.into(PosterView)
-		setupBottomnavigatioView()
+
 		bottomNavViewBar.bringChildToFront(bottomNavViewBar)
 		var adapter = SeasonEpisodeListAdapter(this,null,season.episodes,applicationContext,user!!,id!!)
 		episodes_list.adapter = adapter
@@ -102,6 +112,11 @@ class SeasonActivity : AppCompatActivity() {
 		}
 	}
 
+	/**
+	 * Checks if any of the users lists contain a show matching id passed
+	 * @return Boolean that represents if any of the users list contain a show with a matching id
+	 * to the currently selected show
+	 */
 	fun inLists(): Boolean{
 		for (list in user!!.list!!){
 			if (user!!.checkListContainsShow(id!!,list.name)){
@@ -113,20 +128,32 @@ class SeasonActivity : AppCompatActivity() {
 		return false
 	}
 
+	/**
+	 * Retrieves more information on the current season of show
+	 * @param [id] id of current chosen tv show
+	 * @return TVSeasonInfo object
+	 */
 	fun getSeasonInfo(id: Int):TVSeasonInfo{
 		var season: TVSeasonBasic = Gson().fromJson(intent.getStringExtra("Season"))
 		return Async!!.getSeasonAsync(season!!.seasonNumber,id)
 	}
 
+	/**
+	 * Sets up variable and calls method that handles View elements
+	 */
 	fun setup(){
 		Async = AsyncTasker(applicationContext)
 		id = intent.extras.get("TVID") as Int
 		user = Gson().fromJson(intent.getStringExtra("User"))
 		setView(getSeasonInfo(id!!))
+		setupBottomnavigatioView()
 	}
 
 	inline fun <reified T> Gson.fromJson(json: String) = this.fromJson<T>(json, object: TypeToken<T>() {}.type)
 
+	/**
+	 * Instantiates the bottom navigation view and sets the menu values to the navigation bar
+	 */
 	private fun setupBottomnavigatioView(){
 		Log.d(TAG,"setupBottomNavigationView")
 		BottomNavigationBarHelper.setupBottomNavigationBar(bottomNavViewBar)
@@ -136,6 +163,9 @@ class SeasonActivity : AppCompatActivity() {
 		menuI?.isChecked = true
 	}
 
+	/**
+	 * Overridden onDestroy function runs garbage collection to help keep RAM usage as low as possible
+	 */
 	override fun onDestroy() {
 		//android.os.Process.killProcess(android.os.Process.myPid());
 

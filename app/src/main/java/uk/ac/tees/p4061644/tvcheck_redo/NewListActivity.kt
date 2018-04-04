@@ -26,15 +26,26 @@ class NewListActivity : AppCompatActivity() {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_new_list)
 		setup()
-		setupBottomnavigatioView()
-
 	}
+
+
 	inline fun <reified T> Gson.fromJson(json: String) = this.fromJson<T>(json, object: TypeToken<T>() {}.type)
 
 
+	/**
+	 * Sets up variable and calls method that handles View elements
+	 */
 	fun setup(){
 		user = Gson().fromJson(intent.getStringExtra("User"))
+		setView()
+		setupBottomnavigatioView()
 
+	}
+
+	/**
+	 * Sets onClickListeners to buttons and handles data validation when create button pressed
+	 */
+	fun setView(){
 		create_btn.setOnClickListener {
 			if (listName_txt.text.toString().isNullOrEmpty()){
 				listName_txt.error = "List name is cannot be empty"
@@ -57,9 +68,11 @@ class NewListActivity : AppCompatActivity() {
 			intent.putExtra("User",Gson().toJson(user))
 			applicationContext.startActivity(intent)
 		}
-
 	}
 
+	/**
+	 * Instantiates the bottom navigation view and sets the menu values to the navigation bar
+	 */
 	private fun setupBottomnavigatioView(){
 		Log.d(TAG,"setupBottomNavigationView")
 		BottomNavigationBarHelper.setupBottomNavigationBar(bottomNavViewBar)

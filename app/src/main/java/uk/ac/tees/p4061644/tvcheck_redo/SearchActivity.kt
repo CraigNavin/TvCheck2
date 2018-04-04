@@ -32,13 +32,24 @@ class SearchActivity : AppCompatActivity(){
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_search)
 		setup()
-		setupBottomnavigatioView()
+
 	}
 	inline fun <reified T> Gson.fromJson(json: String) = this.fromJson<T>(json, object: TypeToken<T>() {}.type)
 
+	/**
+	 * Sets up variable and calls method that handles View elements
+	 */
 	fun setup(){
 		user = Gson().fromJson(intent.getStringExtra("User"))
 		Async = AsyncTasker(applicationContext)
+		setView()
+		setupBottomnavigatioView()
+	}
+
+	/**
+	 * Sets up all elements that are on the activity. Assigns onClickListeners to the search button
+	 */
+	fun setView(){
 		if (intent.extras.get("List") != null){
 			search_button.visibility = View.GONE
 			search_text_field . visibility = View.GONE
@@ -69,7 +80,9 @@ class SearchActivity : AppCompatActivity(){
 		bottomNavViewBar.bringChildToFront(this.bottomNavViewBar)
 	}
 
-
+	/**
+	 * Is called when the search button is pressed. Performs the search and sets the adapter to the search result list.
+	 */
 	fun search(term: String){
 		var results = Async!!.searchShows(term)
 		var adapter = SearchListAdapter(this,results,applicationContext)
@@ -77,6 +90,9 @@ class SearchActivity : AppCompatActivity(){
 		adapter.notifyDataSetChanged()
 	}
 
+	/**
+	 * Instantiates the bottom navigation view and sets the menu values to the navigation bar
+	 */
 	private fun setupBottomnavigatioView(){
 		Log.d(TAG,"setupBottomNavigationView")
 		BottomNavigationBarHelper.setupBottomNavigationBar(bottomNavViewBar)
@@ -86,7 +102,9 @@ class SearchActivity : AppCompatActivity(){
 		menuI?.isChecked = true
 	}
 
-
+	/**
+	 * Overridden onDestroy function runs garbage collection to help keep RAM usage as low as possible
+	 */
 	override fun onDestroy() {
 		//android.os.Process.killProcess(android.os.Process.myPid());
 

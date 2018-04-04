@@ -29,6 +29,11 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener {
 		findViewById(R.id.Sign_Up_TVLogin).setOnClickListener(this)
 	}
 
+	/**
+	 * Performs validation on the data that is entered. Produces an error if any of the validation fails
+	 * If all of the validation passes, then the user is added to the firebase authtication service. In
+	 * addition to this, a User object is created and added to the parse database for use within the app
+	 */
 	private fun RegisterUser() {
 		val email = SIgn_Up_Email.text.toString()
 		val password = Sign_Up_Pass1.text.toString()
@@ -91,11 +96,16 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener {
 
 	}
 
-	fun removeWhiteSpace(value : String): String{
+	/**
+	 * Removes any whitespace from passed string
+	 * @param [string] string that will have white space removed
+	 * @return updated string with no white space in it
+	 */
+	fun removeWhiteSpace(string: String): String{
 		var result = ""
 		var prevchar = ""
 
-		for (char in value){
+		for (char in string){
 			if(!(prevchar ==" " && char ==' ')){
 				result += char
 			}
@@ -104,6 +114,9 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener {
 		return result
 	}
 
+	/**
+	 * Handles what happens when a view is clicked.
+	 */
 	override fun onClick(view: View) {
 		when (view.id) {
 			R.id.Sign_Up_Btn -> RegisterUser()
