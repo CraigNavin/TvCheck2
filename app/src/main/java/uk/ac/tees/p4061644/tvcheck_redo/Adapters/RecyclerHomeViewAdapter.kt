@@ -1,24 +1,26 @@
 package uk.ac.tees.p4061644.tvcheck_redo.Adapters
 
 import android.content.Context
+import android.content.Intent
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import com.google.gson.Gson
 import com.omertron.themoviedbapi.model.tv.TVBasic
 import com.squareup.picasso.Picasso
 import uk.ac.tees.p4061644.tvcheck_redo.R
+import uk.ac.tees.p4061644.tvcheck_redo.ShowActivity
+import uk.ac.tees.p4061644.tvcheck_redo.models.User
 
 /**
  * Created by Craig on 21/03/2018.
  */
-class RecyclerHomeViewAdapter(private val context: Context, private val shows: ArrayList<TVBasic>, private val listener: OnItemClickListener): RecyclerView.Adapter<RecyclerHomeViewAdapter.ViewHolder>() {
+class RecyclerHomeViewAdapter(private val context: Context, private val shows: ArrayList<TVBasic>,private val user: User): RecyclerView.Adapter<RecyclerHomeViewAdapter.ViewHolder>() {
 
-	interface OnItemClickListener {
-		fun onItemClick(position: Int)
-	}
 
 	override fun getItemCount(): Int {
 		return shows.size
@@ -30,9 +32,18 @@ class RecyclerHomeViewAdapter(private val context: Context, private val shows: A
 	}
 
 	override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
-		var show = shows!![position]
-		holder!!.itemView.setOnClickListener { View.OnClickListener { listener.onItemClick(position) } }
-		holder!!.bind(show,listener)
+		var show = shows[position]
+		Picasso.with(context).load(context.getString(R.string.base_address_w500) + show.posterPath)
+				.placeholder(R.drawable.ic_default_search_image)
+				.into(holder!!.imgView)
+		holder.showName!!.text = show.name
+		holder.imgView!!.setOnClickListener {
+		val intent = Intent(context, ShowActivity::class.java)//activity_Num 1
+		intent.putExtra("Show",Gson().toJson(show))
+		intent.putExtra("User", Gson().toJson(user))
+		context.startActivity(intent)
+			Toast.makeText(context,show.name,Toast.LENGTH_SHORT).show()
+		}
 	}
 
 	class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
@@ -43,12 +54,6 @@ class RecyclerHomeViewAdapter(private val context: Context, private val shows: A
 			showName = view.findViewById(R.id.Name) as TextView?
 		}
 
-		fun bind(show:TVBasic, listener: OnItemClickListener){
-			Picasso.with(itemView.context).load(itemView.context.getString(R.string.base_address_w500) + show.posterPath)
-					.placeholder(R.drawable.ic_default_search_image)
-					.into(imgView)
-			showName!!.text = show.name
-		}
 
 	}
 }

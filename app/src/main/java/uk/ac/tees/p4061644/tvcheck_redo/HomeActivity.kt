@@ -24,7 +24,7 @@ import uk.ac.tees.p4061644.tvcheck_redo.utils.DatabaseHandler
 import java.util.*
 import kotlin.collections.ArrayList
 
-class HomeActivity : Activity(),RecyclerHomeViewAdapter.OnItemClickListener{
+class HomeActivity : Activity(){
 
 
 	private var TAG: String = "HomeActivity"
@@ -53,6 +53,7 @@ class HomeActivity : Activity(),RecyclerHomeViewAdapter.OnItemClickListener{
 		dbh = DatabaseHandler(applicationContext)
 		user = gson.fromJson(intent.getStringExtra("User"))
 		setView()
+		setupBottomnavigatioView()
 
 	}
 
@@ -90,12 +91,12 @@ class HomeActivity : Activity(),RecyclerHomeViewAdapter.OnItemClickListener{
 
 		recycle_popular.apply {
 			layoutManager = poplayoutManager
-			adapter = RecyclerHomeViewAdapter(applicationContext,popular,this@HomeActivity)
+			adapter = RecyclerHomeViewAdapter(applicationContext,popular,user!!)
 		}
 
 		recycle_top_rated.apply {
 			layoutManager = toplayoutManager
-			adapter= RecyclerHomeViewAdapter(applicationContext,topRated,this@HomeActivity)
+			adapter= RecyclerHomeViewAdapter(applicationContext,topRated,user!!)
 		}
 	}
 
@@ -107,15 +108,6 @@ class HomeActivity : Activity(),RecyclerHomeViewAdapter.OnItemClickListener{
 		var listindex = Random().nextInt(user!!.list!!.size)
 		var showindex = Random().nextInt(user!!.list!![listindex].list!!.size)
 		return user!!.list!![listindex].list!![showindex]
-	}
-
-	override fun onItemClick(position: Int) {
-		val show = Async!!.fillhome(1,null)!![position]
-		val showString = gson.toJson(show)
-		val intent = Intent(applicationContext,ShowActivity::class.java)//activity_Num 1
-		intent.putExtra("Show",showString)
-		intent.putExtra("User",Gson().toJson(user))
-		applicationContext.startActivity(intent)
 	}
 
 	/**

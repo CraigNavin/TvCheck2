@@ -135,6 +135,7 @@ class ShowActivity : AppCompatActivity() {
 	 *
 	 */
 	fun setView(){
+		show = Async!!.getShowInfoAsync(basic!!.id)
 		ShowName_TV!!.text = show!!.name
 		Overview_TV!!.text = show!!.overview
 
@@ -151,7 +152,7 @@ class ShowActivity : AppCompatActivity() {
 		season_list!!.adapter = adapter
 
 		save_progress_bar.visibility = View.GONE
-		show = Async!!.getShowInfoAsync(basic!!.id)
+
 
 		for (list in user!!.list!!){
 			if (user!!.checkListContainsShow(basic!!.id,list.name)){
