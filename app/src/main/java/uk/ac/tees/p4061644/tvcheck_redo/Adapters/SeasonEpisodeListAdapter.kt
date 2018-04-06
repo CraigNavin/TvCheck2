@@ -75,9 +75,12 @@ class SeasonEpisodeListAdapter(private var activity: Activity, private var seaso
 	 */
 	fun handleSeasons(holder: SeasonEpisodeListAdapter.ViewHolder, position: Int): SeasonEpisodeListAdapter.ViewHolder {
 		var TVSeasonBasic = seasons!![position]
-		var seasonNum = "Season " + TVSeasonBasic.seasonNumber.toString()
+		if(TVSeasonBasic.seasonNumber == 0){
+			holder.txtName?.text = "Specials"
+		}else{
+			holder.txtName?.text = "Season " + TVSeasonBasic.seasonNumber.toString()
+		}
 		var episodeCount = TVSeasonBasic.episodeCount.toString() + " Episodes"
-		holder.txtName?.text = seasonNum
 		holder.txtEpisodes!!.text = episodeCount
 
 		com.squareup.picasso.Picasso.with(context)

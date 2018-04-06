@@ -63,7 +63,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 			mAuth!!.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
 
 				if (task.isSuccessful) {
-					Toast.makeText(applicationContext, "Login Successful", Toast.LENGTH_SHORT).show()
+					Toast.makeText(applicationContext, "Login Successful", Toast.LENGTH_LONG).show()
 					val user = dbh!!.retrievefirst(mAuth!!.currentUser!!.uid)
 					val i = Intent(baseContext, HomeActivity::class.java)
 					i.putExtra("User", Gson().toJson(user))
@@ -72,7 +72,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 				}
 				else {
 					Login_progressbar.visibility = View.GONE
-					Toast.makeText(applicationContext, "Authentication Failed", Toast.LENGTH_SHORT).show()
+					Toast.makeText(applicationContext, "Login Unsuccessful", Toast.LENGTH_SHORT).show()
 				}
 			}
 		}catch(e: Exception){

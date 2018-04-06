@@ -31,6 +31,7 @@
     <string name="Cancel">Cancel</string>
     <string name="listName">Please enter list name</string>
     <string name="emptyLists">Follow some shows to get recommendations</string>
+    <string name="Source">Information From TMDB</string>
 
     
 

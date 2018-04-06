@@ -14,7 +14,9 @@ import com.omertron.themoviedbapi.model.tv.TVBasic
 import com.omertron.themoviedbapi.model.tv.TVInfo
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_home.*
+import kotlinx.android.synthetic.main.activity_home.view.*
 import kotlinx.android.synthetic.main.layout_bottom_navigation_view.*
+import kotlinx.android.synthetic.main.recyclerview_item.*
 import uk.ac.tees.p4061644.tvcheck_redo.Adapters.RecyclerHomeViewAdapter
 import uk.ac.tees.p4061644.tvcheck_redo.models.Show
 import uk.ac.tees.p4061644.tvcheck_redo.models.User
@@ -22,6 +24,7 @@ import uk.ac.tees.p4061644.tvcheck_redo.utils.AsyncTasker
 import uk.ac.tees.p4061644.tvcheck_redo.utils.BottomNavigationBarHelper
 import uk.ac.tees.p4061644.tvcheck_redo.utils.DatabaseHandler
 import java.util.*
+import javax.crypto.spec.GCMParameterSpec
 import kotlin.collections.ArrayList
 
 class HomeActivity : Activity(){
@@ -52,6 +55,7 @@ class HomeActivity : Activity(){
 		Async = AsyncTasker(applicationContext)
 		dbh = DatabaseHandler(applicationContext)
 		user = gson.fromJson(intent.getStringExtra("User"))
+		Log.d(TAG,Gson().toJson(user))
 		setView()
 		setupBottomnavigatioView()
 
@@ -65,10 +69,10 @@ class HomeActivity : Activity(){
 		var toplayoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
 		var popular = Async!!.fillhome(1,null)!!
 		var topRated = Async!!.fillhome(2,null)!!
-		var show :Show = getRandomShowFromLists()
 		var tvInfo : TVInfo? = null
 		var similar : ArrayList<TVBasic>? = null
 		if (!user!!.list!!.any{ it.list!!.count() == 0}){
+			var show :Show = getRandomShowFromLists()
 			similar = Async!!.fillhome(3,show.id)!!
 			tvInfo = Async!!.getShowInfoAsync(similar[Random().nextInt(similar.size)].id)
 			Similar_txt.text = "Because you followed " + Async!!.getShowBasicAsync(show.id).name
@@ -85,8 +89,8 @@ class HomeActivity : Activity(){
 			}
 
 		}else{
-			relLayout2.visibility = View.GONE
-			emptyLists_txt.visibility = View.VISIBLE
+			HideSimilar()
+
 		}
 
 		recycle_popular.apply {
@@ -98,6 +102,14 @@ class HomeActivity : Activity(){
 			layoutManager = toplayoutManager
 			adapter= RecyclerHomeViewAdapter(applicationContext,topRated,user!!)
 		}
+	}
+
+	fun HideSimilar(){
+		img_view.visibility = View.GONE
+		Name_txt.visibility = View.GONE
+		OverView_txt.visibility = View.GONE
+		Similar_txt.visibility = View.GONE
+		emptyLists_txt.visibility = View.VISIBLE
 	}
 
 	/**
@@ -128,5 +140,6 @@ class HomeActivity : Activity(){
 	override fun onDestroy() {
 		super.onDestroy()
 		Runtime.getRuntime().gc()
+
 	}
 }
