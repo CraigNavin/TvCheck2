@@ -112,6 +112,7 @@ class SeasonActivity : AppCompatActivity() {
 						)
 						.show()
 			}else{
+				watched_box!!.isChecked = false
 				Toast.makeText(applicationContext,"Please add this show to a list before marking episodes as watched",Toast.LENGTH_SHORT).show()
 			}
 		}

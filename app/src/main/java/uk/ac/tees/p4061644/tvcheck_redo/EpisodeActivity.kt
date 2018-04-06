@@ -23,6 +23,7 @@ class EpisodeActivity : AppCompatActivity() {
 	private val activity_Num: Int = 1
 	private var episode: TVEpisodeInfo? = null
 	private var user: User? = null
+	private var id : Int = 0
 
 
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,12 +48,14 @@ class EpisodeActivity : AppCompatActivity() {
 	 */
 	fun setView(){
 		EPName_TV!!.text = episode!!.name
+		var seasonNum :Int = 0
 		if (getShowFromLists() != null){
 			if(getShowFromLists()!!.seasons!![0].seasonNumber == 0){
-				watched_box!!.isChecked = getShowFromLists()!!.seasons!![episode!!.seasonNumber].episodes[episode!!.episodeNumber - 1].watched
+				seasonNum = episode!!.seasonNumber
 			}else{
-				watched_box!!.isChecked = getShowFromLists()!!.seasons!![episode!!.seasonNumber - 1].episodes[episode!!.episodeNumber - 1].watched
+				seasonNum = episode!!.seasonNumber -1
 			}
+			watched_box!!.isChecked = getShowFromLists()!!.seasons!![seasonNum].episodes[episode!!.episodeNumber - 1].watched
 		}
 
 
@@ -67,11 +70,33 @@ class EpisodeActivity : AppCompatActivity() {
 				.into(PosterView)
 
 		watched_box!!.setOnCheckedChangeListener { buttonView, isChecked ->
-			getShowFromLists()!!.seasons!![episode!!.seasonNumber].episodes[episode!!.episodeNumber -1].watched = isChecked
-			user = DatabaseHandler(applicationContext).update(user!!)
+			if (inLists()){
+				getShowFromLists()!!.seasons!![seasonNum].episodes[episode!!.episodeNumber -1].watched = isChecked
+				user = DatabaseHandler(applicationContext).update(user!!)
 
-			Toast.makeText(applicationContext,"Episode Updated", Toast.LENGTH_SHORT).show()
+				Toast.makeText(applicationContext,"Episode Updated", Toast.LENGTH_SHORT).show()
+			}else{
+				watched_box!!.isChecked = false
+				Toast.makeText(applicationContext,"Please add this show to a list before marking episodes as watched",Toast.LENGTH_SHORT).show()
+			}
+
 		}
+	}
+
+	/**
+	 * Checks if any of the users lists contain a show matching id passed
+	 * @return Boolean that represents if any of the users list contain a show with a matching id
+	 * to the currently selected show
+	 */
+	fun inLists(): Boolean{
+		for (list in user!!.list!!){
+			if (user!!.checkListContainsShow(id!!,list.name)){
+				return true
+			}else{
+				return false
+			}
+		}
+		return false
 	}
 
 	/**
@@ -79,6 +104,7 @@ class EpisodeActivity : AppCompatActivity() {
 	 */
 	fun setup(){
 		Log.d(TAG,intent.extras.get("TVID").toString())
+		id = intent.extras.get("TVID") as Int
 		user = Gson().fromJson(intent.getStringExtra("User"))
 		episode = Gson().fromJson(intent.getStringExtra("Episode"))
 		setView()

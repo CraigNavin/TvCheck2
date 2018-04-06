@@ -16,7 +16,6 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.omertron.themoviedbapi.model.tv.TVBasic
 import com.omertron.themoviedbapi.model.tv.TVInfo
-import com.omertron.themoviedbapi.model.tv.TVSeasonBasic
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_show.*
 import kotlinx.android.synthetic.main.layout_bottom_navigation_view.*
@@ -109,6 +108,7 @@ class ShowActivity : AppCompatActivity() {
 
 						).show()
 			}else{
+				watched_box.isChecked = false
 				Toast.makeText(applicationContext,"Please add this show to a list before marking episodes as watched",Toast.LENGTH_SHORT).show()
 			}
 
