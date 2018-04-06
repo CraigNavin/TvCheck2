@@ -49,7 +49,7 @@ class ProfileActivity : AppCompatActivity() {
 	fun setView(){
 		var name_list = user!!.getListNames()
 
-		List_LV.adapter = ArrayAdapter<String>(applicationContext,android.R.layout.simple_list_item_1,name_list)
+		List_LV.adapter = ArrayAdapter<String>(applicationContext,R.layout.mytextview,name_list)
 		List_LV.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
 			val listName = parent.getItemAtPosition(position) as String
 			val intent = Intent(applicationContext,SearchActivity::class.java)//activity_Num 1
