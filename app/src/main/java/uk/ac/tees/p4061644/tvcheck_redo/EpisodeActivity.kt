@@ -47,10 +47,12 @@ class EpisodeActivity : AppCompatActivity() {
 	 */
 	fun setView(){
 		EPName_TV!!.text = episode!!.name
-		var bool: Boolean
 		if (getShowFromLists() != null){
-			bool = getShowFromLists()!!.seasons!![episode!!.seasonNumber].episodes[episode!!.episodeNumber - 1].watched
-			watched_box!!.isChecked = bool
+			if(getShowFromLists()!!.seasons!![0].seasonNumber == 0){
+				watched_box!!.isChecked = getShowFromLists()!!.seasons!![episode!!.seasonNumber].episodes[episode!!.episodeNumber - 1].watched
+			}else{
+				watched_box!!.isChecked = getShowFromLists()!!.seasons!![episode!!.seasonNumber - 1].episodes[episode!!.episodeNumber - 1].watched
+			}
 		}
 
 

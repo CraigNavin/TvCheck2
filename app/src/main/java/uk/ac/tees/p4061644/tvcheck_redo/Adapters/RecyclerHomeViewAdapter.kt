@@ -22,15 +22,28 @@ import uk.ac.tees.p4061644.tvcheck_redo.models.User
 class RecyclerHomeViewAdapter(private val context: Context, private val shows: ArrayList<TVBasic>,private val user: User): RecyclerView.Adapter<RecyclerHomeViewAdapter.ViewHolder>() {
 
 
+	/**
+	 * Returns the size of the list
+	 * @return Size of list
+	 */
 	override fun getItemCount(): Int {
 		return shows.size
 	}
 
+	/**
+	 * Inflates a layout into the ViewHolder
+	 * @return A ViewHolder Instance of an assigned layout
+	 */
 	override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
 		var view: View = LayoutInflater.from(context).inflate(R.layout.recyclerview_item,parent,false)
 		return ViewHolder(view)
 	}
 
+	/**
+	 * Binds all of the relevant information to the ViewHolders elements.
+	 * @param [holder] A ViewHolder instance with an assigned Layout
+	 * @param [position] The position in the list that information will be retrieved
+	 */
 	override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
 		var show = shows[position]
 		Picasso.with(context).load(context.getString(R.string.base_address_w500) + show.posterPath)
@@ -46,6 +59,10 @@ class RecyclerHomeViewAdapter(private val context: Context, private val shows: A
 		}
 	}
 
+	/**
+	 * VView Holder class to manage all of the Views Elements
+	 * @param [view] View of an assigned layout
+	 */
 	class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
 		var imgView: ImageView? = null
 		var showName: TextView? = null

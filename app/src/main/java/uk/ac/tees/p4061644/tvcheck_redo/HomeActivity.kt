@@ -65,13 +65,13 @@ class HomeActivity : Activity(){
 		var toplayoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
 		var popular = Async!!.fillhome(1,null)!!
 		var topRated = Async!!.fillhome(2,null)!!
-		var show :Show? = null
+		var show :Show = getRandomShowFromLists()
 		var tvInfo : TVInfo? = null
 		var similar : ArrayList<TVBasic>? = null
 		if (!user!!.list!!.any{ it.list!!.count() == 0}){
-			similar = Async!!.fillhome(3,getRandomShowFromLists().id)!!
+			similar = Async!!.fillhome(3,show.id)!!
 			tvInfo = Async!!.getShowInfoAsync(similar[Random().nextInt(similar.size)].id)
-			Similar_txt.text = "Because you watched " + tvInfo.name
+			Similar_txt.text = "Because you followed " + Async!!.getShowBasicAsync(show.id).name
 			Name_txt.text = tvInfo.name
 			OverView_txt.text = tvInfo.overview
 			Picasso.with(applicationContext).load(getString(R.string.base_address_w185) + tvInfo.posterPath)

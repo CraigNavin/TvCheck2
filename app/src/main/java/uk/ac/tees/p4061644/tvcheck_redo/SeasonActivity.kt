@@ -60,7 +60,12 @@ class SeasonActivity : AppCompatActivity() {
 		var seasonNum = "Season " + season.seasonNumber
 
 		if(getShow() != null){
-			watched_box!!.isChecked = getShow()!!.seasons!![season.seasonNumber].watched
+			if(getShow()!!.seasons!![0].seasonNumber == 0){
+				watched_box!!.isChecked = getShow()!!.seasons!![season.seasonNumber].watched
+			}else{
+				watched_box!!.isChecked = getShow()!!.seasons!![season.seasonNumber-1].watched
+			}
+
 		}
 
 		SeasonNum_TV.text = seasonNum

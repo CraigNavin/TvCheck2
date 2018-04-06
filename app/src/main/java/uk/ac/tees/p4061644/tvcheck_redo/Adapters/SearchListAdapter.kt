@@ -16,33 +16,41 @@ import uk.ac.tees.p4061644.tvcheck_redo.R
 /**
  * Created by Craig on 05/03/2018.
  */
-class SearchListAdapter(private var activity: android.app.Activity, private var results: ArrayList<com.omertron.themoviedbapi.model.tv.TVBasic>?, private var context: android.content.Context): android.widget.BaseAdapter(){
+class SearchListAdapter(private var activity: Activity, private var results: ArrayList<TVBasic>?, private var context: Context): BaseAdapter(){
 
-	class ViewHolder(row: android.view.View?){
-		var txtName: android.widget.TextView? = null
-		var txtComment: android.widget.TextView? = null
-		var imgView: android.widget.ImageView? = null
+	/**
+	 * View Holder class to manage all of the Views Elements
+	 * @param [row] View of an assigned layout
+	 */
+	class ViewHolder(row:View?){
+		var txtName: TextView? = null
+		var txtComment: TextView? = null
+		var imgView: ImageView? = null
 
 
 		init {
-			this.txtName = row?.findViewById(uk.ac.tees.p4061644.tvcheck_redo.R.id.txtName) as android.widget.TextView?
-			this.txtComment = row?.findViewById(uk.ac.tees.p4061644.tvcheck_redo.R.id.txtComment) as android.widget.TextView?
-			this.imgView = row?.findViewById(uk.ac.tees.p4061644.tvcheck_redo.R.id.img_view) as android.widget.ImageView
+			this.txtName = row?.findViewById(R.id.txtName) as TextView?
+			this.txtComment = row?.findViewById(R.id.txtComment) as TextView?
+			this.imgView = row?.findViewById(R.id.img_view) as ImageView
 		}
 	}
 
-	override fun getView(position: Int, convertView: android.view.View?, parent: android.view.ViewGroup?): android.view.View {
+	/**
+	 * Assigns a Layout to a ViewHolder and calls Method to populate the ViewHolder with data
+	 * @return A View with a ViewHolder as its tag
+	 */
+	override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
 		val view: android.view.View?
-		val viewHolder: uk.ac.tees.p4061644.tvcheck_redo.Adapters.SearchListAdapter.ViewHolder
+		val viewHolder: SearchListAdapter.ViewHolder
 
 		if (convertView == null){
-			val inflater = activity.getSystemService(android.content.Context.LAYOUT_INFLATER_SERVICE) as android.view.LayoutInflater
-			view = inflater.inflate(uk.ac.tees.p4061644.tvcheck_redo.R.layout.search_item_layout,null)
-			viewHolder = uk.ac.tees.p4061644.tvcheck_redo.Adapters.SearchListAdapter.ViewHolder(view)
+			val inflater = activity.getSystemService(android.content.Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+			view = inflater.inflate(R.layout.search_item_layout,null)
+			viewHolder = SearchListAdapter.ViewHolder(view)
 			view!!.tag = viewHolder
 		} else{
 			view = convertView
-			viewHolder = view.tag as uk.ac.tees.p4061644.tvcheck_redo.Adapters.SearchListAdapter.ViewHolder
+			viewHolder = view.tag as SearchListAdapter.ViewHolder
 		}
 
 		handleResults(viewHolder,position)
@@ -50,28 +58,46 @@ class SearchListAdapter(private var activity: android.app.Activity, private var 
 		return view
 	}
 
-	fun handleResults(holder: uk.ac.tees.p4061644.tvcheck_redo.Adapters.SearchListAdapter.ViewHolder, position: Int): uk.ac.tees.p4061644.tvcheck_redo.Adapters.SearchListAdapter.ViewHolder {
+	/**
+	 * Assigns data to the elements of the ViewHolder passed
+	 * @param [holder] ViewHolder Instance with an assigned layout
+	 * @param [position] Position of the chosen item in the list
+	 * @return ViewHolder Instance with data assigned to layouts elements
+	 */
+	fun handleResults(holder: SearchListAdapter.ViewHolder, position: Int): SearchListAdapter.ViewHolder {
 		var TVBasic = results!![position]
 
 		var rating = "User Rating: " + TVBasic.voteAverage
 		holder.txtName!!.text = TVBasic.name
 		holder.txtComment!!.text = rating
-		com.squareup.picasso.Picasso.with(context).load(context.resources.getString(uk.ac.tees.p4061644.tvcheck_redo.R.string.base_address_w185).toString() + TVBasic.posterPath)
+		Picasso.with(context).load(context.resources.getString(uk.ac.tees.p4061644.tvcheck_redo.R.string.base_address_w185).toString() + TVBasic.posterPath)
 				.placeholder(uk.ac.tees.p4061644.tvcheck_redo.R.drawable.ic_default_search_image)
 				.into(holder.imgView!!)
 		return holder
 	}
 
-
+	/**
+	 * Returns a Json string of element at Position
+	 * @param [position] Position of chosen item in list
+	 * @return JSON String of element at position
+	 */
 	override fun getItem(position: Int): String{
-		return com.google.gson.Gson().toJson(results!![position])
+		return Gson().toJson(results!![position])
 
 	}
 
+	/**
+	 * Returns a the Long of the position passed
+	 * @param [position] Position of chosen item in list
+	 */
 	override fun getItemId(position: Int): Long {
 		return position.toLong()
 	}
 
+	/**
+	 * Returns the size of the list
+	 * @return Size of the list
+	 */
 	override fun getCount(): Int {
 		return results!!.size
 	}

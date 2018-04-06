@@ -55,7 +55,7 @@ class ShowActivity : AppCompatActivity() {
 	}
 
 	/**
-	 *
+	 * Sets an onClickListener to the floating action button. T
 	 */
 	fun setupFloatBtn(){
 		registerForContextMenu(save_float_btn)
@@ -80,7 +80,7 @@ class ShowActivity : AppCompatActivity() {
 	}
 
 	/**
-	 *
+	 * Sets a OnCheckedChangeListener to the activities checkbox and handles what happens when checkBox value changes
 	 */
 	fun setupCheckbox(){
 		watched_box.setOnCheckedChangeListener { buttonView, isChecked ->
@@ -116,9 +116,12 @@ class ShowActivity : AppCompatActivity() {
 	}
 
 	/**
-	 *
+	 * Sets the listView's adapter and assigns an onClickListener that will handle all clicks on the listView
 	 */
 	fun setupList(){
+		var seasons = show!!.seasons
+		var adapter = SeasonEpisodeListAdapter(this,seasons,null,applicationContext,user!!,show!!.id)
+		season_list!!.adapter = adapter
 		season_list!!.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
 			val item = parent.getItemAtPosition(position) as String
 			val intent = Intent(applicationContext,SeasonActivity::class.java)//activity_Num 1
@@ -127,6 +130,7 @@ class ShowActivity : AppCompatActivity() {
 			intent.putExtra("TVID",show!!.id)
 			applicationContext.startActivity(intent)
 		}
+		adapter.notifyDataSetChanged()
 	}
 
 	/**
@@ -147,9 +151,7 @@ class ShowActivity : AppCompatActivity() {
 				.into(PosterView)
 
 		bottomNavViewBar.bringChildToFront(findViewById(R.id.bottomNavViewBar))
-		var seasons = show!!.seasons
-		var adapter = SeasonEpisodeListAdapter(this,seasons,null,applicationContext,user!!,show!!.id)
-		season_list!!.adapter = adapter
+
 
 		save_progress_bar.visibility = View.GONE
 
@@ -165,7 +167,6 @@ class ShowActivity : AppCompatActivity() {
 		setupFloatBtn()
 		setupCheckbox()
 		setupList()
-		adapter.notifyDataSetChanged()
 	}
 
 	/**
