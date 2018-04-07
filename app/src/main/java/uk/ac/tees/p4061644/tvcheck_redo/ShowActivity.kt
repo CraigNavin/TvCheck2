@@ -120,7 +120,7 @@ class ShowActivity : AppCompatActivity() {
 	 */
 	fun setupList(){
 		var seasons = show!!.seasons
-		var adapter = SeasonEpisodeListAdapter(this,seasons,null,applicationContext,user!!,show!!.id)
+		var adapter = SeasonEpisodeListAdapter(this,seasons,null,applicationContext)
 		season_list!!.adapter = adapter
 		season_list!!.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
 			val item = parent.getItemAtPosition(position) as String
@@ -140,8 +140,8 @@ class ShowActivity : AppCompatActivity() {
 	 */
 	fun setView(){
 		show = Async!!.getShowInfoAsync(basic!!.id)
-		ShowName_TV!!.text = show!!.name
-		Overview_TV!!.text = show!!.overview
+		Name_TV!!.text = show!!.name
+		Bio_TV!!.text = show!!.overview
 
 		if (getShow() != null){
 			watched_box.isChecked = getShow()!!.watched
@@ -164,6 +164,15 @@ class ShowActivity : AppCompatActivity() {
 				save_float_btn.setImageDrawable(getDrawable(R.drawable.ic_addlist_icon))
 			}
 		}
+
+		cast_btn.setOnClickListener {
+			val intent = Intent(applicationContext,CrewListActivity::class.java)
+			intent.putExtra("User",Gson().toJson(user))
+			intent.putExtra("showName",show!!.name)
+			intent.putExtra("CastList", Gson().toJson(show!!.credits.cast))
+			applicationContext.startActivity(intent)
+		}
+
 		setupFloatBtn()
 		setupCheckbox()
 		setupList()

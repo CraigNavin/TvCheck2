@@ -55,9 +55,9 @@ class SearchActivity : AppCompatActivity(){
 			search_text_field . visibility = View.GONE
 			var list = Async!!.getUserList(user!!.getList(intent.getStringExtra("List"))!!.list!!)
 			var adapter = SearchListAdapter(this,list,applicationContext)
-			result_list_view.adapter = adapter
+			castList_lv.adapter = adapter
 		}
-		result_list_view.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
+		castList_lv.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
 			val item = parent.getItemAtPosition(position) as String
 			val intent = Intent(applicationContext,ShowActivity::class.java)//activity_Num 1
 			intent.putExtra("Show",item)
@@ -86,7 +86,7 @@ class SearchActivity : AppCompatActivity(){
 	fun search(term: String){
 		var results = Async!!.searchShows(term)
 		var adapter = SearchListAdapter(this,results,applicationContext)
-		result_list_view.adapter = adapter
+		castList_lv.adapter = adapter
 		adapter.notifyDataSetChanged()
 	}
 

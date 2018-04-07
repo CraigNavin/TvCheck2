@@ -4,13 +4,19 @@ import android.content.Context
 import android.os.AsyncTask
 import android.util.Log
 import com.omertron.themoviedbapi.TheMovieDbApi
+import com.omertron.themoviedbapi.enumeration.PeopleMethod
 import com.omertron.themoviedbapi.enumeration.SearchType
 import com.omertron.themoviedbapi.enumeration.TVEpisodeMethod
+import com.omertron.themoviedbapi.enumeration.TVMethod
+import com.omertron.themoviedbapi.methods.TmdbCredits
+import com.omertron.themoviedbapi.model.credits.MediaCreditCast
 import com.omertron.themoviedbapi.model.person.ExternalID
+import com.omertron.themoviedbapi.model.person.PersonInfo
 import com.omertron.themoviedbapi.model.tv.TVBasic
 import com.omertron.themoviedbapi.model.tv.TVEpisodeInfo
 import com.omertron.themoviedbapi.model.tv.TVInfo
 import com.omertron.themoviedbapi.model.tv.TVSeasonInfo
+import com.omertron.themoviedbapi.tools.MethodBase
 import uk.ac.tees.p4061644.tvcheck_redo.R
 import uk.ac.tees.p4061644.tvcheck_redo.models.ListModel
 import uk.ac.tees.p4061644.tvcheck_redo.models.Show
@@ -107,7 +113,9 @@ class AsyncTasker(context: Context) {
 		return getSeasonTask(num,TVid).execute().get()
 	}
 
-
+	fun getPerson(id: Int):PersonInfo{
+		return getPersonTask(id).execute().get()
+	}
 
 	/**
 	 * Class used to retrieve a List of TVBasic objects on a background thread to avoid clashes on UI thread
@@ -138,7 +146,7 @@ class AsyncTasker(context: Context) {
 
 
 		override fun doInBackground(vararg voids: Void): TVInfo? {
-			info = api!!.getTVInfo(TVid,"en")
+			info = api!!.getTVInfo(TVid,"en",TVMethod.CREDITS.propertyString)
 
 			return info
 		}
@@ -196,6 +204,19 @@ class AsyncTasker(context: Context) {
 		override fun onPostExecute(result: List<TVBasic>?) {
 			super.onPostExecute(result)
 		}
+	}
+
+	internal inner class getPersonTask constructor(val id: Int) :AsyncTask<Void,Void,PersonInfo>(){
+		private var api: TheMovieDbApi? = this@AsyncTasker.api
+
+		override fun doInBackground(vararg params: Void?): PersonInfo {
+			return api!!.getPersonInfo(id,PeopleMethod.TV_CREDITS.propertyString)
+		}
+
+		override fun onPostExecute(result: PersonInfo?) {
+			super.onPostExecute(result)
+		}
+
 	}
 
 }

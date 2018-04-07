@@ -69,13 +69,13 @@ class SeasonActivity : AppCompatActivity() {
 		}
 
 		SeasonNum_TV.text = seasonNum
-		Overview_TV.text = season.overview
+		Bio_TV.text = season.overview
 		Picasso.with(applicationContext).load(applicationContext.getString(R.string.base_address_w185) + season.posterPath)
 				.placeholder(R.drawable.ic_default_search_image)
 				.into(PosterView)
 
 		bottomNavViewBar.bringChildToFront(bottomNavViewBar)
-		var adapter = SeasonEpisodeListAdapter(this,null,season.episodes,applicationContext,user!!,id!!)
+		var adapter = SeasonEpisodeListAdapter(this,null,season.episodes,applicationContext)
 		episodes_list.adapter = adapter
 
 		episodes_list.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, ids ->

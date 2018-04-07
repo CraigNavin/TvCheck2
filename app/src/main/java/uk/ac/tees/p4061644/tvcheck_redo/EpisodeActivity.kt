@@ -60,9 +60,9 @@ class EpisodeActivity : AppCompatActivity() {
 
 
 		if (episode!!.overview == null || episode!!.overview == ""){
-			Overview_TV!!.text = "No Overview"
+			Bio_TV!!.text = "No Overview"
 		}else{
-			Overview_TV!!.text = episode!!.overview
+			Bio_TV!!.text = episode!!.overview
 		}
 		Picasso.with(applicationContext).load(applicationContext.getString(R.string.base_address_original) + episode!!.stillPath)
 				.placeholder(R.drawable.ic_default_search_image)

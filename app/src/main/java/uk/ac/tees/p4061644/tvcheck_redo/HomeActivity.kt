@@ -87,10 +87,8 @@ class HomeActivity : Activity(){
 				intent.putExtra("User",Gson().toJson(user))
 				applicationContext.startActivity(intent)
 			}
-
 		}else{
 			HideSimilar()
-
 		}
 
 		recycle_popular.apply {

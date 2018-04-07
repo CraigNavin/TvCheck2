@@ -35,7 +35,7 @@
         <TextView
             android:layout_width="230dp"
             android:layout_height="wrap_content"
-            android:id="@+id/ShowName_TV"
+            android:id="@+id/Name_TV"
             android:textSize="26sp"
             android:maxWidth="230dp"
             android:layout_alignParentTop="true"
@@ -44,12 +44,12 @@
         <TextView
             android:layout_width="230dp"
             android:layout_height="wrap_content"
-            android:id="@+id/Overview_TV"
+            android:id="@+id/Bio_TV"
             android:textSize="16sp"
             android:maxWidth="230dp"
             android:maxLines="3"
             android:ellipsize="end"
-            android:layout_below="@+id/ShowName_TV"
+            android:layout_below="@+id/Name_TV"
             android:layout_alignParentEnd="true"
             android:layout_toEndOf="@+id/PosterView"/>
 
@@ -87,6 +87,15 @@
             android:id="@+id/textView"
             android:layout_above="@+id/season_list"
             android:layout_toEndOf="@+id/PosterView"/>
+
+        <Button
+            android:text="Cast"
+            android:layout_width="match_parent"
+            android:id="@+id/cast_btn"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="37dp"
+            android:layout_height="wrap_content"/>
 
     </RelativeLayout>
 

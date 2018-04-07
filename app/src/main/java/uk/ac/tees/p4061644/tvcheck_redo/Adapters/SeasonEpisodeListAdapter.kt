@@ -23,7 +23,7 @@ import uk.ac.tees.p4061644.tvcheck_redo.models.*
 /**
  * Created by Craig on 08/03/2018.
  */
-class SeasonEpisodeListAdapter(private var activity: Activity, private var seasons:List<TVSeasonBasic>?, private var episodes:List<TVEpisodeInfo>?, private var context: Context,private var user:User, private var TVID:Int):BaseAdapter() {
+class SeasonEpisodeListAdapter(private var activity: Activity, private var seasons:List<TVSeasonBasic>?, private var episodes:List<TVEpisodeInfo>?, private var context: Context):BaseAdapter() {
 
 	/**
 	 * View Holder class to manage all of the Views Elements
@@ -47,16 +47,16 @@ class SeasonEpisodeListAdapter(private var activity: Activity, private var seaso
 	 */
 	override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
 		val view: android.view.View?
-		val viewHolder: SeasonEpisodeListAdapter.ViewHolder
+		val viewHolder: ViewHolder
 
 		if (convertView == null){
 			val inflater = activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as android.view.LayoutInflater
 			view = inflater.inflate(R.layout.season_item_layout,null)
-			viewHolder = SeasonEpisodeListAdapter.ViewHolder(view)
+			viewHolder = ViewHolder(view)
 			view!!.tag = viewHolder
 		} else{
 			view = convertView
-			viewHolder = view.tag as SeasonEpisodeListAdapter.ViewHolder
+			viewHolder = view.tag as ViewHolder
 		}
 		if (seasons != null) {
 			handleSeasons(viewHolder,position)

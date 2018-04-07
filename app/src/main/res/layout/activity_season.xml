@@ -47,7 +47,7 @@
             android:text="TextView"
             android:layout_width="230dp"
             android:layout_height="wrap_content"
-            android:id="@+id/Overview_TV"
+            android:id="@+id/Bio_TV"
             android:textSize="16sp"
             android:maxWidth="230dp"
             android:maxLines="6"
