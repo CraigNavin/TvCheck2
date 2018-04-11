@@ -42,7 +42,20 @@
             android:id="@+id/castList_lv"
             android:layout_height="460dp"
             android:layout_below="@+id/castof_txt"
-            android:layout_alignParentStart="true"/>
+            android:layout_alignParentStart="true"
+            android:forceHasOverlappingRendering="true"/>
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/load_pgrbar"
+            android:foregroundGravity="center"
+            android:forceHasOverlappingRendering="false"
+            android:layout_alignParentBottom="true"
+            android:layout_alignEnd="@+id/castof_txt"
+            android:layout_marginBottom="38dp"
+            android:visibility="gone"/>
 
 
     </RelativeLayout>

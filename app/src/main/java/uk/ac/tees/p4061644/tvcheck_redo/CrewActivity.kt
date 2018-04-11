@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
+import android.view.View
 import android.view.Menu
 import android.view.MenuItem
 import com.google.gson.Gson
@@ -12,7 +13,6 @@ import com.omertron.themoviedbapi.model.person.PersonInfo
 import com.omertron.themoviedbapi.model.tv.TVBasic
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_crew.*
-import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.layout_bottom_navigation_view.*
 import uk.ac.tees.p4061644.tvcheck_redo.Adapters.RecyclerHomeViewAdapter
 import uk.ac.tees.p4061644.tvcheck_redo.models.User
@@ -21,7 +21,7 @@ import uk.ac.tees.p4061644.tvcheck_redo.utils.BottomNavigationBarHelper
 
 class CrewActivity : AppCompatActivity() {
 
-	private val TAG: String = "CrewListActivity"
+	private val TAG: String = "CrewActivity"
 	private val activity_Num: Int = 1
 	private var user: User? = null
 	private var person: PersonInfo? = null
@@ -33,38 +33,52 @@ class CrewActivity : AppCompatActivity() {
 		setup()
 	}
 
-
+	/**
+	 * Sets up variable and calls method that handles View elements
+	 */
 	fun setup(){
 		user = Gson().fromJson(intent.getStringExtra("User"))
 		Async = AsyncTasker(applicationContext)
 		person = AsyncTasker(applicationContext).getPerson(intent.getStringExtra("CastID").toInt())
+		Log.d(TAG,"SETUP")
 		setView()
 		setupBottomnavigatioView()
 	}
 
+	/**
+	 * Sets up view elements with the crew members TV Credits and their details
+	 */
 	fun setView(){
 		var tvCreditManager = LinearLayoutManager (this, LinearLayoutManager.HORIZONTAL,false)
+		Log.d(TAG,"SETVIEW")
 		Name_TV.text = person!!.name
 		Bio_TV.text = person!!.biography
 
 		Picasso.with(applicationContext).load(getString(R.string.base_address_w185) + intent.getStringExtra("PicPath"))
 				.placeholder(R.drawable.ic_default_search_image)
 				.into(PosterView)
-
 		var tvCreditList = ArrayList<TVBasic>()
+		loadBar_prgbar.visibility = View.VISIBLE
+		Log.d(TAG,"LOOPSTART")
 		for (credit in person!!.tvCredits.cast){
 			tvCreditList.add(Async!!.getShowBasicAsync(credit.id))
 		}
+		Log.d(TAG,"LOOPEND")
 
 		tvCreditList.apply {
 			sortBy { it.popularity }
 			reverse()
 		}
 
+		Log.d(TAG,"LISTSORTED")
+
 		tvCredit_recycler.apply {
 			layoutManager = tvCreditManager
 			adapter = RecyclerHomeViewAdapter(applicationContext,tvCreditList,user!!)
 		}
+		loadBar_prgbar.visibility = View.GONE
+
+		Log.d(TAG,"RECYCLERPOPULATED")
 	}
 
 	inline fun <reified T> Gson.fromJson(json: String) = this.fromJson<T>(json, object: TypeToken<T>() {}.type)

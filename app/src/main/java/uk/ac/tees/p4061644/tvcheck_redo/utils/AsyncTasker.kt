@@ -9,6 +9,7 @@ import com.omertron.themoviedbapi.enumeration.SearchType
 import com.omertron.themoviedbapi.enumeration.TVEpisodeMethod
 import com.omertron.themoviedbapi.enumeration.TVMethod
 import com.omertron.themoviedbapi.methods.TmdbCredits
+import com.omertron.themoviedbapi.model.credits.CreditTVBasic
 import com.omertron.themoviedbapi.model.credits.MediaCreditCast
 import com.omertron.themoviedbapi.model.person.ExternalID
 import com.omertron.themoviedbapi.model.person.PersonInfo
@@ -218,5 +219,6 @@ class AsyncTasker(context: Context) {
 		}
 
 	}
+
 
 }
