@@ -1,5 +1,6 @@
 package uk.ac.tees.p4061644.tvcheck_redo.Adapters
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.support.v7.widget.RecyclerView
@@ -19,7 +20,7 @@ import uk.ac.tees.p4061644.tvcheck_redo.models.User
 /**
  * Created by Craig on 21/03/2018.
  */
-class RecyclerHomeViewAdapter(private val context: Context, private val shows: ArrayList<TVBasic>,private val user: User): RecyclerView.Adapter<RecyclerHomeViewAdapter.ViewHolder>() {
+class RecyclerHomeViewAdapter(private val context: Context, private val shows: ArrayList<TVBasic>,private val user: User,private val size:Int): RecyclerView.Adapter<RecyclerHomeViewAdapter.ViewHolder>() {
 
 
 	/**
@@ -35,8 +36,14 @@ class RecyclerHomeViewAdapter(private val context: Context, private val shows: A
 	 * @return A ViewHolder Instance of an assigned layout
 	 */
 	override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
-		var view: View = LayoutInflater.from(context).inflate(R.layout.recyclerview_item,parent,false)
-		return ViewHolder(view)
+		var view : View? = null
+		if (size == 1){
+			 view = LayoutInflater.from(context).inflate(R.layout.recyclerview_item,parent,false)
+		}else if (size == 2){
+			 view = LayoutInflater.from(context).inflate(R.layout.recyclerview_item_small,parent,false)
+		}
+
+		return ViewHolder(view!!)
 	}
 
 	/**

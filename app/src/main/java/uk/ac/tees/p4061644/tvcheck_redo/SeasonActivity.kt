@@ -68,8 +68,22 @@ class SeasonActivity : AppCompatActivity() {
 
 		}
 
+		airdate_tv.text = "Air date: " + season.airDate
+		EpisodeCount_tv.text = "Episode Count:" + season.episodeCount.toString()
 		SeasonNum_TV.text = seasonNum
-		Bio_TV.text = season.overview
+
+		if (season.overview.isNullOrEmpty()){
+			Bio_TV.text = "No Overview"
+		}else{
+			Bio_TV.text = season.overview
+			Bio_TV.setOnClickListener {
+				val intent = Intent(applicationContext, ReadMoreActivity::class.java)
+				intent.putExtra("ReadMore", season.overview)
+				startActivity(intent)
+			}
+		}
+
+
 		Picasso.with(applicationContext).load(applicationContext.getString(R.string.base_address_w185) + season.posterPath)
 				.placeholder(R.drawable.ic_default_search_image)
 				.into(PosterView)
@@ -78,7 +92,7 @@ class SeasonActivity : AppCompatActivity() {
 		var adapter = SeasonEpisodeListAdapter(this,null,season.episodes,applicationContext)
 		episodes_list.adapter = adapter
 
-		episodes_list.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, ids ->
+		episodes_list.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
 			val item = parent.getItemAtPosition(position) as String
 			val episode: TVEpisodeInfo = Gson().fromJson(item)
 			Toast.makeText(applicationContext,episode.name,Toast.LENGTH_SHORT).show()
@@ -89,23 +103,24 @@ class SeasonActivity : AppCompatActivity() {
 			applicationContext.startActivity(intent)
 		}
 
-		watched_box!!.setOnCheckedChangeListener { buttonView, isChecked ->
+		watched_box!!.setOnCheckedChangeListener { _, isChecked ->
 			if (inLists()){
-				var season = getShow()!!.seasons!![season.seasonNumber]
-				season.watched = isChecked
+				var season1 = getShow()!!.seasons!![season.seasonNumber]
+
+				season1.watched = isChecked
 
 				AlertDialog.Builder(this)
 						.setTitle("Watched Season?")
 						.setMessage("Do you want to set all this seasons episodes to watched?")
 						.setPositiveButton(android.R.string.yes,
-								DialogInterface.OnClickListener { dialog, which ->
-									season.episodes.forEach { it.watched = isChecked }
+								DialogInterface.OnClickListener { _, _ ->
+									season1.episodes.forEach { it.watched = isChecked }
 									user =DatabaseHandler(applicationContext).update(user!!)
 									Toast.makeText(applicationContext,"Season and episodes Updated",Toast.LENGTH_SHORT).show()
 								}
 						)
 						.setNegativeButton(android.R.string.no,
-								DialogInterface.OnClickListener { dialog, which ->
+								DialogInterface.OnClickListener { _, _ ->
 									user =DatabaseHandler(applicationContext).update(user!!)
 									Toast.makeText(applicationContext,"Season Updated",Toast.LENGTH_SHORT).show()
 								}
@@ -141,7 +156,7 @@ class SeasonActivity : AppCompatActivity() {
 	 */
 	fun getSeasonInfo(id: Int):TVSeasonInfo{
 		var season: TVSeasonBasic = Gson().fromJson(intent.getStringExtra("Season"))
-		return Async!!.getSeasonAsync(season!!.seasonNumber,id)
+		return Async!!.getSeasonAsync(season.seasonNumber,id)
 	}
 
 	/**

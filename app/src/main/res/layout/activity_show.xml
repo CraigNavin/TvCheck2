@@ -21,9 +21,9 @@
             android:layout_width="match_parent"
             android:id="@+id/season_list"
             android:addStatesFromChildren="false"
-            android:layout_height="332dp"
             android:layout_below="@+id/PosterView"
-            android:layout_alignParentStart="true"/>
+            android:layout_alignParentStart="true"
+            android:layout_height="250dp"/>
 
         <ImageView
             android:layout_width="250px"
@@ -36,7 +36,7 @@
             android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:id="@+id/Name_TV"
-            android:textSize="26sp"
+            android:textSize="24sp"
             android:maxWidth="230dp"
             android:layout_alignParentTop="true"
             android:layout_toEndOf="@+id/PosterView"/>
@@ -76,26 +76,51 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/watched_box"
-            android:layout_alignBaseline="@+id/textView"
-            android:layout_alignBottom="@+id/textView"
-            android:layout_toEndOf="@+id/textView"/>
+            android:layout_alignBaseline="@+id/watched_tv"
+            android:layout_alignBottom="@+id/watched_tv"
+            android:layout_toEndOf="@+id/watched_tv"/>
 
         <TextView
             android:text="@string/watched"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textView"
+            android:id="@+id/watched_tv"
             android:layout_above="@+id/season_list"
+            android:layout_toEndOf="@+id/PosterView"/>
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/Bio_TV"
+            android:id="@+id/vote_tv"
+            android:layout_above="@+id/watched_box"
             android:layout_toEndOf="@+id/PosterView"/>
 
         <Button
             android:text="Cast"
             android:layout_width="match_parent"
             android:id="@+id/cast_btn"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
-            android:layout_marginBottom="37dp"
-            android:layout_height="wrap_content"/>
+            android:layout_marginBottom="42dp"/>
+
+        <TextView
+            android:text="@string/MayAlsoLike"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/AlsoLike_TV"
+            android:layout_below="@+id/season_list"
+            android:layout_alignParentStart="true"
+            android:textSize="16sp"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/AlsoLike_TV"
+            android:layout_alignParentStart="true"
+            android:id="@+id/similar_recycler"/>
 
     </RelativeLayout>
 

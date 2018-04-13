@@ -43,30 +43,52 @@
             android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:id="@+id/Bio_TV"
+            android:maxLines="5"
+            android:ellipsize="end"
             android:textSize="16sp"
             android:maxWidth="230dp"
             android:layout_below="@+id/EPName_TV"
             android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"/>
+            android:layout_alignParentEnd="true"
+            android:paddingBottom="10px"
+            android:clickable="true"/>
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/Bio_TV"
+            android:layout_alignParentStart="true"
+            android:id="@+id/airDate_tv"
+            android:textSize="16sp"
+            android:paddingBottom="10px"/>
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/watched_box"
+            android:layout_alignBaseline="@+id/watched_txt"
+            android:layout_alignBottom="@+id/watched_txt"
+            android:layout_toEndOf="@+id/watched_txt"/>
 
         <TextView
             android:text="@string/watched"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/watched_txt"
-            android:layout_alignBaseline="@+id/watched_box"
-            android:layout_alignBottom="@+id/watched_box"
+            android:layout_below="@+id/Vote_tv"
             android:layout_alignParentStart="true"
-            android:layout_above="@+id/include2"
-            android:layout_below="@+id/Bio_TV"/>
+            android:textSize="16sp"/>
 
-        <CheckBox
+        <TextView
+            android:text="TextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/watched_box"
-            android:layout_above="@+id/include2"
-            android:layout_toEndOf="@+id/watched_txt"
-            android:layout_below="@+id/Bio_TV"/>
+            android:id="@+id/Vote_tv"
+            android:layout_below="@+id/airDate_tv"
+            android:layout_alignParentStart="true"
+            android:textSize="16sp"
+            android:paddingBottom="10px"/>
 
     </RelativeLayout>
 

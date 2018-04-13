@@ -3,8 +3,10 @@ package uk.ac.tees.p4061644.tvcheck_redo
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.view.ViewCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.ContextMenu
 import android.view.Menu
@@ -19,6 +21,7 @@ import com.omertron.themoviedbapi.model.tv.TVInfo
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_show.*
 import kotlinx.android.synthetic.main.layout_bottom_navigation_view.*
+import uk.ac.tees.p4061644.tvcheck_redo.Adapters.RecyclerHomeViewAdapter
 import uk.ac.tees.p4061644.tvcheck_redo.Adapters.SeasonEpisodeListAdapter
 import uk.ac.tees.p4061644.tvcheck_redo.models.Show
 import uk.ac.tees.p4061644.tvcheck_redo.models.User
@@ -66,7 +69,7 @@ class ShowActivity : AppCompatActivity() {
 				AlertDialog.Builder(this)
 						.setTitle("Confirm Remove")
 						.setMessage("Are you sure you want to remove " + basic!!.name  +" from your lists?")
-						.setPositiveButton("Remove", { dialog, which ->
+						.setPositiveButton("Remove", { _, _ ->
 							user!!.list!!.forEach { it.list!!.removeIf { it.id == basic!!.id } }
 							user = DatabaseHandler(applicationContext).update(user!!)
 							save_float_btn.setImageDrawable(getDrawable(R.drawable.ic_addlist_icon))
@@ -82,7 +85,7 @@ class ShowActivity : AppCompatActivity() {
 	 * Sets a OnCheckedChangeListener to the activities checkbox and handles what happens when checkBox value changes
 	 */
 	fun setupCheckbox(){
-		watched_box.setOnCheckedChangeListener { buttonView, isChecked ->
+		watched_box.setOnCheckedChangeListener { _, isChecked ->
 			if (inLists()){
 				var showInList = getShow()
 				showInList!!.watched = isChecked
@@ -90,8 +93,8 @@ class ShowActivity : AppCompatActivity() {
 						.setTitle("Watched Show?")
 						.setMessage("Do you want to set all this seasons and episodes to watched?")
 						.setPositiveButton(android.R.string.yes,
-								DialogInterface.OnClickListener { dialog, which ->
-									showInList!!.seasons!!.forEach { it.watched = isChecked
+								DialogInterface.OnClickListener { _, _ ->
+									showInList.seasons!!.forEach { it.watched = isChecked
 										it.episodes.forEach { it.watched = isChecked
 										}
 									}
@@ -101,7 +104,7 @@ class ShowActivity : AppCompatActivity() {
 
 						)
 						.setNegativeButton(android.R.string.no,
-								DialogInterface.OnClickListener { dialog, which ->
+								DialogInterface.OnClickListener { _, _ ->
 									user = DatabaseHandler(applicationContext).update(user!!)
 									Toast.makeText(applicationContext,"Show Updated",Toast.LENGTH_SHORT).show()
 								}
@@ -119,6 +122,7 @@ class ShowActivity : AppCompatActivity() {
 	 * Sets the listView's adapter and assigns an onClickListener that will handle all clicks on the listView
 	 */
 	fun setupList(){
+		var simlayoutManager = LinearLayoutManager (this, LinearLayoutManager.HORIZONTAL,false)
 		var seasons = show!!.seasons
 		var adapter = SeasonEpisodeListAdapter(this,seasons,null,applicationContext)
 		season_list!!.adapter = adapter
@@ -130,6 +134,12 @@ class ShowActivity : AppCompatActivity() {
 			intent.putExtra("TVID",show!!.id)
 			applicationContext.startActivity(intent)
 		}
+
+		similar_recycler.apply {
+			layoutManager = simlayoutManager
+			setAdapter(RecyclerHomeViewAdapter(applicationContext,Async!!.fillhome(3,show!!.id)!!,user!!,2))
+		}
+
 		adapter.notifyDataSetChanged()
 	}
 
@@ -141,7 +151,20 @@ class ShowActivity : AppCompatActivity() {
 	fun setView(){
 		show = Async!!.getShowInfoAsync(basic!!.id)
 		Name_TV!!.text = show!!.name
-		Bio_TV!!.text = show!!.overview
+
+		vote_tv.text = "Score: "  + show!!.voteAverage.toString() + "(" + show!!.voteCount + ")"
+		if (show!!.overview.isNullOrEmpty()){
+			Bio_TV!!.text = "No Overview"
+		}else{
+			Bio_TV!!.text = show!!.overview
+			Bio_TV.setOnClickListener {
+				val intent  = Intent(applicationContext,ReadMoreActivity::class.java)
+				intent.putExtra("ReadMore",show!!.overview)
+				startActivity(intent)
+			}
+
+		}
+
 
 		if (getShow() != null){
 			watched_box.isChecked = getShow()!!.watched
@@ -150,8 +173,8 @@ class ShowActivity : AppCompatActivity() {
 				.placeholder(R.drawable.ic_default_search_image)
 				.into(PosterView)
 
-		bottomNavViewBar.bringChildToFront(findViewById(R.id.bottomNavViewBar))
-
+		bottomNavViewBar.bringToFront()
+		similar_recycler.invalidate()
 
 		save_progress_bar.visibility = View.GONE
 

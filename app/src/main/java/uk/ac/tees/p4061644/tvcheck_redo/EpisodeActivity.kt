@@ -1,5 +1,6 @@
 package uk.ac.tees.p4061644.tvcheck_redo
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
@@ -48,6 +49,8 @@ class EpisodeActivity : AppCompatActivity() {
 	 */
 	fun setView(){
 		EPName_TV!!.text = episode!!.name
+		airDate_tv.text = "Air Date: " + episode!!.airDate
+		Vote_tv.text = "Score: " + episode!!.voteAverage + "(" + episode!!.voteCount + ")"
 		var seasonNum :Int = 0
 		if (getShowFromLists() != null){
 			if(getShowFromLists()!!.seasons!![0].seasonNumber == 0){
@@ -58,18 +61,23 @@ class EpisodeActivity : AppCompatActivity() {
 			watched_box!!.isChecked = getShowFromLists()!!.seasons!![seasonNum].episodes[episode!!.episodeNumber - 1].watched
 		}
 
-
-		if (episode!!.overview == null || episode!!.overview == ""){
+		if (episode!!.overview.isNullOrEmpty()){
 			Bio_TV!!.text = "No Overview"
-		}else{
+		}else {
 			Bio_TV!!.text = episode!!.overview
+			Bio_TV!!.setOnClickListener {
+				val intent = Intent(applicationContext, ReadMoreActivity::class.java)
+				intent.putExtra("ReadMore", episode!!.overview)
+				startActivity(intent)
+			}
 		}
+
 		Picasso.with(applicationContext).load(applicationContext.getString(R.string.base_address_original) + episode!!.stillPath)
 				.placeholder(R.drawable.ic_default_search_image)
 				.fit()
 				.into(PosterView)
 
-		watched_box!!.setOnCheckedChangeListener { buttonView, isChecked ->
+		watched_box!!.setOnCheckedChangeListener { _, isChecked ->
 			if (inLists()){
 				getShowFromLists()!!.seasons!![seasonNum].episodes[episode!!.episodeNumber -1].watched = isChecked
 				user = DatabaseHandler(applicationContext).update(user!!)
@@ -90,7 +98,7 @@ class EpisodeActivity : AppCompatActivity() {
 	 */
 	fun inLists(): Boolean{
 		for (list in user!!.list!!){
-			if (user!!.checkListContainsShow(id!!,list.name)){
+			if (user!!.checkListContainsShow(id,list.name)){
 				return true
 			}else{
 				return false

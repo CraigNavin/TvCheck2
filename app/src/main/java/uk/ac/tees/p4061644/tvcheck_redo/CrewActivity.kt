@@ -53,12 +53,12 @@ class CrewActivity : AppCompatActivity() {
 		Log.d(TAG,"SETVIEW")
 		Name_TV.text = person!!.name
 		Bio_TV.text = person!!.biography
+		DPoB_tv.text = person!!.birthday + "," + person!!.placeOfBirth
 
 		Picasso.with(applicationContext).load(getString(R.string.base_address_w185) + intent.getStringExtra("PicPath"))
 				.placeholder(R.drawable.ic_default_search_image)
 				.into(PosterView)
 		var tvCreditList = ArrayList<TVBasic>()
-		loadBar_prgbar.visibility = View.VISIBLE
 		Log.d(TAG,"LOOPSTART")
 		for (credit in person!!.tvCredits.cast){
 			tvCreditList.add(Async!!.getShowBasicAsync(credit.id))
@@ -74,9 +74,8 @@ class CrewActivity : AppCompatActivity() {
 
 		tvCredit_recycler.apply {
 			layoutManager = tvCreditManager
-			adapter = RecyclerHomeViewAdapter(applicationContext,tvCreditList,user!!)
+			adapter = RecyclerHomeViewAdapter(applicationContext,tvCreditList,user!!,1)
 		}
-		loadBar_prgbar.visibility = View.GONE
 
 		Log.d(TAG,"RECYCLERPOPULATED")
 	}

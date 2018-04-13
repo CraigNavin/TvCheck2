@@ -58,6 +58,8 @@
         </activity>
         <activity android:name=".CrewActivity">
         </activity>
+        <activity android:name=".ReadMoreActivity">
+        </activity>
     </application>
 
 </manifest>

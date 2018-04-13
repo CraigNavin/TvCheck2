@@ -58,7 +58,6 @@ class HomeActivity : Activity(){
 		Log.d(TAG,Gson().toJson(user))
 		setView()
 		setupBottomnavigatioView()
-
 	}
 
 	/**
@@ -69,8 +68,8 @@ class HomeActivity : Activity(){
 		var toplayoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
 		var popular = Async!!.fillhome(1,null)!!
 		var topRated = Async!!.fillhome(2,null)!!
-		var tvInfo : TVInfo? = null
-		var similar : ArrayList<TVBasic>? = null
+		var tvInfo : TVInfo?
+		var similar : ArrayList<TVBasic>?
 		if (!user!!.list!!.any{ it.list!!.count() == 0}){
 			var show :Show = getRandomShowFromLists()
 			similar = Async!!.fillhome(3,show.id)!!
@@ -93,12 +92,12 @@ class HomeActivity : Activity(){
 
 		recycle_popular.apply {
 			layoutManager = poplayoutManager
-			adapter = RecyclerHomeViewAdapter(applicationContext,popular,user!!)
+			adapter = RecyclerHomeViewAdapter(applicationContext,popular,user!!,1)
 		}
 
 		recycle_top_rated.apply {
 			layoutManager = toplayoutManager
-			adapter= RecyclerHomeViewAdapter(applicationContext,topRated,user!!)
+			adapter= RecyclerHomeViewAdapter(applicationContext,topRated,user!!,1)
 		}
 	}
 

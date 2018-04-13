@@ -52,15 +52,13 @@
             android:layout_below="@+id/PosterView"
             android:id="@+id/tvCredit_recycler"/>
 
-        <ProgressBar
-            style="?android:attr/progressBarStyle"
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/loadBar_prgbar"
-            android:layout_below="@+id/Bio_TV"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="101dp"
-            android:visibility="gone"/>
+            android:layout_above="@+id/tvCredit_recycler"
+            android:layout_toEndOf="@+id/PosterView"
+            android:id="@+id/DPoB_tv"
+            android:layout_below="@+id/Bio_TV"/>
 
 
     </RelativeLayout>
