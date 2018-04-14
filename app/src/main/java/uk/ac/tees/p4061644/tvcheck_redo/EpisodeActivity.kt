@@ -78,7 +78,8 @@ class EpisodeActivity : AppCompatActivity() {
 				.into(PosterView)
 
 		watched_box!!.setOnCheckedChangeListener { _, isChecked ->
-			if (inLists()){
+			Log.d(TAG,id.toString())
+			if (user!!.inLists(id)){
 				getShowFromLists()!!.seasons!![seasonNum].episodes[episode!!.episodeNumber -1].watched = isChecked
 				user = DatabaseHandler(applicationContext).update(user!!)
 
@@ -89,22 +90,6 @@ class EpisodeActivity : AppCompatActivity() {
 			}
 
 		}
-	}
-
-	/**
-	 * Checks if any of the users lists contain a show matching id passed
-	 * @return Boolean that represents if any of the users list contain a show with a matching id
-	 * to the currently selected show
-	 */
-	fun inLists(): Boolean{
-		for (list in user!!.list!!){
-			if (user!!.checkListContainsShow(id,list.name)){
-				return true
-			}else{
-				return false
-			}
-		}
-		return false
 	}
 
 	/**

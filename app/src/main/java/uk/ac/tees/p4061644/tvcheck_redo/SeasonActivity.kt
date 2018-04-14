@@ -105,7 +105,8 @@ class SeasonActivity : AppCompatActivity() {
 		}
 
 		watched_box!!.setOnCheckedChangeListener { _, isChecked ->
-			if (inLists()){
+			Log.d(TAG,id.toString())
+			if (user!!.inLists(id!!)){
 				var season1 = getShow()!!.seasons!![season.seasonNumber]
 
 				season1.watched = isChecked
@@ -132,22 +133,6 @@ class SeasonActivity : AppCompatActivity() {
 				Toast.makeText(applicationContext,"Please add this show to a list before marking episodes as watched",Toast.LENGTH_SHORT).show()
 			}
 		}
-	}
-
-	/**
-	 * Checks if any of the users lists contain a show matching id passed
-	 * @return Boolean that represents if any of the users list contain a show with a matching id
-	 * to the currently selected show
-	 */
-	fun inLists(): Boolean{
-		for (list in user!!.list!!){
-			if (user!!.checkListContainsShow(id!!,list.name)){
-				return true
-			}else{
-				return false
-			}
-		}
-		return false
 	}
 
 	/**

@@ -1,5 +1,6 @@
 package uk.ac.tees.p4061644.tvcheck_redo.models
 
+import android.util.Log
 import com.parse.ParseClassName
 
 /**
@@ -56,6 +57,21 @@ class User (val UserID: String){
 	}
 
 	/**
+	 * Checks if any of the users lists contain a show matching id passed
+	 * @return Boolean that represents if any of the users list contain a show with a matching id
+	 * to the currently selected show
+	 */
+	fun inLists(id: Int): Boolean{
+		var inList : Boolean = false
+		list!!.forEach {
+			if(checkListContainsShow(id,it.name)){
+				inList = true
+			}
+		}
+		return inList
+	}
+
+	/**
 	 * Checks if a list contains a show
 	 * @param [id] the id of the Show that is being searched for
 	 * @param [listname] the name of the list that is being searched for the show id
@@ -63,7 +79,7 @@ class User (val UserID: String){
 	 */
 	fun checkListContainsShow(id: Int,listname: String): Boolean{
 		var ListModel: ListModel = list!!.find { it.name == listname}!!
+		ListModel.list!!.forEach { Log.d("CHECKLISTCONTAINS", it.id.toString()) }
 		return ListModel.list!!.any { it.id == id }
-
 	}
 }

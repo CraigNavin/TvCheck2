@@ -61,7 +61,7 @@ class ShowActivity : AppCompatActivity() {
 	fun setupFloatBtn(){
 		registerForContextMenu(save_float_btn)
 		save_float_btn.setOnClickListener {
-			if (!inLists()){
+			if (!user!!.inLists(basic!!.id)){
 				openContextMenu(save_float_btn)
 				save_float_btn.setImageDrawable(getDrawable(R.drawable.ic_love))
 			}else{
@@ -85,7 +85,8 @@ class ShowActivity : AppCompatActivity() {
 	 */
 	fun setupCheckbox(){
 		watched_box.setOnCheckedChangeListener { _, isChecked ->
-			if (inLists()){
+			Log.d(TAG,show!!.id.toString())
+			if (user!!.inLists(basic!!.id)){
 				var showInList = getShow()
 				showInList!!.watched = isChecked
 				AlertDialog.Builder(this)
@@ -214,21 +215,6 @@ class ShowActivity : AppCompatActivity() {
 
 	}
 
-	/**
-	 * Checks if any of the users lists contain a show matching id passed
-	 * @return Boolean that represents if any of the users list contain a show with a matching id
-	 * to the currently selected show
-	 */
-	fun inLists(): Boolean{
-		for (list in user!!.list!!){
-			if (user!!.checkListContainsShow(basic!!.id,list.name)){
-				return true
-			}else{
-				return false
-			}
-		}
-		return false
-	}
 
 	/**
 	 * Overridden function that adds each lists name to the menu list
