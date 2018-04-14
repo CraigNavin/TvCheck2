@@ -3,7 +3,6 @@ package uk.ac.tees.p4061644.tvcheck_redo
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.view.ViewCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
@@ -152,7 +151,7 @@ class ShowActivity : AppCompatActivity() {
 		show = Async!!.getShowInfoAsync(basic!!.id)
 		Name_TV!!.text = show!!.name
 
-		vote_tv.text = "Score: "  + show!!.voteAverage.toString() + "(" + show!!.voteCount + ")"
+		vote_tv.text = show!!.voteAverage.toString() + "(" + show!!.voteCount + ")"
 		if (show!!.overview.isNullOrEmpty()){
 			Bio_TV!!.text = "No Overview"
 		}else{

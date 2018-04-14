@@ -22,7 +22,7 @@
     <string name="base_address_w185">https://image.tmdb.org/t/p/w185</string>
     <string name="base_address_w500">https://image.tmdb.org/t/p/w500</string>
     <string name="base_address_original">https://image.tmdb.org/t/p/original</string>
-    <string name="New_List...">New List...</string>
+    <string name="New_List...">New List…</string>
     <string name="list_name">Enter list name:</string>
     <string name="popular_TV">Popular TV</string>
     <string name="top_rated_TV">Top Rated TV</string>
@@ -32,7 +32,11 @@
     <string name="listName">Please enter list name</string>
     <string name="emptyLists">Follow some shows to get recommendations</string>
     <string name="Source">Information From TMDB</string>
-    <string name="MayAlsoLike">You may also like...</string>
+    <string name="MayAlsoLike">You may also like…</string>
+    <string name="Overview">Overview</string>
+    <string name="airDate">Air Date: </string>
+    <string name="EpCount">Episode Count: </string>
+    <string name="voteAvg">Vote Average: </string>
 
 
 </resources>

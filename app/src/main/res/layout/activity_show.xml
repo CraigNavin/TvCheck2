@@ -39,7 +39,8 @@
             android:textSize="24sp"
             android:maxWidth="230dp"
             android:layout_alignParentTop="true"
-            android:layout_toEndOf="@+id/PosterView"/>
+            android:layout_toEndOf="@+id/PosterView"
+            android:textColor="?attr/colorAccent"/>
 
         <TextView
             android:layout_width="230dp"
@@ -86,16 +87,18 @@
             android:layout_height="wrap_content"
             android:id="@+id/watched_tv"
             android:layout_above="@+id/season_list"
-            android:layout_toEndOf="@+id/PosterView"/>
+            android:layout_toEndOf="@+id/PosterView"
+            android:textColor="?attr/colorAccent"/>
 
         <TextView
-            android:text="TextView"
+            android:text="@string/voteAvg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/Bio_TV"
-            android:id="@+id/vote_tv"
+            android:id="@+id/vote_name_tv"
             android:layout_above="@+id/watched_box"
-            android:layout_toEndOf="@+id/PosterView"/>
+            android:layout_toEndOf="@+id/PosterView"
+            android:textColor="?attr/colorAccent"/>
 
         <Button
             android:text="Cast"
@@ -113,7 +116,8 @@
             android:id="@+id/AlsoLike_TV"
             android:layout_below="@+id/season_list"
             android:layout_alignParentStart="true"
-            android:textSize="16sp"/>
+            android:textSize="16sp"
+            android:textColor="?attr/colorAccent"/>
 
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
@@ -121,6 +125,15 @@
             android:layout_below="@+id/AlsoLike_TV"
             android:layout_alignParentStart="true"
             android:id="@+id/similar_recycler"/>
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/Bio_TV"
+            android:layout_toEndOf="@+id/vote_name_tv"
+            android:layout_marginStart="12dp"
+            android:id="@+id/vote_tv"/>
 
     </RelativeLayout>
 

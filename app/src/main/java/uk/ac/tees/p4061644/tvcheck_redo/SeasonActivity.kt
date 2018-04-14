@@ -18,6 +18,7 @@ import com.omertron.themoviedbapi.model.tv.TVSeasonInfo
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_season.*
 import kotlinx.android.synthetic.main.layout_bottom_navigation_view.*
+import kotlinx.android.synthetic.main.season_item_layout.*
 import uk.ac.tees.p4061644.tvcheck_redo.models.User
 import uk.ac.tees.p4061644.tvcheck_redo.utils.AsyncTasker
 import uk.ac.tees.p4061644.tvcheck_redo.utils.BottomNavigationBarHelper
@@ -68,8 +69,8 @@ class SeasonActivity : AppCompatActivity() {
 
 		}
 
-		airdate_tv.text = "Air date: " + season.airDate
-		EpisodeCount_tv.text = "Episode Count:" + season.episodeCount.toString()
+		airDate_tv.text = season.airDate
+		EpisodeCount_tv.text = season.episodes.size.toString()
 		SeasonNum_TV.text = seasonNum
 
 		if (season.overview.isNullOrEmpty()){

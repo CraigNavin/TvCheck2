@@ -41,31 +41,8 @@
             android:textSize="26sp"
             android:maxWidth="230dp"
             android:layout_alignParentTop="true"
-            android:layout_toEndOf="@+id/PosterView"/>
-
-        <TextView
-            android:text="TextView"
-            android:layout_width="230dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/Bio_TV"
-            android:textSize="16sp"
-            android:maxWidth="230dp"
-            android:maxLines="4"
-            android:ellipsize="end"
-            android:layout_below="@+id/SeasonNum_TV"
-            android:layout_alignParentEnd="true"
             android:layout_toEndOf="@+id/PosterView"
-            android:paddingBottom="10px"
-            android:clickable="true"/>
-
-        <TextView
-            android:text="@string/watched"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/watched_txt"
-            android:layout_above="@+id/episodes_list"
-            android:layout_toEndOf="@+id/PosterView"
-            android:textSize="16sp"/>
+            android:textColor="?attr/colorAccent"/>
 
         <CheckBox
             android:layout_width="wrap_content"
@@ -76,24 +53,81 @@
             android:layout_toEndOf="@+id/watched_txt"/>
 
         <TextView
-            android:text="TextView"
+            android:text="@string/EpCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/Bio_TV"
-            android:id="@+id/airdate_tv"
+            android:id="@+id/EpisodeCount_name_tv"
             android:paddingBottom="10px"
             android:textSize="16sp"
-            android:layout_toEndOf="@+id/PosterView"/>
+            android:layout_below="@+id/airdate_name_tv"
+            android:layout_toEndOf="@+id/PosterView"
+            android:textColor="?attr/colorAccent"/>
+
+        <TextView
+            android:text="@string/airDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/airdate_name_tv"
+            android:paddingBottom="10px"
+            android:textSize="16sp"
+            android:layout_below="@+id/SeasonNum_TV"
+            android:layout_toEndOf="@+id/PosterView"
+            android:textColor="?attr/colorAccent"/>
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/Bio_TV"
+            android:textSize="16sp"
+            android:maxWidth="230dp"
+            android:maxLines="4"
+            android:ellipsize="end"
+            android:paddingBottom="10px"
+            android:clickable="true"
+            android:layout_below="@+id/Overview_tv"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:textAlignment="center"/>
+
+        <TextView
+            android:text="@string/watched"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/watched_txt"
+            android:textSize="16sp"
+            android:layout_below="@+id/EpisodeCount_name_tv"
+            android:layout_toEndOf="@+id/PosterView"
+            android:textColor="?attr/colorAccent"/>
+
+        <TextView
+            android:text="@string/Overview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/Overview_tv"
+            android:textSize="18sp"
+            android:layout_below="@+id/episodes_list"
+            android:layout_centerHorizontal="true"
+            android:textColor="?attr/colorAccent"/>
 
         <TextView
             android:text="TextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/EpisodeCount_tv"
-            android:paddingBottom="10px"
-            android:textSize="16sp"
-            android:layout_below="@+id/airdate_tv"
-            android:layout_alignEnd="@+id/airdate_tv"/>
+            android:layout_below="@+id/SeasonNum_TV"
+            android:layout_toEndOf="@+id/airdate_name_tv"
+            android:layout_marginStart="12dp"
+            android:id="@+id/airDate_tv"/>
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/EpisodeCount_name_tv"
+            android:layout_alignBottom="@+id/EpisodeCount_name_tv"
+            android:layout_toEndOf="@+id/EpisodeCount_name_tv"
+            android:layout_marginStart="11dp"
+            android:id="@+id/EpisodeCount_tv"/>
 
     </RelativeLayout>
 

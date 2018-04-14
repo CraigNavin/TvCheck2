@@ -49,8 +49,8 @@ class EpisodeActivity : AppCompatActivity() {
 	 */
 	fun setView(){
 		EPName_TV!!.text = episode!!.name
-		airDate_tv.text = "Air Date: " + episode!!.airDate
-		Vote_tv.text = "Score: " + episode!!.voteAverage + "(" + episode!!.voteCount + ")"
+		airDate_tv.text = episode!!.airDate
+		Vote_tv.text = episode!!.voteAverage.toString() + "(" + episode!!.voteCount + ")"
 		var seasonNum :Int = 0
 		if (getShowFromLists() != null){
 			if(getShowFromLists()!!.seasons!![0].seasonNumber == 0){

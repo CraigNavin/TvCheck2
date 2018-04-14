@@ -25,12 +25,13 @@
             android:textStyle="bold"
             android:textSize="32dp"
             android:textAlignment="gravity"
-            />
+            android:textColor="?attr/colorAccent"/>
         <TextView
             android:id="@+id/txtComment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="comment"
-            android:textSize="24dp"/>
+            android:textSize="24dp"
+            android:textColor="?android:attr/textColorTertiary"/>
     </LinearLayout>
 </RelativeLayout>

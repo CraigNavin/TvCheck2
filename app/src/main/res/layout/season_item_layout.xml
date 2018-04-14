@@ -27,14 +27,15 @@
             android:textStyle="bold"
             android:textSize="28dp"
             android:textAlignment="gravity"
-            />
+            android:textColor="?attr/colorAccent"/>
 
         <TextView
             android:id="@+id/episodes_count"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="comment"
-            android:textSize="18dp"/>
+            android:textSize="18dp"
+            android:textColor="?android:attr/textColorTertiary"/>
 
     </LinearLayout>
 
