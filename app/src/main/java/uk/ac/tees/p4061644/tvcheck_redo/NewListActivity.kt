@@ -60,6 +60,7 @@ class NewListActivity : AppCompatActivity() {
 				val intent = Intent(applicationContext,ProfileActivity::class.java)
 				intent.putExtra("User",Gson().toJson(user))
 				applicationContext.startActivity(intent)
+
 			}
 		}
 
@@ -67,6 +68,7 @@ class NewListActivity : AppCompatActivity() {
 			val intent = Intent(applicationContext,ProfileActivity::class.java)
 			intent.putExtra("User",Gson().toJson(user))
 			applicationContext.startActivity(intent)
+
 		}
 	}
 

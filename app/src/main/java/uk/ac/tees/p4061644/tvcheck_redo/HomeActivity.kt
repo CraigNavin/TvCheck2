@@ -74,7 +74,6 @@ class HomeActivity : Activity(){
 			var show :Show = getRandomShowFromLists()
 			similar = Async!!.fillhome(3,show.id)!!
 			tvInfo = Async!!.getShowInfoAsync(similar[Random().nextInt(similar.size)].id)
-			Similar_txt.text = "Because you followed " + Async!!.getShowBasicAsync(show.id).name
 			Name_txt.text = tvInfo.name
 			OverView_txt.text = tvInfo.overview
 			Picasso.with(applicationContext).load(getString(R.string.base_address_w185) + tvInfo.posterPath)
@@ -85,6 +84,7 @@ class HomeActivity : Activity(){
 				intent.putExtra("Show",Gson().toJson(tvInfo))
 				intent.putExtra("User",Gson().toJson(user))
 				applicationContext.startActivity(intent)
+
 			}
 		}else{
 			HideSimilar()
@@ -101,6 +101,9 @@ class HomeActivity : Activity(){
 		}
 	}
 
+	/**
+	 * Hides the similar section if the user has no shows in lists
+	 */
 	fun HideSimilar(){
 		img_view.visibility = View.GONE
 		Name_txt.visibility = View.GONE

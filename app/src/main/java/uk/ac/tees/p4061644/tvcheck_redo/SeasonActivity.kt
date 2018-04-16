@@ -81,6 +81,7 @@ class SeasonActivity : AppCompatActivity() {
 				val intent = Intent(applicationContext, ReadMoreActivity::class.java)
 				intent.putExtra("ReadMore", season.overview)
 				startActivity(intent)
+
 			}
 		}
 
@@ -102,6 +103,7 @@ class SeasonActivity : AppCompatActivity() {
 			intent.putExtra("User",Gson().toJson(user))
 			intent.putExtra("TVID",id!!)
 			applicationContext.startActivity(intent)
+
 		}
 
 		watched_box!!.setOnCheckedChangeListener { _, isChecked ->

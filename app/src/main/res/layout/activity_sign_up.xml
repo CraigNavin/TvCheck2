@@ -20,7 +20,8 @@
         android:layout_alignLeft="@+id/Sign_Up_Pass1"
         android:layout_alignStart="@+id/Sign_Up_Pass1"
         android:layout_marginTop="103dp"
-        android:hint="@string/Email" />
+        android:hint="@string/Email"
+        android:paddingBottom="50px"/>
 
     <TextView
         android:text="@string/LoginPrompt"
@@ -38,17 +39,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:ems="10"
-        android:id="@+id/Sign_Up_Pass2"
-        android:layout_centerVertical="true"
-        android:layout_alignLeft="@+id/Sign_Up_Pass1"
-        android:layout_alignStart="@+id/Sign_Up_Pass1"
-        android:hint="@string/Conpassword" />
-
     <Button
         android:text="@string/SignUp"
         android:layout_width="wrap_content"
@@ -64,8 +54,19 @@
         android:inputType="textPassword"
         android:ems="10"
         android:id="@+id/Sign_Up_Pass1"
-        android:layout_marginTop="12dp"
+        android:hint="@string/Password"
         android:layout_below="@+id/SIgn_Up_Email"
         android:layout_centerHorizontal="true"
-        android:hint="@string/Password" />
+        android:paddingBottom="50px"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:id="@+id/Sign_Up_Pass2"
+        android:hint="@string/Conpassword"
+        android:paddingBottom="50px"
+        android:layout_below="@+id/Sign_Up_Pass1"
+        android:layout_alignStart="@+id/Sign_Up_Pass1"/>
 </RelativeLayout>

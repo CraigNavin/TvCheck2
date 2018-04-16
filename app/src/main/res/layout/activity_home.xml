@@ -28,7 +28,8 @@
             android:id="@+id/popular_TV"
             android:textSize="20sp"
             android:layout_above="@+id/recycle_popular"
-            android:layout_alignParentStart="true"/>
+            android:layout_alignParentStart="true"
+            android:textColor="?attr/colorAccent"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -50,7 +51,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/Name_txt"
-                    android:textSize="18sp"/>
+                    android:textSize="18sp"
+                    android:textColor="?attr/colorAccent"/>
 
                 <TextView
                     android:text="TextView"
@@ -84,13 +86,14 @@
                 android:layout_below="@+id/Similar_txt"/>
 
             <TextView
-                android:text="TextView"
+                android:text="@string/MayAlsoLike"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/Similar_txt"
                 android:textSize="20sp"
                 android:layout_alignParentTop="true"
-                android:layout_alignParentStart="true"/>
+                android:layout_alignParentStart="true"
+                android:textColor="?attr/colorAccent"/>
 
         </RelativeLayout>
 
@@ -119,7 +122,8 @@
             android:id="@+id/top_rated_TV"
             android:textSize="20sp"
             android:layout_below="@+id/relLayout2"
-            android:layout_alignParentStart="true"/>
+            android:layout_alignParentStart="true"
+            android:textColor="?attr/colorAccent"/>
 
     </RelativeLayout>
 

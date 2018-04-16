@@ -124,7 +124,15 @@ class ShowActivity : AppCompatActivity() {
 	fun setupList(){
 		var simlayoutManager = LinearLayoutManager (this, LinearLayoutManager.HORIZONTAL,false)
 		var seasons = show!!.seasons
+
+		if(seasons[0].seasonNumber == 0){
+			seasons.removeAt(0)
+		}
+
 		var adapter = SeasonEpisodeListAdapter(this,seasons,null,applicationContext)
+
+
+
 		season_list!!.adapter = adapter
 		season_list!!.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
 			val item = parent.getItemAtPosition(position) as String
@@ -194,6 +202,7 @@ class ShowActivity : AppCompatActivity() {
 			intent.putExtra("showName",show!!.name)
 			intent.putExtra("CastList", Gson().toJson(show!!.credits.cast))
 			applicationContext.startActivity(intent)
+
 		}
 
 		setupFloatBtn()

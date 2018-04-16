@@ -13,7 +13,7 @@ import uk.ac.tees.p4061644.tvcheck_redo.models.User
 import uk.ac.tees.p4061644.tvcheck_redo.utils.DatabaseHandler
 import java.util.*
 
-class SignUpActivity : AppCompatActivity(), View.OnClickListener {
+class SignUpActivity : AppCompatActivity(){
 
 	private var mAuth: FirebaseAuth? = null
 	private var dbh : DatabaseHandler? = null
@@ -25,8 +25,8 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener {
 		mAuth = FirebaseAuth.getInstance()
 		dbh = DatabaseHandler(applicationContext)
 
-		findViewById(R.id.Sign_Up_Btn).setOnClickListener(this)
-		findViewById(R.id.Sign_Up_TVLogin).setOnClickListener(this)
+		findViewById(R.id.Sign_Up_Btn).setOnClickListener{ RegisterUser() }
+		findViewById(R.id.Sign_Up_TVLogin).setOnClickListener{ startActivity(Intent(this, LoginActivity::class.java)) }
 	}
 
 	/**
@@ -112,15 +112,5 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener {
 			prevchar = char.toString()
 		}
 		return result
-	}
-
-	/**
-	 * Handles what happens when a view is clicked.
-	 */
-	override fun onClick(view: View) {
-		when (view.id) {
-			R.id.Sign_Up_Btn -> RegisterUser()
-			R.id.Sign_Up_TVLogin -> applicationContext.startActivity(Intent(this, LoginActivity::class.java))
-		}
 	}
 }

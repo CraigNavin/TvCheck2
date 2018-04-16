@@ -12,6 +12,9 @@ class ReadMoreActivity : AppCompatActivity() {
 		setContentView(R.layout.activity_read_more)
 		ReadMore_tv.text = intent.getStringExtra("ReadMore")
 
-		go_back_btn.setOnClickListener { super.onBackPressed() }
+		go_back_btn.setOnClickListener {
+			super.onBackPressed()
+
+		}
 	}
 }

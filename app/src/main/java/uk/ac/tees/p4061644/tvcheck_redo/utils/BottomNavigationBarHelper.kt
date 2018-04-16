@@ -37,26 +37,22 @@ object BottomNavigationBarHelper {
 	 */
 	fun enableNavigation(context: Context, viewEx: BottomNavigationViewEx?, User: String) {
 		viewEx?.onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
+			var intent : Intent? = null
 			when (item.itemId) {
 				R.id.action_home ->{
-					val intent = Intent(context, HomeActivity::class.java) //activity_Num 0
-					intent.putExtra("User", User)
-					context.startActivity(intent)
+					intent = Intent(context, HomeActivity::class.java) //activity_Num 0
 				}
 
 				R.id.action_Search -> {
-					val intent = Intent(context,SearchActivity::class.java)//activity_Num 1
-					intent.putExtra("User",User)
-					context.startActivity(intent)
+					intent = Intent(context,SearchActivity::class.java)//activity_Num 1
 				}
 
 				R.id.action_profile -> {
-					val intent = Intent(context, ProfileActivity::class.java) //activity_Num 2
-					intent.putExtra("User", User)
-					context.startActivity(intent)
-
+					intent = Intent(context, ProfileActivity::class.java) //activity_Num 2
 				}
 			}
+			intent!!.putExtra("User", User)
+			context.startActivity(intent)
 			false
 		}
 	}

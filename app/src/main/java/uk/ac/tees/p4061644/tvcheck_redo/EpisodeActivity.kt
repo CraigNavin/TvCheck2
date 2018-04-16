@@ -69,6 +69,7 @@ class EpisodeActivity : AppCompatActivity() {
 				val intent = Intent(applicationContext, ReadMoreActivity::class.java)
 				intent.putExtra("ReadMore", episode!!.overview)
 				startActivity(intent)
+
 			}
 		}
 

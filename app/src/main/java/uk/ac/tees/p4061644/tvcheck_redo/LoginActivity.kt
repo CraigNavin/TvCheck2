@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.activity_login.*
 import uk.ac.tees.p4061644.tvcheck_redo.utils.DatabaseHandler
 
 
-class LoginActivity : AppCompatActivity(), View.OnClickListener {
+class LoginActivity : AppCompatActivity(){
 
 	private var mAuth: FirebaseAuth? = null
 	private var dbh: DatabaseHandler? = null
@@ -27,8 +27,8 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 		mAuth = FirebaseAuth.getInstance()
 		Login_email.requestFocus()
 
-		findViewById(R.id.Login_TVsignUp).setOnClickListener(this)
-		findViewById(R.id.Login_Btn).setOnClickListener(this)
+		findViewById(R.id.Login_TVsignUp).setOnClickListener { startActivity(Intent(this, SignUpActivity::class.java)) }
+		findViewById(R.id.Login_Btn).setOnClickListener{ login() }
 	}
 
 	/**
@@ -79,15 +79,5 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 			Toast.makeText(applicationContext,"An Error Occured", Toast.LENGTH_SHORT).show()
 		}
 
-	}
-
-	/**
-	 * Overridden onClick method that controls what happens when a click happens
-	 */
-	override fun onClick(view: View) {
-		when (view.id) {
-			R.id.Login_TVsignUp -> applicationContext.startActivity(Intent(this, SignUpActivity::class.java))
-			R.id.Login_Btn -> login()
-		}
 	}
 }

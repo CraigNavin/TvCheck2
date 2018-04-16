@@ -62,6 +62,7 @@ class ProfileActivity : AppCompatActivity() {
 			val intent = Intent(applicationContext,NewListActivity::class.java)
 			intent.putExtra("User",Gson().toJson(user))
 			applicationContext.startActivity(intent)
+
 		}
 	}
 
