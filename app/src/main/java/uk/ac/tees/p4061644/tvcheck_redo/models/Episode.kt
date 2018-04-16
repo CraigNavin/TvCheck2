@@ -1,7 +1,5 @@
 package uk.ac.tees.p4061644.tvcheck_redo.models
 
-import com.omertron.themoviedbapi.model.tv.TVEpisodeInfo
-
 
 /**
  * This class is a data class an only contains properties and not logic.
@@ -9,5 +7,4 @@ import com.omertron.themoviedbapi.model.tv.TVEpisodeInfo
  * Created by Craig on 01/02/2018.
  */
 
-data class Episode ( var watched: Boolean){
-}
+data class Episode ( var watched: Boolean)

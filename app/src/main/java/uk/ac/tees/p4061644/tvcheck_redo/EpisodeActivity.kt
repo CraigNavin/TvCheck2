@@ -39,7 +39,7 @@ class EpisodeActivity : AppCompatActivity() {
 	 * @return Show object from user list
 	 */
 	fun getShowFromLists(): Show? {
-		var TVID = intent.extras.get("TVID")
+		val TVID = intent.extras.get("TVID")
 		user!!.list!!.forEach { it.list!!.forEach { if (it.id == TVID){ return it } }}
 		return null
 	}

@@ -6,7 +6,6 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.parse.*
 import com.parse.ParseQuery.getQuery
-import org.w3c.dom.UserDataHandler
 import uk.ac.tees.p4061644.tvcheck_redo.R
 import uk.ac.tees.p4061644.tvcheck_redo.models.ListModel
 import uk.ac.tees.p4061644.tvcheck_redo.models.User
@@ -44,7 +43,7 @@ class DatabaseHandler(context: Context) {
 	 * @param [user] User object that will be added to the database
 	 */
 	fun insert(user: User) {
-		var userobj = ParseObject("UserData")
+		val userobj = ParseObject("UserData")
 		userobj.put("UserId",user.UserID)
 		userobj.put("Lists",gson.toJson(user.list))
 		userobj.saveInBackground()
@@ -60,15 +59,13 @@ class DatabaseHandler(context: Context) {
 	 */
 	fun retrievefirst(UserId: String): User?{
 
-		var query : ParseQuery<ParseObject> = getQuery("UserData")
+		val query : ParseQuery<ParseObject> = getQuery("UserData")
 		query.whereEqualTo("UserId",UserId)
-		var obj = query.first
+		val obj = query.first
 
 		if (obj == null){
-			Log.d("RETRIEVEFIRST","NOTHING FOUND")
 			return null
 		}else{
-			Log.d("RETRIEVEFIRST","GOT USER")
 			val list: ArrayList<ListModel> = gson.fromJson(obj.get("Lists").toString())
 			return User(obj.getString("UserId"),list)
 		}
@@ -80,7 +77,7 @@ class DatabaseHandler(context: Context) {
 	 * @return User object with new and updated information.
 	 */
 	fun update(user: User): User{
-		var query: ParseQuery<ParseObject> = getQuery("UserData")
+		val query: ParseQuery<ParseObject> = getQuery("UserData")
 		var retUser : User? = null
 		query.whereEqualTo("UserId", user.UserID)
 		query.getFirstInBackground({ userdata, e ->

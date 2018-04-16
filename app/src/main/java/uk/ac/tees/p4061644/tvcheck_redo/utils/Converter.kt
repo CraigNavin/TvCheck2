@@ -1,9 +1,9 @@
 package uk.ac.tees.p4061644.tvcheck_redo.utils
 
 import android.content.Context
-import android.os.AsyncTask
 import android.util.Log
-import com.omertron.themoviedbapi.model.tv.*
+import com.omertron.themoviedbapi.model.tv.TVInfo
+import com.omertron.themoviedbapi.model.tv.TVSeasonBasic
 import uk.ac.tees.p4061644.tvcheck_redo.models.Episode
 import uk.ac.tees.p4061644.tvcheck_redo.models.Season
 import uk.ac.tees.p4061644.tvcheck_redo.models.Show
@@ -21,7 +21,7 @@ class Converter(context: Context) {
 	 * @return Show object that was converted from TVInfo object passed as parameter
 	 */
 	fun convert(TVInfo: TVInfo): Show{
-		var seasonList: ArrayList<Season> = ArrayList()
+		val seasonList: ArrayList<Season> = ArrayList()
 		if(TVInfo.seasons.size != 0){
 			for (s in TVInfo.seasons){
 				seasonList.add(convert(s!!,TVInfo.id))
@@ -37,9 +37,9 @@ class Converter(context: Context) {
 	 * @param [TVid] Id of TV Show. Used to retrieve TVSeasonInfo object
 	 */
 	fun convert(TVSeason: TVSeasonBasic,TVid: Int): Season{
-		var TVSeasonInfo = tasker.getSeasonAsync(TVSeason.seasonNumber,TVid)
+		val TVSeasonInfo = tasker.getSeasonAsync(TVSeason.seasonNumber,TVid)
 
-		var episodeList: ArrayList<Episode> = ArrayList()
+		val episodeList: ArrayList<Episode> = ArrayList()
 		if (TVSeasonInfo.episodes != null){
 			if (TVSeasonInfo.episodes.size != 0){
 

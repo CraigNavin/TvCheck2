@@ -33,10 +33,6 @@ class User (val UserID: String){
 		return list!!.find { it.name == string }
 	}
 
-	fun getShow(list: ArrayList<Show>, id: Int): Show?{
-		return list.find { it.id == id }
-	}
-
 	/**
 	 * Checks if a list with desired name already exists
 	 * @param [string] users desired list name that will be checked against current list
@@ -51,7 +47,7 @@ class User (val UserID: String){
 	 * @return Arraylist of all of the users list names
 	 */
 	fun getListNames():ArrayList<String>{
-		var retlist = ArrayList<String>()
+		val retlist = ArrayList<String>()
 		list!!.forEach { retlist.add(it.name) }
 		return retlist
 	}
@@ -78,8 +74,7 @@ class User (val UserID: String){
 	 * @return Boolean to represent if the list contains a show with passed ID
 	 */
 	fun checkListContainsShow(id: Int,listname: String): Boolean{
-		var ListModel: ListModel = list!!.find { it.name == listname}!!
-		ListModel.list!!.forEach { Log.d("CHECKLISTCONTAINS", it.id.toString()) }
+		val ListModel: ListModel = list!!.find { it.name == listname}!!
 		return ListModel.list!!.any { it.id == id }
 	}
 }

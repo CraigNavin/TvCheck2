@@ -2,26 +2,16 @@ package uk.ac.tees.p4061644.tvcheck_redo.utils
 
 import android.content.Context
 import android.os.AsyncTask
-import android.util.Log
 import com.omertron.themoviedbapi.TheMovieDbApi
 import com.omertron.themoviedbapi.enumeration.PeopleMethod
 import com.omertron.themoviedbapi.enumeration.SearchType
-import com.omertron.themoviedbapi.enumeration.TVEpisodeMethod
 import com.omertron.themoviedbapi.enumeration.TVMethod
-import com.omertron.themoviedbapi.methods.TmdbCredits
-import com.omertron.themoviedbapi.model.credits.CreditTVBasic
-import com.omertron.themoviedbapi.model.credits.MediaCreditCast
-import com.omertron.themoviedbapi.model.person.ExternalID
 import com.omertron.themoviedbapi.model.person.PersonInfo
 import com.omertron.themoviedbapi.model.tv.TVBasic
-import com.omertron.themoviedbapi.model.tv.TVEpisodeInfo
 import com.omertron.themoviedbapi.model.tv.TVInfo
 import com.omertron.themoviedbapi.model.tv.TVSeasonInfo
-import com.omertron.themoviedbapi.tools.MethodBase
 import uk.ac.tees.p4061644.tvcheck_redo.R
-import uk.ac.tees.p4061644.tvcheck_redo.models.ListModel
 import uk.ac.tees.p4061644.tvcheck_redo.models.Show
-import uk.ac.tees.p4061644.tvcheck_redo.models.User
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -50,7 +40,7 @@ class AsyncTasker(context: Context) {
 	 * @return ArrayList of TVBasic objects that match or closely match the search term
 	 */
 	fun searchShows(search: String): ArrayList<TVBasic>? {
-		var list = searchShowsTask(search).execute().get()
+		val list = searchShowsTask(search).execute().get()
 		if (list == null){
 			return ArrayList()
 		}else{
@@ -67,7 +57,7 @@ class AsyncTasker(context: Context) {
 	 * similar shows to the show with the id passed as a parameter
 	 */
 	fun fillhome(getType:Int, TVid: Int?): ArrayList<TVBasic>?{
-		var list: List<TVBasic> = populateHomeTask(getType,TVid).execute().get()
+		val list: List<TVBasic> = populateHomeTask(getType,TVid).execute().get()
 		if (list.isEmpty()){
 			return ArrayList()
 		}else{
@@ -81,7 +71,7 @@ class AsyncTasker(context: Context) {
 	 * @return ArrayList containing TVBasic objects.
 	 */
 	fun getUserList(list: ArrayList<Show>):ArrayList<TVBasic>{
-		var retList = ArrayList<TVBasic>()
+		val retList = ArrayList<TVBasic>()
 		list.forEach { retList.add(getShowBasicAsync(it.id)) }
 		return  retList
 	}
@@ -127,7 +117,7 @@ class AsyncTasker(context: Context) {
 		private var api: TheMovieDbApi? = this@AsyncTasker.api
 
 		override fun doInBackground(vararg voids: Void): List<TVBasic> {
-			var list: List<TVBasic> = api!!.searchTV(search,1,"en",null, SearchType.PHRASE).results
+			val list: List<TVBasic> = api!!.searchTV(search,1,"en",null, SearchType.PHRASE).results
 			return list
 		}
 
@@ -188,7 +178,7 @@ class AsyncTasker(context: Context) {
 		private var api: TheMovieDbApi? = this@AsyncTasker.api
 
 		override fun doInBackground(vararg voids: Void): List<TVBasic> {
-			var list: List<TVBasic>
+			val list: List<TVBasic>
 			when(getType){
 				1 -> list = api!!.getTVPopular(1,"en").results
 				2 -> list = api!!.getTVTopRated(1,"en").results

@@ -14,9 +14,7 @@ import com.omertron.themoviedbapi.model.tv.TVBasic
 import com.omertron.themoviedbapi.model.tv.TVInfo
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_home.*
-import kotlinx.android.synthetic.main.activity_home.view.*
 import kotlinx.android.synthetic.main.layout_bottom_navigation_view.*
-import kotlinx.android.synthetic.main.recyclerview_item.*
 import uk.ac.tees.p4061644.tvcheck_redo.Adapters.RecyclerHomeViewAdapter
 import uk.ac.tees.p4061644.tvcheck_redo.models.Show
 import uk.ac.tees.p4061644.tvcheck_redo.models.User
@@ -24,8 +22,6 @@ import uk.ac.tees.p4061644.tvcheck_redo.utils.AsyncTasker
 import uk.ac.tees.p4061644.tvcheck_redo.utils.BottomNavigationBarHelper
 import uk.ac.tees.p4061644.tvcheck_redo.utils.DatabaseHandler
 import java.util.*
-import javax.crypto.spec.GCMParameterSpec
-import kotlin.collections.ArrayList
 
 class HomeActivity : Activity(){
 
@@ -64,14 +60,14 @@ class HomeActivity : Activity(){
 	 * Sets up view elements with top rated,Popular shows. As well as a similar show to ones in the users lists
 	 */
 	fun setView(){
-		var poplayoutManager = LinearLayoutManager (this,LinearLayoutManager.HORIZONTAL,false)
-		var toplayoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
-		var popular = Async!!.fillhome(1,null)!!
-		var topRated = Async!!.fillhome(2,null)!!
-		var tvInfo : TVInfo?
-		var similar : ArrayList<TVBasic>?
+		val poplayoutManager = LinearLayoutManager (this,LinearLayoutManager.HORIZONTAL,false)
+		val toplayoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
+		val popular = Async!!.fillhome(1,null)!!
+		val topRated = Async!!.fillhome(2,null)!!
+		val tvInfo : TVInfo?
+		val similar : ArrayList<TVBasic>?
 		if (!user!!.list!!.any{ it.list!!.count() == 0}){
-			var show :Show = getRandomShowFromLists()
+			val show :Show = getRandomShowFromLists()
 			similar = Async!!.fillhome(3,show.id)!!
 			tvInfo = Async!!.getShowInfoAsync(similar[Random().nextInt(similar.size)].id)
 			Name_txt.text = tvInfo.name
@@ -117,8 +113,8 @@ class HomeActivity : Activity(){
 	 * @return Show object to be used to get similar Shows from API
 	 */
 	fun getRandomShowFromLists():Show{
-		var listindex = Random().nextInt(user!!.list!!.size)
-		var showindex = Random().nextInt(user!!.list!![listindex].list!!.size)
+		val listindex = Random().nextInt(user!!.list!!.size)
+		val showindex = Random().nextInt(user!!.list!![listindex].list!!.size)
 		return user!!.list!![listindex].list!![showindex]
 	}
 

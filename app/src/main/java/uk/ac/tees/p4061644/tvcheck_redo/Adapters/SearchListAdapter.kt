@@ -65,9 +65,9 @@ class SearchListAdapter(private var activity: Activity, private var results: Arr
 	 * @return ViewHolder Instance with data assigned to layouts elements
 	 */
 	fun handleResults(holder: SearchListAdapter.ViewHolder, position: Int): SearchListAdapter.ViewHolder {
-		var TVBasic = results!![position]
+		val TVBasic = results!![position]
 
-		var rating = "User Rating: " + TVBasic.voteAverage
+		val rating = "User Rating: " + TVBasic.voteAverage
 		holder.txtName!!.text = TVBasic.name
 		holder.txtComment!!.text = rating
 		Picasso.with(context).load(context.resources.getString(uk.ac.tees.p4061644.tvcheck_redo.R.string.base_address_w185).toString() + TVBasic.posterPath)

@@ -2,23 +2,16 @@ package uk.ac.tees.p4061644.tvcheck_redo.Adapters
 
 import android.app.Activity
 import android.content.Context
-import android.media.Image
-import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
-import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import com.google.gson.Gson
 import com.omertron.themoviedbapi.model.tv.TVEpisodeInfo
 import com.omertron.themoviedbapi.model.tv.TVSeasonBasic
 import com.squareup.picasso.Picasso
-import org.apache.commons.lang3.mutable.Mutable
-import org.w3c.dom.Text
 import uk.ac.tees.p4061644.tvcheck_redo.R
-import uk.ac.tees.p4061644.tvcheck_redo.models.*
 
 /**
  * Created by Craig on 08/03/2018.
@@ -74,13 +67,13 @@ class SeasonEpisodeListAdapter(private var activity: Activity, private var seaso
 	 * @return ViewHolder Instance with data assigned to layouts elements
 	 */
 	fun handleSeasons(holder: SeasonEpisodeListAdapter.ViewHolder, position: Int): SeasonEpisodeListAdapter.ViewHolder {
-		var TVSeasonBasic = seasons!![position]
+		val TVSeasonBasic = seasons!![position]
 		if(TVSeasonBasic.seasonNumber == 0){
 			holder.txtName?.text = "Specials"
 		}else{
 			holder.txtName?.text = "Season " + TVSeasonBasic.seasonNumber.toString()
 		}
-		var episodeCount = TVSeasonBasic.episodeCount.toString() + " Episodes"
+		val episodeCount = TVSeasonBasic.episodeCount.toString() + " Episodes"
 		holder.txtEpisodes!!.text = episodeCount
 
 		com.squareup.picasso.Picasso.with(context)
@@ -97,7 +90,7 @@ class SeasonEpisodeListAdapter(private var activity: Activity, private var seaso
 	 * @return ViewHolder Instance with data assigned to layouts elements
 	 */
 	fun handleEpisodes(holder: SeasonEpisodeListAdapter.ViewHolder, position: Int): SeasonEpisodeListAdapter.ViewHolder {
-		var episode = episodes!![position]
+		val episode = episodes!![position]
 		holder.txtName!!.text = episode.name
 		holder.txtEpisodes!!.text = episode.airDate
 

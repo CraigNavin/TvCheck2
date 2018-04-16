@@ -2,7 +2,6 @@ package uk.ac.tees.p4061644.tvcheck_redo.utils
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
 import android.support.design.widget.BottomNavigationView
 import android.util.Log
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx

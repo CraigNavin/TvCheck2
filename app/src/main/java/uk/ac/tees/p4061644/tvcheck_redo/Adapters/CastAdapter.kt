@@ -52,7 +52,7 @@ class CastAdapter (private var activity: Activity,private var cast:List<MediaCre
 	}
 
 	fun populateView(holder: ViewHolder,position: Int): ViewHolder{
-		var castMember = cast[position]
+		val castMember = cast[position]
 		holder.txtName!!.text = castMember.name
 		holder.txtEpisodes!!.text = castMember.character
 

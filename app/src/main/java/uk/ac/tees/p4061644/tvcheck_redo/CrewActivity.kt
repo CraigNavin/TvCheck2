@@ -1,10 +1,9 @@
 package uk.ac.tees.p4061644.tvcheck_redo
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
-import android.view.View
 import android.view.Menu
 import android.view.MenuItem
 import com.google.gson.Gson
@@ -49,8 +48,7 @@ class CrewActivity : AppCompatActivity() {
 	 * Sets up view elements with the crew members TV Credits and their details
 	 */
 	fun setView(){
-		var tvCreditManager = LinearLayoutManager (this, LinearLayoutManager.HORIZONTAL,false)
-		Log.d(TAG,"SETVIEW")
+		val tvCreditManager = LinearLayoutManager (this, LinearLayoutManager.HORIZONTAL,false)
 		Name_TV.text = person!!.name
 		Bio_TV.text = person!!.biography
 		DPoB_tv.text = person!!.birthday + "," + person!!.placeOfBirth
@@ -58,26 +56,21 @@ class CrewActivity : AppCompatActivity() {
 		Picasso.with(applicationContext).load(getString(R.string.base_address_w185) + intent.getStringExtra("PicPath"))
 				.placeholder(R.drawable.ic_default_search_image)
 				.into(PosterView)
-		var tvCreditList = ArrayList<TVBasic>()
-		Log.d(TAG,"LOOPSTART")
+		val tvCreditList = ArrayList<TVBasic>()
 		for (credit in person!!.tvCredits.cast){
 			tvCreditList.add(Async!!.getShowBasicAsync(credit.id))
 		}
-		Log.d(TAG,"LOOPEND")
 
 		tvCreditList.apply {
 			sortBy { it.popularity }
 			reverse()
 		}
 
-		Log.d(TAG,"LISTSORTED")
 
 		tvCredit_recycler.apply {
 			layoutManager = tvCreditManager
 			adapter = RecyclerHomeViewAdapter(applicationContext,tvCreditList,user!!,1)
 		}
-
-		Log.d(TAG,"RECYCLERPOPULATED")
 	}
 
 	inline fun <reified T> Gson.fromJson(json: String) = this.fromJson<T>(json, object: TypeToken<T>() {}.type)
@@ -91,6 +84,6 @@ class CrewActivity : AppCompatActivity() {
 		BottomNavigationBarHelper.enableNavigation(applicationContext, bottomNavViewBar, Gson().toJson(user))
 		val menu: Menu? = bottomNavViewBar.menu
 		val menuI: MenuItem? = menu?.getItem(activity_Num)
-		menuI?.setChecked(true)
+		menuI?.isChecked = true
 	}
 }

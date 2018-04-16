@@ -87,27 +87,25 @@ class ShowActivity : AppCompatActivity() {
 		watched_box.setOnCheckedChangeListener { _, isChecked ->
 			Log.d(TAG,show!!.id.toString())
 			if (user!!.inLists(basic!!.id)){
-				var showInList = getShow()
+				val showInList = getShow()
 				showInList!!.watched = isChecked
 				AlertDialog.Builder(this)
 						.setTitle("Watched Show?")
 						.setMessage("Do you want to set all this seasons and episodes to watched?")
-						.setPositiveButton(android.R.string.yes,
-								DialogInterface.OnClickListener { _, _ ->
-									showInList.seasons!!.forEach { it.watched = isChecked
-										it.episodes.forEach { it.watched = isChecked
-										}
-									}
-									user = DatabaseHandler(applicationContext).update(user!!)
-									Toast.makeText(applicationContext,"Show,seasons and episodes Updated",Toast.LENGTH_SHORT).show()
+						.setPositiveButton(android.R.string.yes, { _, _ ->
+							showInList.seasons!!.forEach { it.watched = isChecked
+								it.episodes.forEach { it.watched = isChecked
 								}
+							}
+							user = DatabaseHandler(applicationContext).update(user!!)
+							Toast.makeText(applicationContext,"Show,seasons and episodes Updated",Toast.LENGTH_SHORT).show()
+						}
 
 						)
-						.setNegativeButton(android.R.string.no,
-								DialogInterface.OnClickListener { _, _ ->
-									user = DatabaseHandler(applicationContext).update(user!!)
-									Toast.makeText(applicationContext,"Show Updated",Toast.LENGTH_SHORT).show()
-								}
+						.setNegativeButton(android.R.string.no, { _, _ ->
+							user = DatabaseHandler(applicationContext).update(user!!)
+							Toast.makeText(applicationContext,"Show Updated",Toast.LENGTH_SHORT).show()
+						}
 
 						).show()
 			}else{
@@ -122,14 +120,14 @@ class ShowActivity : AppCompatActivity() {
 	 * Sets the listView's adapter and assigns an onClickListener that will handle all clicks on the listView
 	 */
 	fun setupList(){
-		var simlayoutManager = LinearLayoutManager (this, LinearLayoutManager.HORIZONTAL,false)
-		var seasons = show!!.seasons
+		val simlayoutManager = LinearLayoutManager (this, LinearLayoutManager.HORIZONTAL,false)
+		val seasons = show!!.seasons
 
 		if(seasons[0].seasonNumber == 0){
 			seasons.removeAt(0)
 		}
 
-		var adapter = SeasonEpisodeListAdapter(this,seasons,null,applicationContext)
+		val adapter = SeasonEpisodeListAdapter(this,seasons,null,applicationContext)
 
 
 
@@ -242,9 +240,9 @@ class ShowActivity : AppCompatActivity() {
 	 * @return super.onContextItemSelected(item)
 	 *  */
 	override fun onContextItemSelected(item: MenuItem?): Boolean {
-		var nameList = user!!.getListNames()
+		val nameList = user!!.getListNames()
 		if (nameList.contains(item!!.title)){
-			var chosenList = user!!.list!!.find { it.name == item.title }
+			val chosenList = user!!.list!!.find { it.name == item.title }
 			if (user!!.checkListContainsShow(show!!.id,chosenList!!.name)){
 				Toast.makeText(applicationContext,"This list already contains this show. Choose another list",Toast.LENGTH_SHORT).show()
 			}else{

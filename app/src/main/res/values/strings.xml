@@ -37,5 +37,7 @@
     <string name="airDate">Air Date: </string>
     <string name="EpCount">Episode Count: </string>
     <string name="voteAvg">Vote Average: </string>
+    <string name="Cast">Cast</string>
+    <string name="Name">Name</string>
 
 </resources>

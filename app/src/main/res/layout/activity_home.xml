@@ -47,7 +47,6 @@
                 android:layout_marginTop="46dp">
 
                 <TextView
-                    android:text="TextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/Name_txt"
@@ -55,7 +54,6 @@
                     android:textColor="?attr/colorAccent"/>
 
                 <TextView
-                    android:text="TextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/OverView_txt"

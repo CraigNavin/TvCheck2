@@ -1,6 +1,5 @@
 package uk.ac.tees.p4061644.tvcheck_redo
 
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
@@ -18,12 +17,11 @@ import com.omertron.themoviedbapi.model.tv.TVSeasonInfo
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_season.*
 import kotlinx.android.synthetic.main.layout_bottom_navigation_view.*
-import kotlinx.android.synthetic.main.season_item_layout.*
+import uk.ac.tees.p4061644.tvcheck_redo.Adapters.SeasonEpisodeListAdapter
+import uk.ac.tees.p4061644.tvcheck_redo.models.Show
 import uk.ac.tees.p4061644.tvcheck_redo.models.User
 import uk.ac.tees.p4061644.tvcheck_redo.utils.AsyncTasker
 import uk.ac.tees.p4061644.tvcheck_redo.utils.BottomNavigationBarHelper
-import uk.ac.tees.p4061644.tvcheck_redo.Adapters.SeasonEpisodeListAdapter
-import uk.ac.tees.p4061644.tvcheck_redo.models.Show
 import uk.ac.tees.p4061644.tvcheck_redo.utils.DatabaseHandler
 
 class SeasonActivity : AppCompatActivity() {
@@ -58,7 +56,7 @@ class SeasonActivity : AppCompatActivity() {
 	 * @param [season] TVSeasonInfo object that is used to populate elements with information
 	 */
 	fun setView(season: TVSeasonInfo){
-		var seasonNum = "Season " + season.seasonNumber
+		val seasonNum = "Season " + season.seasonNumber
 
 		if(getShow() != null){
 			if(getShow()!!.seasons!![0].seasonNumber == 0){
@@ -91,7 +89,7 @@ class SeasonActivity : AppCompatActivity() {
 				.into(PosterView)
 
 		bottomNavViewBar.bringChildToFront(bottomNavViewBar)
-		var adapter = SeasonEpisodeListAdapter(this,null,season.episodes,applicationContext)
+		val adapter = SeasonEpisodeListAdapter(this,null,season.episodes,applicationContext)
 		episodes_list.adapter = adapter
 
 		episodes_list.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
@@ -109,25 +107,23 @@ class SeasonActivity : AppCompatActivity() {
 		watched_box!!.setOnCheckedChangeListener { _, isChecked ->
 			Log.d(TAG,id.toString())
 			if (user!!.inLists(id!!)){
-				var season1 = getShow()!!.seasons!![season.seasonNumber]
+				val season1 = getShow()!!.seasons!![season.seasonNumber]
 
 				season1.watched = isChecked
 
 				AlertDialog.Builder(this)
 						.setTitle("Watched Season?")
 						.setMessage("Do you want to set all this seasons episodes to watched?")
-						.setPositiveButton(android.R.string.yes,
-								DialogInterface.OnClickListener { _, _ ->
-									season1.episodes.forEach { it.watched = isChecked }
-									user =DatabaseHandler(applicationContext).update(user!!)
-									Toast.makeText(applicationContext,"Season and episodes Updated",Toast.LENGTH_SHORT).show()
-								}
+						.setPositiveButton(android.R.string.yes, { _, _ ->
+							season1.episodes.forEach { it.watched = isChecked }
+							user =DatabaseHandler(applicationContext).update(user!!)
+							Toast.makeText(applicationContext,"Season and episodes Updated",Toast.LENGTH_SHORT).show()
+						}
 						)
-						.setNegativeButton(android.R.string.no,
-								DialogInterface.OnClickListener { _, _ ->
-									user =DatabaseHandler(applicationContext).update(user!!)
-									Toast.makeText(applicationContext,"Season Updated",Toast.LENGTH_SHORT).show()
-								}
+						.setNegativeButton(android.R.string.no, { _, _ ->
+							user =DatabaseHandler(applicationContext).update(user!!)
+							Toast.makeText(applicationContext,"Season Updated",Toast.LENGTH_SHORT).show()
+						}
 						)
 						.show()
 			}else{
@@ -143,7 +139,7 @@ class SeasonActivity : AppCompatActivity() {
 	 * @return TVSeasonInfo object
 	 */
 	fun getSeasonInfo(id: Int):TVSeasonInfo{
-		var season: TVSeasonBasic = Gson().fromJson(intent.getStringExtra("Season"))
+		val season: TVSeasonBasic = Gson().fromJson(intent.getStringExtra("Season"))
 		return Async!!.getSeasonAsync(season.seasonNumber,id)
 	}
 

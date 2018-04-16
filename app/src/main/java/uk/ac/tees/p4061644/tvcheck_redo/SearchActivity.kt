@@ -53,8 +53,8 @@ class SearchActivity : AppCompatActivity(){
 		if (intent.extras.get("List") != null){
 			search_button.visibility = View.GONE
 			search_text_field . visibility = View.GONE
-			var list = Async!!.getUserList(user!!.getList(intent.getStringExtra("List"))!!.list!!)
-			var adapter = SearchListAdapter(this,list,applicationContext)
+			val list = Async!!.getUserList(user!!.getList(intent.getStringExtra("List"))!!.list!!)
+			val adapter = SearchListAdapter(this,list,applicationContext)
 			castList_lv.adapter = adapter
 		}
 		castList_lv.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
@@ -84,8 +84,8 @@ class SearchActivity : AppCompatActivity(){
 	 * Is called when the search button is pressed. Performs the search and sets the adapter to the search result list.
 	 */
 	fun search(term: String){
-		var results = Async!!.searchShows(term)
-		var adapter = SearchListAdapter(this,results,applicationContext)
+		val results = Async!!.searchShows(term)
+		val adapter = SearchListAdapter(this,results,applicationContext)
 		castList_lv.adapter = adapter
 		adapter.notifyDataSetChanged()
 	}

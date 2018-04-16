@@ -101,7 +101,7 @@
             android:textColor="?attr/colorAccent"/>
 
         <Button
-            android:text="Cast"
+            android:text="@string/Cast"
             android:layout_width="match_parent"
             android:id="@+id/cast_btn"
             android:layout_height="wrap_content"
@@ -127,7 +127,6 @@
             android:id="@+id/similar_recycler"/>
 
         <TextView
-            android:text="TextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/Bio_TV"

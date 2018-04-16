@@ -1,6 +1,5 @@
 package uk.ac.tees.p4061644.tvcheck_redo.Adapters
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.support.v7.widget.RecyclerView
@@ -52,7 +51,7 @@ class RecyclerHomeViewAdapter(private val context: Context, private val shows: A
 	 * @param [position] The position in the list that information will be retrieved
 	 */
 	override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
-		var show = shows[position]
+		val show = shows[position]
 		Picasso.with(context).load(context.getString(R.string.base_address_w500) + show.posterPath)
 				.placeholder(R.drawable.ic_default_search_image)
 				.into(holder!!.imgView)

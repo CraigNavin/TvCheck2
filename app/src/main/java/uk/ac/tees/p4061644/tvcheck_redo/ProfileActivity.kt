@@ -1,8 +1,8 @@
 package uk.ac.tees.p4061644.tvcheck_redo
 
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -10,12 +10,10 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx
+import kotlinx.android.synthetic.main.activity_profile.*
+import kotlinx.android.synthetic.main.layout_bottom_navigation_view.*
 import uk.ac.tees.p4061644.tvcheck_redo.models.User
 import uk.ac.tees.p4061644.tvcheck_redo.utils.BottomNavigationBarHelper
-import kotlinx.android.synthetic.main.activity_profile.*
-import kotlinx.android.synthetic.main.activity_search.*
-import kotlinx.android.synthetic.main.layout_bottom_navigation_view.*
 import uk.ac.tees.p4061644.tvcheck_redo.utils.DatabaseHandler
 
 class ProfileActivity : AppCompatActivity() {
@@ -29,8 +27,6 @@ class ProfileActivity : AppCompatActivity() {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_profile)
 		setup()
-
-		Log.d("USERGSONCHECK",user!!.UserID)
 	}
 
 	/**
@@ -47,7 +43,7 @@ class ProfileActivity : AppCompatActivity() {
 	 * populates the view elements on this activity with the correct information
 	 */
 	fun setView(){
-		var name_list = user!!.getListNames()
+		val name_list = user!!.getListNames()
 
 		List_LV.adapter = ArrayAdapter<String>(applicationContext,R.layout.mytextview,name_list)
 		List_LV.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
@@ -78,6 +74,6 @@ class ProfileActivity : AppCompatActivity() {
 		BottomNavigationBarHelper.enableNavigation(applicationContext, bottomNavViewBar,Gson().toJson(user))
 		val menu: Menu? = bottomNavViewBar.menu
 		val menuI: MenuItem? = menu?.getItem(activity_Num)
-		menuI?.setChecked(true)
+		menuI?.isChecked = true
 	}
 }

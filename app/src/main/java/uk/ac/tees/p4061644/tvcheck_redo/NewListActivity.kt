@@ -81,6 +81,6 @@ class NewListActivity : AppCompatActivity() {
 		BottomNavigationBarHelper.enableNavigation(applicationContext, bottomNavViewBar,Gson().toJson(user))
 		val menu: Menu? = bottomNavViewBar.menu
 		val menuI: MenuItem? = menu?.getItem(activity_Num)
-		menuI?.setChecked(true)
+		menuI?.isChecked = true
 	}
 }

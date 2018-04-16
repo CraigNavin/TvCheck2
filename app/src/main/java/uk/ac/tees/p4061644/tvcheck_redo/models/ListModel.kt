@@ -9,9 +9,6 @@ class ListModel (name: String){
 	var name : String
 	var list : ArrayList<Show>? = ArrayList<Show>()
 
-	constructor(name : String, list : ArrayList<Show>) : this(name){
-		this.list =list
-	}
 	init{
 		this.name = name
 	}

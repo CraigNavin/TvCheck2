@@ -44,7 +44,7 @@ class CrewListActivity : AppCompatActivity() {
 	 * Populates the elements of the view with data of list of cast
 	 */
 	fun setView(){
-		var adapter = CastAdapter(this,castList!!.toList(),applicationContext)
+		val adapter = CastAdapter(this,castList!!.toList(),applicationContext)
 		castof_txt.text = "Core cast of " + intent.getStringExtra("showName")
 		castList_lv.adapter = adapter
 		castList_lv.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
@@ -73,6 +73,6 @@ class CrewListActivity : AppCompatActivity() {
 		BottomNavigationBarHelper.enableNavigation(applicationContext, bottomNavViewBar, Gson().toJson(user))
 		val menu: Menu? = bottomNavViewBar.menu
 		val menuI: MenuItem? = menu?.getItem(activity_Num)
-		menuI?.setChecked(true)
+		menuI?.isChecked = true
 	}
 }

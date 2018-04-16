@@ -23,7 +23,6 @@
             android:id="@+id/season_num"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Name"
             android:textStyle="bold"
             android:textSize="28dp"
             android:textAlignment="gravity"
@@ -33,7 +32,6 @@
             android:id="@+id/episodes_count"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="comment"
             android:textSize="18dp"
             android:textColor="?android:attr/textColorTertiary"/>
 
