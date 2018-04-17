@@ -58,16 +58,17 @@ class SearchActivity : AppCompatActivity(){
 				val list = Async!!.getUserList(user!!.getList(intent.getStringExtra("List"))!!.list!!)
 				val adapter = SearchListAdapter(this,list,applicationContext)
 				castList_lv.adapter = adapter
-				castList_lv.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
-					val item = parent.getItemAtPosition(position) as String
-					val intent = Intent(applicationContext,ShowActivity::class.java)//activity_Num 1
-					intent.putExtra("Show",item)
-					intent.putExtra("User",Gson().toJson(user))
-					applicationContext.startActivity(intent)
-				}
 			}catch (e : Exception){
 				Toast.makeText(applicationContext,e.message,Toast.LENGTH_SHORT).show()
 			}
+		}
+
+		castList_lv.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
+			val item = parent.getItemAtPosition(position) as String
+			val intent = Intent(applicationContext,ShowActivity::class.java)//activity_Num 1
+			intent.putExtra("Show",item)
+			intent.putExtra("User",Gson().toJson(user))
+			applicationContext.startActivity(intent)
 		}
 		search_button.setOnClickListener({
 			when(it!!.id){
@@ -91,12 +92,12 @@ class SearchActivity : AppCompatActivity(){
 		var results : ArrayList<TVBasic> = ArrayList()
 		try{
 			results.addAll(Async!!.searchShows(term)!!)
+			val adapter = SearchListAdapter(this,results,applicationContext)
+			castList_lv.adapter = adapter
+			adapter.notifyDataSetChanged()
 		}catch (e : Exception){
 			Toast.makeText(applicationContext,e.message,Toast.LENGTH_SHORT).show()
 		}
-		val adapter = SearchListAdapter(this,results,applicationContext)
-		castList_lv.adapter = adapter
-		adapter.notifyDataSetChanged()
 	}
 
 	/**
