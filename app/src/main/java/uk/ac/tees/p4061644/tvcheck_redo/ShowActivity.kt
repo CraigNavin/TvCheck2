@@ -60,10 +60,10 @@ class ShowActivity : AppCompatActivity() {
 	 */
 	fun setupFloatBtn(){
 		registerForContextMenu(save_float_btn)
+		save_float_btn.isLongClickable = false
 		save_float_btn.setOnClickListener {
 			if (!user!!.inLists(basic!!.id)){
 				openContextMenu(save_float_btn)
-				save_float_btn.setImageDrawable(getDrawable(R.drawable.ic_love))
 			}else{
 				AlertDialog.Builder(this)
 						.setTitle("Confirm Remove")
@@ -267,6 +267,7 @@ class ShowActivity : AppCompatActivity() {
 				chosenList.list!!.add(converter!!.convert(show!!))
 				DatabaseHandler(applicationContext).update(user!!)
 				save_progress_bar.visibility = View.GONE
+				save_float_btn.setImageDrawable(getDrawable(R.drawable.ic_love))
 				Toast.makeText(applicationContext,show!!.name + " added to list " + chosenList.name,Toast.LENGTH_SHORT).show()
 			}
 		}else{
