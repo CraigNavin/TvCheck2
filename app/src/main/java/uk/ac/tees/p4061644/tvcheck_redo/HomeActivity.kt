@@ -16,12 +16,14 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.layout_bottom_navigation_view.*
 import uk.ac.tees.p4061644.tvcheck_redo.Adapters.RecyclerHomeViewAdapter
+import uk.ac.tees.p4061644.tvcheck_redo.models.ListModel
 import uk.ac.tees.p4061644.tvcheck_redo.models.Show
 import uk.ac.tees.p4061644.tvcheck_redo.models.User
 import uk.ac.tees.p4061644.tvcheck_redo.utils.AsyncTasker
 import uk.ac.tees.p4061644.tvcheck_redo.utils.BottomNavigationBarHelper
 import uk.ac.tees.p4061644.tvcheck_redo.utils.DatabaseHandler
 import java.util.*
+import kotlin.collections.ArrayList
 
 class HomeActivity : Activity(){
 
@@ -65,10 +67,14 @@ class HomeActivity : Activity(){
 		val popular = Async!!.fillhome(1,null)!!
 		val topRated = Async!!.fillhome(2,null)!!
 		val tvInfo : TVInfo?
-		val similar : ArrayList<TVBasic>?
+		val similar : ArrayList<TVBasic> = ArrayList()
 		if (!user!!.list!!.any{ it.list!!.count() == 0}){
-			val show :Show = getRandomShowFromLists()
-			similar = Async!!.fillhome(3,show.id)!!
+			do {
+				var show :Show = getRandomShowFromLists()
+				Log.d(TAG,show.id.toString())
+				similar.addAll(Async!!.fillhome(3,show.id)!!)
+				Log.d(TAG,similar.isEmpty().toString())
+			}while(similar.isEmpty())
 			tvInfo = Async!!.getShowInfoAsync(similar[Random().nextInt(similar.size)].id)
 			Name_txt.text = tvInfo.name
 			OverView_txt.text = tvInfo.overview
@@ -113,9 +119,15 @@ class HomeActivity : Activity(){
 	 * @return Show object to be used to get similar Shows from API
 	 */
 	fun getRandomShowFromLists():Show{
-		val listindex = Random().nextInt(user!!.list!!.size)
-		val showindex = Random().nextInt(user!!.list!![listindex].list!!.size)
-		return user!!.list!![listindex].list!![showindex]
+		val nonEmpty : ArrayList<ListModel> = ArrayList()
+		user!!.list!!.forEach {
+			if (it.list!!.isNotEmpty()){
+				nonEmpty.add(it)
+			}
+		}
+		val listindex = Random().nextInt(nonEmpty.size)
+		val showindex = Random().nextInt(nonEmpty[listindex].list!!.size)
+		return nonEmpty[listindex].list!![showindex]
 	}
 
 	/**
