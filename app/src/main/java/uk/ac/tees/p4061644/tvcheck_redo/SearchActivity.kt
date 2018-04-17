@@ -13,6 +13,7 @@ import android.widget.AdapterView
 import android.widget.Toast
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.omertron.themoviedbapi.model.tv.TVBasic
 import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.android.synthetic.main.layout_bottom_navigation_view.*
 import uk.ac.tees.p4061644.tvcheck_redo.models.User
@@ -52,19 +53,22 @@ class SearchActivity : AppCompatActivity(){
 	fun setView(){
 		if (intent.extras.get("List") != null){
 			search_button.visibility = View.GONE
-			search_text_field . visibility = View.GONE
-			val list = Async!!.getUserList(user!!.getList(intent.getStringExtra("List"))!!.list!!)
-			val adapter = SearchListAdapter(this,list,applicationContext)
-			castList_lv.adapter = adapter
+			search_text_field.visibility = View.GONE
+			try{
+				val list = Async!!.getUserList(user!!.getList(intent.getStringExtra("List"))!!.list!!)
+				val adapter = SearchListAdapter(this,list,applicationContext)
+				castList_lv.adapter = adapter
+				castList_lv.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
+					val item = parent.getItemAtPosition(position) as String
+					val intent = Intent(applicationContext,ShowActivity::class.java)//activity_Num 1
+					intent.putExtra("Show",item)
+					intent.putExtra("User",Gson().toJson(user))
+					applicationContext.startActivity(intent)
+				}
+			}catch (e : Exception){
+				Toast.makeText(applicationContext,e.message,Toast.LENGTH_SHORT).show()
+			}
 		}
-		castList_lv.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
-			val item = parent.getItemAtPosition(position) as String
-			val intent = Intent(applicationContext,ShowActivity::class.java)//activity_Num 1
-			intent.putExtra("Show",item)
-			intent.putExtra("User",Gson().toJson(user))
-			applicationContext.startActivity(intent)
-		}
-
 		search_button.setOnClickListener({
 			when(it!!.id){
 				R.id.search_button -> if (search_text_field.text.toString() == ""){
@@ -84,7 +88,12 @@ class SearchActivity : AppCompatActivity(){
 	 * Is called when the search button is pressed. Performs the search and sets the adapter to the search result list.
 	 */
 	fun search(term: String){
-		val results = Async!!.searchShows(term)
+		var results : ArrayList<TVBasic> = ArrayList()
+		try{
+			results.addAll(Async!!.searchShows(term)!!)
+		}catch (e : Exception){
+			Toast.makeText(applicationContext,e.message,Toast.LENGTH_SHORT).show()
+		}
 		val adapter = SearchListAdapter(this,results,applicationContext)
 		castList_lv.adapter = adapter
 		adapter.notifyDataSetChanged()

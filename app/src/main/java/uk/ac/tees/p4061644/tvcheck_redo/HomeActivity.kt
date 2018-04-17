@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.omertron.themoviedbapi.model.tv.TVBasic
@@ -64,32 +65,52 @@ class HomeActivity : Activity(){
 	fun setView(){
 		val poplayoutManager = LinearLayoutManager (this,LinearLayoutManager.HORIZONTAL,false)
 		val toplayoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
-		val popular = Async!!.fillhome(1,null)!!
-		val topRated = Async!!.fillhome(2,null)!!
-		val tvInfo : TVInfo?
+		var popular: ArrayList<TVBasic> = ArrayList()
+		var topRated: ArrayList<TVBasic> = ArrayList()
+		try{
+			popular.addAll(Async!!.fillhome(1,null)!!)
+			topRated.addAll(Async!!.fillhome(2,null)!!)
+		}catch (e: Exception){
+			Toast.makeText(applicationContext,e.message,Toast.LENGTH_SHORT).show()
+		}
+
+		var tvInfo : TVInfo? = null
 		val similar : ArrayList<TVBasic> = ArrayList()
-		if (!user!!.list!!.any{ it.list!!.count() == 0}){
+		var show : Show = getRandomShowFromLists()!!
+		if (show == null) {
+			HideSimilar()
+		}else{
 			do {
-				var show :Show = getRandomShowFromLists()
 				Log.d(TAG,show.id.toString())
-				similar.addAll(Async!!.fillhome(3,show.id)!!)
+				try{
+					similar.addAll(Async!!.fillhome(3,show.id)!!)
+				}catch(e : Exception){
+					Toast.makeText(applicationContext,e.message,Toast.LENGTH_SHORT).show()
+				}
+				if (similar.isEmpty()){
+					show = getRandomShowFromLists()!!
+				}
 				Log.d(TAG,similar.isEmpty().toString())
 			}while(similar.isEmpty())
-			tvInfo = Async!!.getShowInfoAsync(similar[Random().nextInt(similar.size)].id)
-			Name_txt.text = tvInfo.name
-			OverView_txt.text = tvInfo.overview
-			Picasso.with(applicationContext).load(getString(R.string.base_address_w185) + tvInfo.posterPath)
-					.placeholder(R.drawable.ic_default_search_image)
-					.into(img_view)
-			relLayout2.setOnClickListener {
-				val intent = Intent(applicationContext,ShowActivity::class.java)
-				intent.putExtra("Show",Gson().toJson(tvInfo))
-				intent.putExtra("User",Gson().toJson(user))
-				applicationContext.startActivity(intent)
 
+			try{
+				tvInfo = Async!!.getShowInfoAsync(similar[Random().nextInt(similar.size)].id)
+				Name_txt.text = tvInfo!!.name
+				OverView_txt.text = tvInfo!!.overview
+				Picasso.with(applicationContext).load(getString(R.string.base_address_w185) + tvInfo.posterPath)
+						.placeholder(R.drawable.ic_default_search_image)
+						.into(img_view)
+				relLayout2.setOnClickListener {
+					val intent = Intent(applicationContext,ShowActivity::class.java)
+					intent.putExtra("Show",Gson().toJson(tvInfo))
+					intent.putExtra("User",Gson().toJson(user))
+					applicationContext.startActivity(intent)
+
+				}
+			}catch (e: Exception){
+				Toast.makeText(applicationContext,e.message,Toast.LENGTH_SHORT).show()
+				Name_txt.text = "Invalid Result"
 			}
-		}else{
-			HideSimilar()
 		}
 
 		recycle_popular.apply {
@@ -115,15 +136,18 @@ class HomeActivity : Activity(){
 	}
 
 	/**
-	 * Retrieves a random show from the users lists
+	 * Gathers all non empty lists of the user and selects a random show from them. If all list are empty, returns null
 	 * @return Show object to be used to get similar Shows from API
 	 */
-	fun getRandomShowFromLists():Show{
+	fun getRandomShowFromLists():Show?{
 		val nonEmpty : ArrayList<ListModel> = ArrayList()
 		user!!.list!!.forEach {
 			if (it.list!!.isNotEmpty()){
 				nonEmpty.add(it)
 			}
+		}
+		if (nonEmpty.isEmpty()){
+			return null
 		}
 		val listindex = Random().nextInt(nonEmpty.size)
 		val showindex = Random().nextInt(nonEmpty[listindex].list!!.size)

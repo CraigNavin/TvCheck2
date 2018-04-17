@@ -138,9 +138,14 @@ class SeasonActivity : AppCompatActivity() {
 	 * @param [id] id of current chosen tv show
 	 * @return TVSeasonInfo object
 	 */
-	fun getSeasonInfo(id: Int):TVSeasonInfo{
+	fun getSeasonInfo(id: Int):TVSeasonInfo?{
 		val season: TVSeasonBasic = Gson().fromJson(intent.getStringExtra("Season"))
-		return Async!!.getSeasonAsync(season.seasonNumber,id)
+		try{
+			return Async!!.getSeasonAsync(season.seasonNumber,id)
+		}catch (e : Exception){
+			Toast.makeText(applicationContext,e.message,Toast.LENGTH_SHORT).show()
+			return null
+		}
 	}
 
 	/**
@@ -150,7 +155,7 @@ class SeasonActivity : AppCompatActivity() {
 		Async = AsyncTasker(applicationContext)
 		id = intent.extras.get("TVID") as Int
 		user = Gson().fromJson(intent.getStringExtra("User"))
-		setView(getSeasonInfo(id!!))
+		setView(getSeasonInfo(id!!)!!)
 		setupBottomnavigatioView()
 	}
 

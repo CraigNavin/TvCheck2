@@ -140,7 +140,13 @@ class ShowActivity : AppCompatActivity() {
 			intent.putExtra("TVID",show!!.id)
 			applicationContext.startActivity(intent)
 		}
-		var similar = Async!!.fillhome(3,show!!.id)!!
+		var similar: ArrayList<TVBasic> = ArrayList()
+
+		try{
+			similar.addAll(Async!!.fillhome(3,show!!.id)!!)
+		}catch(e: Exception){
+			Toast.makeText(applicationContext,e.message,Toast.LENGTH_SHORT).show()
+		}
 
 		if(similar.isNotEmpty()){
 			similar_recycler.apply {
@@ -158,53 +164,59 @@ class ShowActivity : AppCompatActivity() {
 	 * methods that set up parts of the activity
 	 *
 	 */
-	fun setView(){
-		show = Async!!.getShowInfoAsync(basic!!.id)
-		Name_TV!!.text = show!!.name
+	fun setView() {
+		try {
+			show = Async!!.getShowInfoAsync(basic!!.id)
+			Name_TV!!.text = show!!.name
+			vote_tv.text = show!!.voteAverage.toString() + "(" + show!!.voteCount + ")"
 
-		vote_tv.text = show!!.voteAverage.toString() + "(" + show!!.voteCount + ")"
-		if (show!!.overview.isNullOrEmpty()){
-			Bio_TV!!.text = "No Overview"
-		}else{
-			Bio_TV!!.text = show!!.overview
-			Bio_TV.setOnClickListener {
-				val intent  = Intent(applicationContext,ReadMoreActivity::class.java)
-				intent.putExtra("ReadMore",show!!.overview)
-				startActivity(intent)
+
+			if (show!!.overview.isNullOrEmpty()) {
+				Bio_TV!!.text = "No Overview"
+			}
+			else {
+				Bio_TV!!.text = show!!.overview
+				Bio_TV.setOnClickListener {
+					val intent = Intent(applicationContext, ReadMoreActivity::class.java)
+					intent.putExtra("ReadMore", show!!.overview)
+					startActivity(intent)
+				}
+
 			}
 
-		}
 
-
-		if (getShow() != null){
-			watched_box.isChecked = getShow()!!.watched
-		}
-		Picasso.with(applicationContext).load(applicationContext.getString(R.string.base_address_w185) + show!!.posterPath)
-				.placeholder(R.drawable.ic_default_search_image)
-				.into(PosterView)
-
-		bottomNavViewBar.bringToFront()
-		similar_recycler.invalidate()
-
-		save_progress_bar.visibility = View.GONE
-
-
-		for (list in user!!.list!!){
-			if (user!!.checkListContainsShow(basic!!.id,list.name)){
-				save_float_btn.setImageDrawable(getDrawable(R.drawable.ic_love))
-				break
-			}else{
-				save_float_btn.setImageDrawable(getDrawable(R.drawable.ic_addlist_icon))
+			if (getShow() != null) {
+				watched_box.isChecked = getShow()!!.watched
 			}
-		}
+			Picasso.with(applicationContext).load(applicationContext.getString(R.string.base_address_w185) + show!!.posterPath).placeholder(R.drawable.ic_default_search_image).into(PosterView)
 
-		cast_btn.setOnClickListener {
-			val intent = Intent(applicationContext,CrewListActivity::class.java)
-			intent.putExtra("User",Gson().toJson(user))
-			intent.putExtra("showName",show!!.name)
-			intent.putExtra("CastList", Gson().toJson(show!!.credits.cast))
-			applicationContext.startActivity(intent)
+			bottomNavViewBar.bringToFront()
+			similar_recycler.invalidate()
 
+			save_progress_bar.visibility = View.GONE
+
+
+			for (list in user!!.list!!) {
+				if (user!!.checkListContainsShow(basic!!.id, list.name)) {
+					save_float_btn.setImageDrawable(getDrawable(R.drawable.ic_love))
+					break
+				}
+				else {
+					save_float_btn.setImageDrawable(getDrawable(R.drawable.ic_addlist_icon))
+				}
+			}
+
+			cast_btn.setOnClickListener {
+				val intent = Intent(applicationContext, CrewListActivity::class.java)
+				intent.putExtra("User", Gson().toJson(user))
+				intent.putExtra("showName", show!!.name)
+				intent.putExtra("CastList", Gson().toJson(show!!.credits.cast))
+				applicationContext.startActivity(intent)
+
+			}
+		}catch (e : Exception){
+			Toast.makeText(applicationContext,e.message,Toast.LENGTH_SHORT).show()
+			Name_TV!!.text = "Invalid Return"
 		}
 
 		setupFloatBtn()
