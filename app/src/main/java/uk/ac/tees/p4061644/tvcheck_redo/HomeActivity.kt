@@ -74,16 +74,16 @@ class HomeActivity : Activity(){
 			Toast.makeText(applicationContext,e.message,Toast.LENGTH_SHORT).show()
 		}
 
-		var tvInfo : TVInfo? = null
+		var tvInfo : TVInfo?
 		val similar : ArrayList<TVBasic> = ArrayList()
-		var show : Show = getRandomShowFromLists()!!
+		var show : Show? = getRandomShowFromLists()
 		if (show == null) {
 			HideSimilar()
 		}else{
 			do {
-				Log.d(TAG,show.id.toString())
+				Log.d(TAG,show!!.id.toString())
 				try{
-					similar.addAll(Async!!.fillhome(3,show.id)!!)
+					similar.addAll(Async!!.fillhome(3,show!!.id)!!)
 				}catch(e : Exception){
 					Toast.makeText(applicationContext,e.message,Toast.LENGTH_SHORT).show()
 				}
@@ -95,8 +95,8 @@ class HomeActivity : Activity(){
 
 			try{
 				tvInfo = Async!!.getShowInfoAsync(similar[Random().nextInt(similar.size)].id)
-				Name_txt.text = tvInfo!!.name
-				OverView_txt.text = tvInfo!!.overview
+				Name_txt.text = tvInfo.name
+				OverView_txt.text = tvInfo.overview
 				Picasso.with(applicationContext).load(getString(R.string.base_address_w185) + tvInfo.posterPath)
 						.placeholder(R.drawable.ic_default_search_image)
 						.into(img_view)
