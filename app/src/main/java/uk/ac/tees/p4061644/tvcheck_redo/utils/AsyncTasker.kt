@@ -198,7 +198,9 @@ class AsyncTasker(context: Context) {
 	}
 
 	/**
-	 *
+	 * Class used to info of a person using id parameter
+	 * @param [id] required Integer that is used to retrieve info relating to the persons ID
+	 * @constructor Creates a getPersonTask object that performs its methods on a background thread
 	 */
 	internal inner class getPersonTask constructor(val id: Int) :AsyncTask<Void,Void,PersonInfo>(){
 		private var api: TheMovieDbApi? = this@AsyncTasker.api
