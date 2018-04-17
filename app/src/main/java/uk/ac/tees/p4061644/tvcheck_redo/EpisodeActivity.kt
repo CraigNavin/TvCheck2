@@ -113,7 +113,7 @@ class EpisodeActivity : AppCompatActivity() {
 	private fun setupBottomnavigatioView(){
 		Log.d(TAG,"setupBottomNavigationView")
 		BottomNavigationBarHelper.setupBottomNavigationBar(bottomNavViewBar)
-		BottomNavigationBarHelper.enableNavigation(applicationContext, bottomNavViewBar,Gson().toJson(user))
+		BottomNavigationBarHelper.enableNavigation(applicationContext, bottomNavViewBar,Gson().toJson(user),3)
 		val menu: Menu? = bottomNavViewBar?.menu
 		val menuI: MenuItem? = menu?.getItem(activity_Num)
 		menuI?.isChecked = true
