@@ -140,12 +140,16 @@ class ShowActivity : AppCompatActivity() {
 			intent.putExtra("TVID",show!!.id)
 			applicationContext.startActivity(intent)
 		}
+		var similar = Async!!.fillhome(3,show!!.id)!!
 
-		similar_recycler.apply {
-			layoutManager = simlayoutManager
-			setAdapter(RecyclerHomeViewAdapter(applicationContext,Async!!.fillhome(3,show!!.id)!!,user!!,2))
+		if(similar.isNotEmpty()){
+			similar_recycler.apply {
+				layoutManager = simlayoutManager
+				setAdapter(RecyclerHomeViewAdapter(applicationContext,similar,user!!,2))
+			}
+		}else{
+			AlsoLike_TV.text = "No Similar Shows"
 		}
-
 		adapter.notifyDataSetChanged()
 	}
 

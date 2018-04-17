@@ -197,6 +197,9 @@ class AsyncTasker(context: Context) {
 		}
 	}
 
+	/**
+	 *
+	 */
 	internal inner class getPersonTask constructor(val id: Int) :AsyncTask<Void,Void,PersonInfo>(){
 		private var api: TheMovieDbApi? = this@AsyncTasker.api
 
