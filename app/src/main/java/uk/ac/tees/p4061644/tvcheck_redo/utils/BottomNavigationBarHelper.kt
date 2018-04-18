@@ -35,7 +35,7 @@ object BottomNavigationBarHelper {
 	 * @param [viewEx] The navigation bar that is going to be assigned activity navigation
 	 * @param [User] A Json string of the user that is going to be passed to each activity for access across the application.
 	 */
-	fun enableNavigation(context: Context, viewEx: BottomNavigationViewEx?, User: String, current_activity: Int) {
+	fun enableNavigation(context: Context, viewEx: BottomNavigationViewEx?, User: String, current_activity: Int,activity: Activity) {
 		viewEx?.onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
 			var intent : Intent? = null
 			var pressedInt = 0
@@ -59,6 +59,7 @@ object BottomNavigationBarHelper {
 				intent!!.putExtra("User", User)
 				context.startActivity(intent)
 				Runtime.getRuntime().gc()
+				activity.finish()
 			}
 			false
 		}

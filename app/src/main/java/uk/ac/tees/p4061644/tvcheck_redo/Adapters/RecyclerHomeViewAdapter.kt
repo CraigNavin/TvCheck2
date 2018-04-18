@@ -11,6 +11,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.google.gson.Gson
 import com.omertron.themoviedbapi.model.tv.TVBasic
+import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.Picasso
 import uk.ac.tees.p4061644.tvcheck_redo.R
 import uk.ac.tees.p4061644.tvcheck_redo.ShowActivity
@@ -52,7 +53,7 @@ class RecyclerHomeViewAdapter(private val context: Context, private val shows: A
 	 */
 	override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
 		val show = shows[position]
-		Picasso.with(context).load(context.getString(R.string.base_address_w500) + show.posterPath)
+		Picasso.with(context).load(context.getString(R.string.base_address_w500) + show.posterPath).memoryPolicy(MemoryPolicy.NO_STORE).memoryPolicy(MemoryPolicy.NO_CACHE)
 				.placeholder(R.drawable.ic_default_search_image)
 				.into(holder!!.imgView)
 		holder.showName!!.text = show.name

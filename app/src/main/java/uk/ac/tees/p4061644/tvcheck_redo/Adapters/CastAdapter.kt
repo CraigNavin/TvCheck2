@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.google.gson.Gson
 import com.omertron.themoviedbapi.model.credits.MediaCreditCast
+import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.Picasso
 import uk.ac.tees.p4061644.tvcheck_redo.R
 
@@ -56,7 +57,7 @@ class CastAdapter (private var activity: Activity,private var cast:List<MediaCre
 		holder.txtName!!.text = castMember.name
 		holder.txtEpisodes!!.text = castMember.character
 
-		Picasso.with(context).load(context.getString(R.string.base_address_w185) + castMember.artworkPath)
+		Picasso.with(context).load(context.getString(R.string.base_address_w185) + castMember.artworkPath).memoryPolicy(MemoryPolicy.NO_STORE).memoryPolicy(MemoryPolicy.NO_CACHE)
 				.placeholder(R.drawable.ic_default_search_image)
 				.into(holder.image)
 		return holder

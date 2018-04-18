@@ -10,6 +10,7 @@ import android.widget.Toast
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.omertron.themoviedbapi.model.tv.TVEpisodeInfo
+import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_episode.*
 import kotlinx.android.synthetic.main.layout_bottom_navigation_view.*
@@ -75,7 +76,7 @@ class EpisodeActivity : AppCompatActivity() {
 				}
 			}
 			/* Retrives the image from path provided and inserts it in to imageView */
-			Picasso.with(applicationContext).load(applicationContext.getString(R.string.base_address_original) + episode!!.stillPath)
+			Picasso.with(applicationContext).load(applicationContext.getString(R.string.base_address_original) + episode!!.stillPath).memoryPolicy(MemoryPolicy.NO_STORE).memoryPolicy(MemoryPolicy.NO_CACHE)
 					.placeholder(R.drawable.ic_default_search_image)
 					.fit()
 					.into(PosterView)
@@ -125,7 +126,7 @@ class EpisodeActivity : AppCompatActivity() {
 	private fun setupBottomnavigatioView(){
 		Log.d(TAG,"setupBottomNavigationView")
 		BottomNavigationBarHelper.setupBottomNavigationBar(bottomNavViewBar)
-		BottomNavigationBarHelper.enableNavigation(applicationContext, bottomNavViewBar,Gson().toJson(user),3)
+		BottomNavigationBarHelper.enableNavigation(applicationContext, bottomNavViewBar,Gson().toJson(user),3,this)
 		val menu: Menu? = bottomNavViewBar?.menu
 		val menuI: MenuItem? = menu?.getItem(activity_Num)
 		menuI?.isChecked = true

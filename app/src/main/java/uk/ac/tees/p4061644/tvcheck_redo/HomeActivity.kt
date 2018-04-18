@@ -12,6 +12,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.omertron.themoviedbapi.model.tv.TVBasic
 import com.omertron.themoviedbapi.model.tv.TVInfo
+import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.layout_bottom_navigation_view.*
@@ -87,7 +88,7 @@ class HomeActivity : Activity(){
 			tvInfo = Async!!.getShowInfoAsync(similar[Random().nextInt(similar.size)].id)
 			Name_txt.text = tvInfo!!.name
 			OverView_txt.text = tvInfo.overview
-			Picasso.with(applicationContext).load(getString(R.string.base_address_w185) + tvInfo.posterPath)
+			Picasso.with(applicationContext).load(getString(R.string.base_address_w185) + tvInfo.posterPath).memoryPolicy(MemoryPolicy.NO_STORE).memoryPolicy(MemoryPolicy.NO_CACHE)
 					.placeholder(R.drawable.ic_default_search_image)
 					.into(img_view)
 			relLayout2.setOnClickListener {
@@ -147,7 +148,7 @@ class HomeActivity : Activity(){
 	private fun setupBottomnavigatioView(){
 		Log.d(TAG,"setupBottomNavigationView")
 		BottomNavigationBarHelper.setupBottomNavigationBar(bottomNavViewBar)
-		BottomNavigationBarHelper.enableNavigation(applicationContext, bottomNavViewBar,Gson().toJson(user),activity_Num)
+		BottomNavigationBarHelper.enableNavigation(applicationContext, bottomNavViewBar,Gson().toJson(user),activity_Num,this)
 		val menu: Menu? = bottomNavViewBar.menu
 		val menuI: MenuItem? = menu?.getItem(activity_Num)
 		menuI?.isChecked = true

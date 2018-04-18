@@ -17,6 +17,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.omertron.themoviedbapi.model.tv.TVBasic
 import com.omertron.themoviedbapi.model.tv.TVInfo
+import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_show.*
 import kotlinx.android.synthetic.main.layout_bottom_navigation_view.*
@@ -183,9 +184,10 @@ class ShowActivity : AppCompatActivity() {
 				if (getShow() != null) {
 					watched_box.isChecked = getShow()!!.watched
 				}
-				Picasso.with(applicationContext).load(applicationContext.getString(R.string.base_address_w185) + show!!.posterPath)
+				Picasso.with(applicationContext).load(applicationContext.getString(R.string.base_address_w185) + show!!.posterPath).memoryPolicy(MemoryPolicy.NO_STORE).memoryPolicy(MemoryPolicy.NO_CACHE)
 						.placeholder(R.drawable.ic_default_search_image)
 						.into(PosterView)
+
 
 				bottomNavViewBar.bringToFront()
 				similar_recycler.invalidate()
@@ -281,7 +283,7 @@ class ShowActivity : AppCompatActivity() {
 	private fun setupBottomnavigatioView(){
 		Log.d(TAG,"setupBottomNavigationView")
 		BottomNavigationBarHelper.setupBottomNavigationBar(bottomNavViewBar)
-		BottomNavigationBarHelper.enableNavigation(applicationContext, bottomNavViewBar,Gson().toJson(user),3)
+		BottomNavigationBarHelper.enableNavigation(applicationContext, bottomNavViewBar,Gson().toJson(user),3,this)
 		val menu: Menu? = bottomNavViewBar?.menu
 		val menuI: MenuItem? = menu?.getItem(activity_Num)
 		menuI?.isChecked = true

@@ -10,6 +10,7 @@ import android.widget.TextView
 import com.google.gson.Gson
 import com.omertron.themoviedbapi.model.tv.TVEpisodeInfo
 import com.omertron.themoviedbapi.model.tv.TVSeasonBasic
+import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.Picasso
 import uk.ac.tees.p4061644.tvcheck_redo.R
 
@@ -77,7 +78,7 @@ class SeasonEpisodeListAdapter(private var activity: Activity, private var seaso
 		holder.txtEpisodes!!.text = episodeCount
 
 		com.squareup.picasso.Picasso.with(context)
-				.load(context.resources.getString(uk.ac.tees.p4061644.tvcheck_redo.R.string.base_address_w185).toString() + TVSeasonBasic.posterPath)
+				.load(context.resources.getString(uk.ac.tees.p4061644.tvcheck_redo.R.string.base_address_w185).toString() + TVSeasonBasic.posterPath).memoryPolicy(MemoryPolicy.NO_STORE).memoryPolicy(MemoryPolicy.NO_CACHE)
 				.placeholder(R.drawable.ic_default_search_image)
 				.into(holder.image)
 		return holder
@@ -94,7 +95,7 @@ class SeasonEpisodeListAdapter(private var activity: Activity, private var seaso
 		holder.txtName!!.text = episode.name
 		holder.txtEpisodes!!.text = episode.airDate
 
-		Picasso.with(context).load(context.resources.getString(uk.ac.tees.p4061644.tvcheck_redo.R.string.base_address_w500).toString() + episode.stillPath)
+		Picasso.with(context).load(context.resources.getString(uk.ac.tees.p4061644.tvcheck_redo.R.string.base_address_w500).toString() + episode.stillPath).memoryPolicy(MemoryPolicy.NO_STORE).memoryPolicy(MemoryPolicy.NO_CACHE)
 				.placeholder(R.drawable.ic_default_search_image)
 				.into(holder.image)
 		return holder

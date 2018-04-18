@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.google.gson.Gson
 import com.omertron.themoviedbapi.model.tv.TVBasic
+import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.Picasso
 import uk.ac.tees.p4061644.tvcheck_redo.R
 
@@ -70,7 +71,7 @@ class SearchListAdapter(private var activity: Activity, private var results: Arr
 		val rating = "User Rating: " + TVBasic.voteAverage
 		holder.txtName!!.text = TVBasic.name
 		holder.txtComment!!.text = rating
-		Picasso.with(context).load(context.resources.getString(uk.ac.tees.p4061644.tvcheck_redo.R.string.base_address_w185).toString() + TVBasic.posterPath)
+		Picasso.with(context).load(context.resources.getString(uk.ac.tees.p4061644.tvcheck_redo.R.string.base_address_w185).toString() + TVBasic.posterPath).memoryPolicy(MemoryPolicy.NO_STORE).memoryPolicy(MemoryPolicy.NO_CACHE)
 				.placeholder(uk.ac.tees.p4061644.tvcheck_redo.R.drawable.ic_default_search_image)
 				.into(holder.imgView!!)
 		return holder
