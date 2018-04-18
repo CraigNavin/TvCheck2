@@ -8,7 +8,6 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.omertron.themoviedbapi.model.tv.TVBasic
@@ -65,16 +64,10 @@ class HomeActivity : Activity(){
 	fun setView(){
 		val poplayoutManager = LinearLayoutManager (this,LinearLayoutManager.HORIZONTAL,false)
 		val toplayoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
-		var popular: ArrayList<TVBasic> = ArrayList()
-		var topRated: ArrayList<TVBasic> = ArrayList()
-		try{
-			popular.addAll(Async!!.fillhome(1,null)!!)
-			topRated.addAll(Async!!.fillhome(2,null)!!)
-		}catch (e: Exception){
-			Toast.makeText(applicationContext,e.message,Toast.LENGTH_SHORT).show()
-		}
+		val popular: ArrayList<TVBasic> = ArrayList(Async!!.fillhome(1,null)!!)
+		val topRated: ArrayList<TVBasic> = ArrayList(Async!!.fillhome(2,null)!!)
 
-		var tvInfo : TVInfo?
+		val tvInfo : TVInfo?
 		val similar : ArrayList<TVBasic> = ArrayList()
 		var show : Show? = getRandomShowFromLists()
 		if (show == null) {
@@ -82,37 +75,31 @@ class HomeActivity : Activity(){
 		}else{
 			do {
 				Log.d(TAG,show!!.id.toString())
-				try{
-					similar.addAll(Async!!.fillhome(3,show!!.id)!!)
-				}catch(e : Exception){
-					Toast.makeText(applicationContext,e.message,Toast.LENGTH_SHORT).show()
-				}
+
+				similar.addAll(Async!!.fillhome(3,show.id)!!)
+
 				if (similar.isEmpty()){
-					show = getRandomShowFromLists()!!
+					show = getRandomShowFromLists()
 				}
 				Log.d(TAG,similar.isEmpty().toString())
 			}while(similar.isEmpty())
 
-			try{
-				tvInfo = Async!!.getShowInfoAsync(similar[Random().nextInt(similar.size)].id)
-				Name_txt.text = tvInfo.name
-				OverView_txt.text = tvInfo.overview
-				Picasso.with(applicationContext).load(getString(R.string.base_address_w185) + tvInfo.posterPath)
-						.placeholder(R.drawable.ic_default_search_image)
-						.into(img_view)
-				relLayout2.setOnClickListener {
-					val intent = Intent(applicationContext,ShowActivity::class.java)
-					intent.putExtra("Show",Gson().toJson(tvInfo))
-					intent.putExtra("User",Gson().toJson(user))
-					applicationContext.startActivity(intent)
+			tvInfo = Async!!.getShowInfoAsync(similar[Random().nextInt(similar.size)].id)
+			Name_txt.text = tvInfo!!.name
+			OverView_txt.text = tvInfo.overview
+			Picasso.with(applicationContext).load(getString(R.string.base_address_w185) + tvInfo.posterPath)
+					.placeholder(R.drawable.ic_default_search_image)
+					.into(img_view)
+			relLayout2.setOnClickListener {
+				val intent = Intent(applicationContext, ShowActivity::class.java)
+				intent.putExtra("Show", Gson().toJson(tvInfo))
+				intent.putExtra("User", Gson().toJson(user))
+				applicationContext.startActivity(intent)
 
-				}
-			}catch (e: Exception){
-				Toast.makeText(applicationContext,e.message,Toast.LENGTH_SHORT).show()
-				Name_txt.text = "Invalid Result"
 			}
 		}
 
+		/* Applies adapters and layoutmanagers to home screen recycler views */
 		recycle_popular.apply {
 			layoutManager = poplayoutManager
 			adapter = RecyclerHomeViewAdapter(applicationContext,popular,user!!,1)
@@ -160,7 +147,7 @@ class HomeActivity : Activity(){
 	private fun setupBottomnavigatioView(){
 		Log.d(TAG,"setupBottomNavigationView")
 		BottomNavigationBarHelper.setupBottomNavigationBar(bottomNavViewBar)
-		BottomNavigationBarHelper.enableNavigation(applicationContext, bottomNavViewBar,Gson().toJson(user),activity_Num)
+		BottomNavigationBarHelper.enableNavigation(applicationContext, bottomNavViewBar,Gson().toJson(user),activity_Num,this)
 		val menu: Menu? = bottomNavViewBar.menu
 		val menuI: MenuItem? = menu?.getItem(activity_Num)
 		menuI?.isChecked = true

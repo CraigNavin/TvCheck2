@@ -40,7 +40,7 @@ class Converter(context: Context) {
 		val TVSeasonInfo = tasker.getSeasonAsync(TVSeason.seasonNumber,TVid)
 
 		val episodeList: ArrayList<Episode> = ArrayList()
-		if (TVSeasonInfo.episodes != null){
+		if (TVSeasonInfo!!.episodes != null){
 			if (TVSeasonInfo.episodes.size != 0){
 
 				for (e in TVSeasonInfo.episodes){

@@ -27,8 +27,8 @@ class LoginActivity : AppCompatActivity(){
 		mAuth = FirebaseAuth.getInstance()
 		Login_email.requestFocus()
 
-		findViewById(R.id.Login_TVsignUp).setOnClickListener { startActivity(Intent(this, SignUpActivity::class.java)) }
-		findViewById(R.id.Login_Btn).setOnClickListener{ login() }
+		Login_TVsignUp.setOnClickListener { startActivity(Intent(this, SignUpActivity::class.java)) }
+		Login_Btn.setOnClickListener{ login() }
 	}
 
 	/**

@@ -55,62 +55,57 @@ class SeasonActivity : AppCompatActivity() {
 	 * Handles what happens when the watched checkbox status changes.
 	 * @param [season] TVSeasonInfo object that is used to populate elements with information
 	 */
-	fun setView(season: TVSeasonInfo){
-		val seasonNum = "Season " + season.seasonNumber
+	fun setView(season: TVSeasonInfo?){
+		if (season != null){
+			/* Sets up all text fields on the screen */
+			val seasonNum = "Season " + season.seasonNumber
+			if(getShow() != null){
+				if(getShow()!!.seasons!![0].seasonNumber == 0){
+					watched_box!!.isChecked = getShow()!!.seasons!![season.seasonNumber].watched
+				}else{
+					watched_box!!.isChecked = getShow()!!.seasons!![season.seasonNumber-1].watched
+				}
+			}
+			airDate_tv.text = season.airDate
+			EpisodeCount_tv.text = season.episodes.size.toString()
+			SeasonNum_TV.text = seasonNum
 
-		if(getShow() != null){
-			if(getShow()!!.seasons!![0].seasonNumber == 0){
-				watched_box!!.isChecked = getShow()!!.seasons!![season.seasonNumber].watched
+			if (season.overview.isNullOrEmpty()){
+				Bio_TV.text = "No Overview"
 			}else{
-				watched_box!!.isChecked = getShow()!!.seasons!![season.seasonNumber-1].watched
+				Bio_TV.text = season.overview
+				Bio_TV.setOnClickListener {
+					val intent = Intent(applicationContext, ReadMoreActivity::class.java)
+					intent.putExtra("ReadMore", season.overview)
+					startActivity(intent)
+				}
 			}
 
-		}
+			/* Retrives the image from path provided and inserts it in to imageView */
+			Picasso.with(applicationContext).load(applicationContext.getString(R.string.base_address_w185) + season.posterPath)
+					.placeholder(R.drawable.ic_default_search_image)
+					.into(PosterView)
+			bottomNavViewBar.bringChildToFront(bottomNavViewBar)
 
-		airDate_tv.text = season.airDate
-		EpisodeCount_tv.text = season.episodes.size.toString()
-		SeasonNum_TV.text = seasonNum
-
-		if (season.overview.isNullOrEmpty()){
-			Bio_TV.text = "No Overview"
-		}else{
-			Bio_TV.text = season.overview
-			Bio_TV.setOnClickListener {
-				val intent = Intent(applicationContext, ReadMoreActivity::class.java)
-				intent.putExtra("ReadMore", season.overview)
-				startActivity(intent)
-
-			}
-		}
-
-
-		Picasso.with(applicationContext).load(applicationContext.getString(R.string.base_address_w185) + season.posterPath)
-				.placeholder(R.drawable.ic_default_search_image)
-				.into(PosterView)
-
-		bottomNavViewBar.bringChildToFront(bottomNavViewBar)
-		val adapter = SeasonEpisodeListAdapter(this,null,season.episodes,applicationContext)
-		episodes_list.adapter = adapter
-
-		episodes_list.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
-			val item = parent.getItemAtPosition(position) as String
-			val episode: TVEpisodeInfo = Gson().fromJson(item)
-			Toast.makeText(applicationContext,episode.name,Toast.LENGTH_SHORT).show()
-			val intent = Intent(applicationContext,EpisodeActivity::class.java)//activity_Num 1
-			intent.putExtra("Episode",item)
-			intent.putExtra("User",Gson().toJson(user))
-			intent.putExtra("TVID",id!!)
-			applicationContext.startActivity(intent)
+			setupList(season)
+			setupCheckbox(season)
+			/* Sets onCheckedChangeListener to watched checkbox */
 
 		}
+	}
 
+	/**
+	 * Sets a OnCheckedChangeListener to the activities checkbox and handles what happens when checkBox value changes
+	 * @param [season] Season from which data will be retrieved
+	 */
+	fun setupCheckbox(season: TVSeasonInfo){
 		watched_box!!.setOnCheckedChangeListener { _, isChecked ->
 			Log.d(TAG,id.toString())
 			if (user!!.inLists(id!!)){
 				val season1 = getShow()!!.seasons!![season.seasonNumber]
 
 				season1.watched = isChecked
-
+				/* Creates a dialog window to ask the user if they would like to mark all episodes of this season as watched also */
 				AlertDialog.Builder(this)
 						.setTitle("Watched Season?")
 						.setMessage("Do you want to set all this seasons episodes to watched?")
@@ -134,18 +129,33 @@ class SeasonActivity : AppCompatActivity() {
 	}
 
 	/**
+	 * Sets the listView's adapter and assigns an onClickListener that will handle all clicks on the listView
+	 */
+	fun setupList(season: TVSeasonInfo){
+		val adapter = SeasonEpisodeListAdapter(this,null,season.episodes,applicationContext)
+		episodes_list.adapter = adapter
+
+		/* Sets onClickListener to episode list */
+		episodes_list.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
+			val item = parent.getItemAtPosition(position) as String
+			val episode: TVEpisodeInfo = Gson().fromJson(item)
+			val intent = Intent(applicationContext,EpisodeActivity::class.java)//activity_Num 1
+			intent.putExtra("Episode",item)
+			intent.putExtra("User",Gson().toJson(user))
+			intent.putExtra("TVID",id!!)
+			applicationContext.startActivity(intent)
+		}
+
+	}
+
+	/**
 	 * Retrieves more information on the current season of show
 	 * @param [id] id of current chosen tv show
 	 * @return TVSeasonInfo object
 	 */
 	fun getSeasonInfo(id: Int):TVSeasonInfo?{
 		val season: TVSeasonBasic = Gson().fromJson(intent.getStringExtra("Season"))
-		try{
-			return Async!!.getSeasonAsync(season.seasonNumber,id)
-		}catch (e : Exception){
-			Toast.makeText(applicationContext,e.message,Toast.LENGTH_SHORT).show()
-			return null
-		}
+		return Async!!.getSeasonAsync(season.seasonNumber,id)
 	}
 
 	/**
@@ -155,7 +165,7 @@ class SeasonActivity : AppCompatActivity() {
 		Async = AsyncTasker(applicationContext)
 		id = intent.extras.get("TVID") as Int
 		user = Gson().fromJson(intent.getStringExtra("User"))
-		setView(getSeasonInfo(id!!)!!)
+		setView(getSeasonInfo(id!!))
 		setupBottomnavigatioView()
 	}
 
@@ -167,7 +177,7 @@ class SeasonActivity : AppCompatActivity() {
 	private fun setupBottomnavigatioView(){
 		Log.d(TAG,"setupBottomNavigationView")
 		BottomNavigationBarHelper.setupBottomNavigationBar(bottomNavViewBar)
-		BottomNavigationBarHelper.enableNavigation(applicationContext, bottomNavViewBar,Gson().toJson(user),3)
+		BottomNavigationBarHelper.enableNavigation(applicationContext, bottomNavViewBar,Gson().toJson(user),3,this)
 		val menu: Menu? = bottomNavViewBar?.menu
 		val menuI: MenuItem? = menu?.getItem(activity_Num)
 		menuI?.isChecked = true

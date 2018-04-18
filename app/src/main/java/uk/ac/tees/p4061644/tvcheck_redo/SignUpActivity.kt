@@ -25,8 +25,8 @@ class SignUpActivity : AppCompatActivity(){
 		mAuth = FirebaseAuth.getInstance()
 		dbh = DatabaseHandler(applicationContext)
 
-		findViewById(R.id.Sign_Up_Btn).setOnClickListener{ RegisterUser() }
-		findViewById(R.id.Sign_Up_TVLogin).setOnClickListener{ startActivity(Intent(this, LoginActivity::class.java)) }
+		Sign_Up_Btn.setOnClickListener{ RegisterUser() }
+		Sign_Up_TVLogin.setOnClickListener{ startActivity(Intent(this, LoginActivity::class.java)) }
 	}
 
 	/**
@@ -43,6 +43,8 @@ class SignUpActivity : AppCompatActivity(){
 		removeWhiteSpace(email)
 		removeWhiteSpace(password)
 		removeWhiteSpace(confirmPassword)
+
+		/* Text field validation */
 		if (email.isNullOrEmpty()) {
 			SIgn_Up_Email.error = "Email is required"
 			SIgn_Up_Email.requestFocus()

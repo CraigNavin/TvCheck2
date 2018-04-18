@@ -51,25 +51,23 @@ class SearchActivity : AppCompatActivity(){
 	 * Sets up all elements that are on the activity. Assigns onClickListeners to the search button
 	 */
 	fun setView(){
+		/* Sets list to users list that was selected if intent content is not null */
 		if (intent.extras.get("List") != null){
 			search_button.visibility = View.GONE
 			search_text_field.visibility = View.GONE
-			try{
-				val list = Async!!.getUserList(user!!.getList(intent.getStringExtra("List"))!!.list!!)
-				val adapter = SearchListAdapter(this,list,applicationContext)
-				castList_lv.adapter = adapter
-			}catch (e : Exception){
-				Toast.makeText(applicationContext,e.message,Toast.LENGTH_SHORT).show()
-			}
+			val list = Async!!.getUserList(user!!.getList(intent.getStringExtra("List"))!!.list!!)
+			val adapter = SearchListAdapter(this,list,applicationContext)
+			searchList_lv.adapter = adapter
 		}
-
-		castList_lv.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
+		/* Sets onClickListener to search result list */
+		searchList_lv.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
 			val item = parent.getItemAtPosition(position) as String
 			val intent = Intent(applicationContext,ShowActivity::class.java)//activity_Num 1
 			intent.putExtra("Show",item)
 			intent.putExtra("User",Gson().toJson(user))
 			applicationContext.startActivity(intent)
 		}
+		/* Sets onClickListener to Search button */
 		search_button.setOnClickListener({
 			when(it!!.id){
 				R.id.search_button -> if (search_text_field.text.toString() == ""){
@@ -90,14 +88,11 @@ class SearchActivity : AppCompatActivity(){
 	 */
 	fun search(term: String){
 		var results : ArrayList<TVBasic> = ArrayList()
-		try{
-			results.addAll(Async!!.searchShows(term)!!)
-			val adapter = SearchListAdapter(this,results,applicationContext)
-			castList_lv.adapter = adapter
-			adapter.notifyDataSetChanged()
-		}catch (e : Exception){
-			Toast.makeText(applicationContext,e.message,Toast.LENGTH_SHORT).show()
-		}
+		results.addAll(Async!!.searchShows(term)!!)
+		val adapter = SearchListAdapter(this,results,applicationContext)
+		searchList_lv.adapter = adapter
+		adapter.notifyDataSetChanged()
+
 	}
 
 	/**
@@ -106,7 +101,7 @@ class SearchActivity : AppCompatActivity(){
 	private fun setupBottomnavigatioView(){
 		Log.d(TAG,"setupBottomNavigationView")
 		BottomNavigationBarHelper.setupBottomNavigationBar(bottomNavViewBar)
-		BottomNavigationBarHelper.enableNavigation(applicationContext, bottomNavViewBar,Gson().toJson(user),activity_Num)
+		BottomNavigationBarHelper.enableNavigation(applicationContext, bottomNavViewBar,Gson().toJson(user),activity_Num,this)
 		val menu: Menu? = bottomNavViewBar.menu
 		val menuI: MenuItem? = menu?.getItem(activity_Num)
 		menuI?.isChecked = true

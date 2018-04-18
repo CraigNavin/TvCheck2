@@ -45,7 +45,8 @@ class CrewListActivity : AppCompatActivity() {
 	 */
 	fun setView(){
 		val adapter = CastAdapter(this,castList!!.toList(),applicationContext)
-		castof_txt.text = "Core cast of " + intent.getStringExtra("showName")
+		val castOf  = "Core cast of " + intent.getStringExtra("showName")
+		castof_txt.text = castOf
 		castList_lv.adapter = adapter
 		castList_lv.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
 			load_pgrbar.visibility = View.VISIBLE
@@ -70,7 +71,7 @@ class CrewListActivity : AppCompatActivity() {
 	private fun setupBottomnavigatioView(){
 		Log.d(TAG,"setupBottomNavigationView")
 		BottomNavigationBarHelper.setupBottomNavigationBar(bottomNavViewBar)
-		BottomNavigationBarHelper.enableNavigation(applicationContext, bottomNavViewBar, Gson().toJson(user),3)
+		BottomNavigationBarHelper.enableNavigation(applicationContext, bottomNavViewBar, Gson().toJson(user),3,this)
 		val menu: Menu? = bottomNavViewBar.menu
 		val menuI: MenuItem? = menu?.getItem(activity_Num)
 		menuI?.isChecked = true

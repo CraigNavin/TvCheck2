@@ -61,7 +61,6 @@ class RecyclerHomeViewAdapter(private val context: Context, private val shows: A
 		intent.putExtra("Show",Gson().toJson(show))
 		intent.putExtra("User", Gson().toJson(user))
 		context.startActivity(intent)
-		Toast.makeText(context,show.name,Toast.LENGTH_SHORT).show()
 		}
 	}
 

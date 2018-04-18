@@ -39,11 +39,7 @@ class CrewActivity : AppCompatActivity() {
 	fun setup(){
 		user = Gson().fromJson(intent.getStringExtra("User"))
 		Async = AsyncTasker(applicationContext)
-		try{
-			person = AsyncTasker(applicationContext).getPerson(intent.getStringExtra("CastID").toInt())
-		}catch (e: Exception){
-			Toast.makeText(applicationContext,e.message,Toast.LENGTH_SHORT).show()
-		}
+		person = AsyncTasker(applicationContext).getPerson(intent.getStringExtra("CastID").toInt())
 
 		Log.d(TAG,"SETUP")
 		setView()
@@ -64,12 +60,7 @@ class CrewActivity : AppCompatActivity() {
 				.into(PosterView)
 		val tvCreditList = ArrayList<TVBasic>()
 		for (credit in person!!.tvCredits.cast){
-			try{
-				tvCreditList.add(Async!!.getShowBasicAsync(credit.id))
-			}catch (e: Exception){
-				Toast.makeText(applicationContext,e.message,Toast.LENGTH_SHORT).show()
-			}
-
+			tvCreditList.add(Async!!.getShowBasicAsync(credit.id)!!)
 		}
 
 		tvCreditList.apply {
@@ -92,7 +83,7 @@ class CrewActivity : AppCompatActivity() {
 	private fun setupBottomnavigatioView(){
 		Log.d(TAG,"setupBottomNavigationView")
 		BottomNavigationBarHelper.setupBottomNavigationBar(bottomNavViewBar)
-		BottomNavigationBarHelper.enableNavigation(applicationContext, bottomNavViewBar, Gson().toJson(user),3)
+		BottomNavigationBarHelper.enableNavigation(applicationContext, bottomNavViewBar, Gson().toJson(user),3,this)
 		val menu: Menu? = bottomNavViewBar.menu
 		val menuI: MenuItem? = menu?.getItem(activity_Num)
 		menuI?.isChecked = true

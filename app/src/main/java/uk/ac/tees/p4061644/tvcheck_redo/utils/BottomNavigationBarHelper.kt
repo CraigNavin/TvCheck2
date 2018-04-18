@@ -1,5 +1,6 @@
 package uk.ac.tees.p4061644.tvcheck_redo.utils
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.support.design.widget.BottomNavigationView
@@ -34,7 +35,7 @@ object BottomNavigationBarHelper {
 	 * @param [viewEx] The navigation bar that is going to be assigned activity navigation
 	 * @param [User] A Json string of the user that is going to be passed to each activity for access across the application.
 	 */
-	fun enableNavigation(context: Context, viewEx: BottomNavigationViewEx?, User: String, current_activity: Int) {
+	fun enableNavigation(context: Context, viewEx: BottomNavigationViewEx?, User: String, current_activity: Int,activity: Activity) {
 		viewEx?.onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
 			var intent : Intent? = null
 			var pressedInt = 0
@@ -57,6 +58,7 @@ object BottomNavigationBarHelper {
 			if (current_activity != pressedInt){
 				intent!!.putExtra("User", User)
 				context.startActivity(intent)
+				activity.finish()
 			}
 			false
 		}

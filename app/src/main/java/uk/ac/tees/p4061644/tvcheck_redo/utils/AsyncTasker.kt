@@ -2,6 +2,7 @@ package uk.ac.tees.p4061644.tvcheck_redo.utils
 
 import android.content.Context
 import android.os.AsyncTask
+import android.widget.Toast
 import com.omertron.themoviedbapi.TheMovieDbApi
 import com.omertron.themoviedbapi.enumeration.PeopleMethod
 import com.omertron.themoviedbapi.enumeration.SearchType
@@ -23,7 +24,7 @@ import kotlin.collections.ArrayList
  * @constructor Creates a AsyncTasker object for retrieval of data
  * Created by Craig on 01/02/2018.
  */
-class AsyncTasker(context: Context) {
+class AsyncTasker(val context: Context) {
 
 	private var api : TheMovieDbApi? = null
 
@@ -35,77 +36,113 @@ class AsyncTasker(context: Context) {
 	}
 
 	/**
-	 * Retrieves a list of TVBasic objects that match or closely match the term passed
+	 * Retrieves a list of TVBasic objects that match or closely match the term passed. Shows a toast
+	 * and returns null if an error was thrown
 	 * @param [search] the search term that will be used to search for Tv Shows
 	 * @return ArrayList of TVBasic objects that match or closely match the search term
 	 */
 	fun searchShows(search: String): ArrayList<TVBasic>? {
-		val list = searchShowsTask(search).execute().get()
-		if (list == null){
-			return ArrayList()
-		}else{
-			return ArrayList(list)
+		try{
+			return ArrayList(searchShowsTask(search).execute().get())
+		}catch (e : Exception){
+			Toast.makeText(context,"Error retrieving Show", Toast.LENGTH_SHORT).show()
+			return null
 		}
 	}
 
 	/**
 	 * Retrives different data from API depending on the getType passed. Can return a list of
-	 * popular Tv Shows, Top rated Tv Shows or Similar Tv Shows to a passed TV ID
+	 * popular Tv Shows, Top rated Tv Shows or Similar Tv Shows to a passed TV ID. Shows a toast
+	 * and returns null if an error was thrown
 	 * @param [getType] will change what the contents of the returning Arraylist is
 	 * @param [TVid] Id of a show that will be used to get similar shows to show with this id
 	 * @return Arraylist containing TVBasic objects. These can be popular shows, Top rated shows or
 	 * similar shows to the show with the id passed as a parameter
 	 */
 	fun fillhome(getType:Int, TVid: Int?): ArrayList<TVBasic>?{
-		val list: List<TVBasic> = populateHomeTask(getType,TVid).execute().get()
-		if (list.isEmpty()){
-			return ArrayList()
-		}else{
-			return ArrayList(list)
+		try{
+			return ArrayList(populateHomeTask(getType,TVid).execute().get())
+		}catch (e : Exception){
+			Toast.makeText(context,"Error retrieving Show", Toast.LENGTH_SHORT).show()
+			return null
 		}
 	}
 
 	/**
-	 * Retrieves each show inside of a users list using each shows id
+	 * Retrieves each show inside of a users list using each shows id. Returns the list before error
+	 * if error is thrown
 	 * @param [list] A list containing Show Objects.
 	 * @return ArrayList containing TVBasic objects.
 	 */
 	fun getUserList(list: ArrayList<Show>):ArrayList<TVBasic>{
 		val retList = ArrayList<TVBasic>()
-		list.forEach { retList.add(getShowBasicAsync(it.id)) }
-		return  retList
+		try{
+			list.forEach { retList.add(getShowBasicAsync(it.id)!!) }
+			return  retList
+		}catch (e : Exception){
+			Toast.makeText(context,"Error retrieving Show", Toast.LENGTH_SHORT).show()
+			return retList
+		}
+
 	}
 
 	/**
-	 * Retrieves a shows TVInfo object that matches an ID
+	 * Attempts to retrieve a shows TVInfo object that matches an ID. Shows a toast if error thrown
 	 * @param [id] The id that will be used to retrieve the TVInfo object
 	 * @return TVInfo object that matched with ID passed
 	 */
-	fun getShowInfoAsync(id:Int): TVInfo {
-		return getShowTask(id).execute().get()
+	fun getShowInfoAsync(id:Int): TVInfo? {
+		try{
+			return getShowTask(id).execute().get()
+		}catch (e : Exception){
+			Toast.makeText(context,"Error retrieving Show", Toast.LENGTH_SHORT).show()
+			return null
+		}
+
 	}
 
 	/**
-	 * Retrieves a shows TVBasic object that matches an ID
+	 * Attempts to retrieve a shows TVBasic object that matches an ID. Shows a toast if error thrown
 	 * @param [id] The id that will be used to retrieve the TVBasic object
 	 * @return TVBasic object that matched with ID passed
 	 */
-	fun getShowBasicAsync(id:Int): TVBasic {
-		return getShowTask(id).execute().get()
+	fun getShowBasicAsync(id:Int): TVBasic? {
+		try{
+			return getShowTask(id).execute().get()
+		}catch(e : Exception){
+			Toast.makeText(context,"Error Retrieving Show", Toast.LENGTH_SHORT).show()
+			return null
+		}
+
 	}
 
 	/**
-	 * Retrieves a TVSeasonInfo object
+	 * Attempts to retrieve a TVSeasonInfo object. Shows toast if error thrown
 	 * @param [num] The season number of the show that is to be returned
 	 * @param [TVid] The id of the show that the season is from.
-	 * @return A TvSeasonInfo object
+	 * @return A TvSeasonInfo object or null if error thrown
 	 */
-	fun getSeasonAsync(num: Int, TVid: Int): TVSeasonInfo {
-		return getSeasonTask(num,TVid).execute().get()
+	fun getSeasonAsync(num: Int, TVid: Int): TVSeasonInfo? {
+		try{
+			return getSeasonTask(num,TVid).execute().get()
+		}catch (e : Exception) {
+			Toast.makeText(context, "Error Retrieving Show", Toast.LENGTH_SHORT).show()
+			return null
+		}
 	}
 
-	fun getPerson(id: Int):PersonInfo{
-		return getPersonTask(id).execute().get()
+	/**
+	 * Attempts to retrive a PersonInfo object. Shows toast if error thrown
+	 * @param [id] The id of the person being requested
+	 * @return A PersonInfo object associated with id parameter or null if error thrown
+	 */
+	fun getPerson(id: Int):PersonInfo?{
+		try{
+			return getPersonTask(id).execute().get()
+		}catch (e : Exception){
+			Toast.makeText(context,e.message, Toast.LENGTH_SHORT).show()
+			return null
+		}
 	}
 
 	/**

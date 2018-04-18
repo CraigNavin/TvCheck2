@@ -56,7 +56,7 @@ class ShowActivity : AppCompatActivity() {
 	}
 
 	/**
-	 * Sets an onClickListener to the floating action button. T
+	 * Sets an onClickListener to the floating action button.
 	 */
 	fun setupFloatBtn(){
 		registerForContextMenu(save_float_btn)
@@ -142,11 +142,8 @@ class ShowActivity : AppCompatActivity() {
 		}
 		var similar: ArrayList<TVBasic> = ArrayList()
 
-		try{
-			similar.addAll(Async!!.fillhome(3,show!!.id)!!)
-		}catch(e: Exception){
-			Toast.makeText(applicationContext,e.message,Toast.LENGTH_SHORT).show()
-		}
+		similar.addAll(Async!!.fillhome(3,show!!.id)!!)
+
 
 		if(similar.isNotEmpty()){
 			similar_recycler.apply {
@@ -165,59 +162,59 @@ class ShowActivity : AppCompatActivity() {
 	 *
 	 */
 	fun setView() {
-		try {
-			show = Async!!.getShowInfoAsync(basic!!.id)
-			Name_TV!!.text = show!!.name
-			vote_tv.text = show!!.voteAverage.toString() + "(" + show!!.voteCount + ")"
+		show = Async!!.getShowInfoAsync(basic!!.id)
+			if (show != null){
 
+				Name_TV!!.text = show!!.name
+				vote_tv.text = show!!.voteAverage.toString() + "(" + show!!.voteCount + ")"
 
-			if (show!!.overview.isNullOrEmpty()) {
-				Bio_TV!!.text = "No Overview"
-			}
-			else {
-				Bio_TV!!.text = show!!.overview
-				Bio_TV.setOnClickListener {
-					val intent = Intent(applicationContext, ReadMoreActivity::class.java)
-					intent.putExtra("ReadMore", show!!.overview)
-					startActivity(intent)
-				}
-
-			}
-
-
-			if (getShow() != null) {
-				watched_box.isChecked = getShow()!!.watched
-			}
-			Picasso.with(applicationContext).load(applicationContext.getString(R.string.base_address_w185) + show!!.posterPath).placeholder(R.drawable.ic_default_search_image).into(PosterView)
-
-			bottomNavViewBar.bringToFront()
-			similar_recycler.invalidate()
-
-			save_progress_bar.visibility = View.GONE
-
-
-			for (list in user!!.list!!) {
-				if (user!!.checkListContainsShow(basic!!.id, list.name)) {
-					save_float_btn.setImageDrawable(getDrawable(R.drawable.ic_love))
-					break
+				if (show!!.overview.isNullOrEmpty()) {
+					Bio_TV!!.text = "No Overview"
 				}
 				else {
-					save_float_btn.setImageDrawable(getDrawable(R.drawable.ic_addlist_icon))
+					Bio_TV!!.text = show!!.overview
+					Bio_TV.setOnClickListener {
+						val intent = Intent(applicationContext, ReadMoreActivity::class.java)
+						intent.putExtra("ReadMore", show!!.overview)
+						startActivity(intent)
+					}
+
 				}
+				if (getShow() != null) {
+					watched_box.isChecked = getShow()!!.watched
+				}
+				Picasso.with(applicationContext).load(applicationContext.getString(R.string.base_address_w185) + show!!.posterPath)
+						.placeholder(R.drawable.ic_default_search_image)
+						.into(PosterView)
+
+				bottomNavViewBar.bringToFront()
+				similar_recycler.invalidate()
+
+				save_progress_bar.visibility = View.GONE
+
+
+				for (list in user!!.list!!) {
+					if (user!!.checkListContainsShow(basic!!.id, list.name)) {
+						save_float_btn.setImageDrawable(getDrawable(R.drawable.ic_love))
+						break
+					}
+					else {
+						save_float_btn.setImageDrawable(getDrawable(R.drawable.ic_addlist_icon))
+					}
+				}
+
+				cast_btn.setOnClickListener {
+					val intent = Intent(applicationContext, CrewListActivity::class.java)
+					intent.putExtra("User", Gson().toJson(user))
+					intent.putExtra("showName", show!!.name)
+					intent.putExtra("CastList", Gson().toJson(show!!.credits.cast))
+					applicationContext.startActivity(intent)
+
+				}
+			}else{
+				Name_TV!!.text = "Invalid Return"
 			}
 
-			cast_btn.setOnClickListener {
-				val intent = Intent(applicationContext, CrewListActivity::class.java)
-				intent.putExtra("User", Gson().toJson(user))
-				intent.putExtra("showName", show!!.name)
-				intent.putExtra("CastList", Gson().toJson(show!!.credits.cast))
-				applicationContext.startActivity(intent)
-
-			}
-		}catch (e : Exception){
-			Toast.makeText(applicationContext,e.message,Toast.LENGTH_SHORT).show()
-			Name_TV!!.text = "Invalid Return"
-		}
 
 		setupFloatBtn()
 		setupCheckbox()
@@ -284,7 +281,7 @@ class ShowActivity : AppCompatActivity() {
 	private fun setupBottomnavigatioView(){
 		Log.d(TAG,"setupBottomNavigationView")
 		BottomNavigationBarHelper.setupBottomNavigationBar(bottomNavViewBar)
-		BottomNavigationBarHelper.enableNavigation(applicationContext, bottomNavViewBar,Gson().toJson(user),3)
+		BottomNavigationBarHelper.enableNavigation(applicationContext, bottomNavViewBar,Gson().toJson(user),3,this)
 		val menu: Menu? = bottomNavViewBar?.menu
 		val menuI: MenuItem? = menu?.getItem(activity_Num)
 		menuI?.isChecked = true
