@@ -26,7 +26,6 @@ class CrewActivity : AppCompatActivity() {
 	private val activity_Num: Int = 1
 	private var user: User? = null
 	private var person: PersonInfo? = null
-	private var Async: AsyncTasker? = null
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -39,8 +38,7 @@ class CrewActivity : AppCompatActivity() {
 	 */
 	fun setup(){
 		user = Gson().fromJson(intent.getStringExtra("User"))
-		Async = AsyncTasker(applicationContext)
-		person = AsyncTasker(applicationContext).getPerson(intent.getStringExtra("CastID").toInt())
+		person = Gson().fromJson(intent.getStringExtra("Person"))
 
 		Log.d(TAG,"SETUP")
 		setView()
@@ -56,12 +54,12 @@ class CrewActivity : AppCompatActivity() {
 		Bio_TV.text = person!!.biography
 		DPoB_tv.text = person!!.birthday + "," + person!!.placeOfBirth
 
-		Picasso.with(applicationContext).load(getString(R.string.base_address_w185) + intent.getStringExtra("PicPath")).memoryPolicy(MemoryPolicy.NO_STORE).memoryPolicy(MemoryPolicy.NO_CACHE)
+		Picasso.with(applicationContext).load(getString(R.string.base_address_w185) + person!!.profilePath).memoryPolicy(MemoryPolicy.NO_STORE).memoryPolicy(MemoryPolicy.NO_CACHE)
 				.placeholder(R.drawable.ic_default_search_image)
 				.into(PosterView)
 		val tvCreditList = ArrayList<TVBasic>()
 		for (credit in person!!.tvCredits.cast){
-			tvCreditList.add(Async!!.getShowBasicAsync(credit.id)!!)
+			tvCreditList.add(AsyncTasker(applicationContext).getShowBasicAsync(credit.id)!!)
 		}
 
 		tvCreditList.apply {

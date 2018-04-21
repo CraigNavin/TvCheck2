@@ -38,7 +38,6 @@ class ShowActivity : AppCompatActivity() {
 	private val activity_Num: Int = 1
 	private var basic : TVBasic? = null
 	private var user: User? = null
-	private var converter: Converter? = null
 	var show : TVInfo? = null
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -230,11 +229,10 @@ class ShowActivity : AppCompatActivity() {
 		Async = AsyncTasker(applicationContext)
 		user = Gson().fromJson(intent.getStringExtra("User"))
 		basic = Gson().fromJson(intent.getStringExtra("Show"))
-		converter = Converter(applicationContext)
 		setView()
 		setupBottomnavigatioView()
 		Log.d(TAG,user.toString())
-
+		Async = null
 	}
 
 
@@ -263,7 +261,7 @@ class ShowActivity : AppCompatActivity() {
 			}else{
 				save_progress_bar.visibility = View.VISIBLE
 				save_progress_bar.bringToFront()
-				chosenList.list!!.add(converter!!.convert(show!!))
+				chosenList.list!!.add(Converter().convert(show!!,applicationContext))
 				DatabaseHandler(applicationContext).update(user!!)
 				save_progress_bar.visibility = View.GONE
 				save_float_btn.setImageDrawable(getDrawable(R.drawable.ic_love))

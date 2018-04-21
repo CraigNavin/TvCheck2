@@ -28,7 +28,6 @@ import uk.ac.tees.p4061644.tvcheck_redo.utils.DatabaseHandler
 class SeasonActivity : AppCompatActivity() {
 
 	private val TAG: String = "SeasonActivity"
-	private var Async : AsyncTasker? = null
 	private val activity_Num: Int = 1
 	private var id: Int? = null
 	private var user: User? = null
@@ -156,14 +155,13 @@ class SeasonActivity : AppCompatActivity() {
 	 */
 	fun getSeasonInfo(id: Int):TVSeasonInfo?{
 		val season: TVSeasonBasic = Gson().fromJson(intent.getStringExtra("Season"))
-		return Async!!.getSeasonAsync(season.seasonNumber,id)
+		return AsyncTasker(applicationContext).getSeasonAsync(season.seasonNumber,id)
 	}
 
 	/**
 	 * Sets up variable and calls method that handles View elements
 	 */
 	fun setup(){
-		Async = AsyncTasker(applicationContext)
 		id = intent.extras.get("TVID") as Int
 		user = Gson().fromJson(intent.getStringExtra("User"))
 		setView(getSeasonInfo(id!!))

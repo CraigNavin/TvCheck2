@@ -235,7 +235,7 @@ class AsyncTasker(val context: Context) {
 	}
 
 	/**
-	 * Class used to info of a person using id parameter
+	 * Class used to retrieve info of a person using id parameter
 	 * @param [id] required Integer that is used to retrieve info relating to the persons ID
 	 * @constructor Creates a getPersonTask object that performs its methods on a background thread
 	 */

@@ -57,6 +57,7 @@ class HomeActivity : Activity(){
 		Log.d(TAG,Gson().toJson(user))
 		setView()
 		setupBottomnavigatioView()
+		Async = null
 	}
 
 	/**

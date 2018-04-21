@@ -24,7 +24,6 @@ import uk.ac.tees.p4061644.tvcheck_redo.Adapters.SearchListAdapter
 
 class SearchActivity : AppCompatActivity(){
 
-	private var Async : AsyncTasker? = null
 	private val activity_Num: Int = 1
 	private val TAG: String = "SearchActivity"
 	private var user: User? = null
@@ -42,7 +41,6 @@ class SearchActivity : AppCompatActivity(){
 	 */
 	fun setup(){
 		user = Gson().fromJson(intent.getStringExtra("User"))
-		Async = AsyncTasker(applicationContext)
 		setView()
 		setupBottomnavigatioView()
 	}
@@ -55,7 +53,7 @@ class SearchActivity : AppCompatActivity(){
 		if (intent.extras.get("List") != null){
 			search_button.visibility = View.GONE
 			search_text_field.visibility = View.GONE
-			val list = Async!!.getUserList(user!!.getList(intent.getStringExtra("List"))!!.list!!)
+			val list = AsyncTasker(applicationContext).getUserList(user!!.getList(intent.getStringExtra("List"))!!.list!!)
 			val adapter = SearchListAdapter(this,list,applicationContext)
 			searchList_lv.adapter = adapter
 		}
@@ -88,7 +86,7 @@ class SearchActivity : AppCompatActivity(){
 	 */
 	fun search(term: String){
 		var results : ArrayList<TVBasic> = ArrayList()
-		results.addAll(Async!!.searchShows(term)!!)
+		results.addAll(AsyncTasker(applicationContext).searchShows(term)!!)
 		val adapter = SearchListAdapter(this,results,applicationContext)
 		searchList_lv.adapter = adapter
 		adapter.notifyDataSetChanged()
