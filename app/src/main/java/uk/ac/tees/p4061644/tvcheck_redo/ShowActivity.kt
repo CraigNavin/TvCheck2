@@ -1,6 +1,5 @@
 package uk.ac.tees.p4061644.tvcheck_redo
 
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
@@ -140,7 +139,7 @@ class ShowActivity : AppCompatActivity() {
 			intent.putExtra("TVID",show!!.id)
 			applicationContext.startActivity(intent)
 		}
-		var similar: ArrayList<TVBasic> = ArrayList()
+		val similar: ArrayList<TVBasic> = ArrayList()
 
 		similar.addAll(Async!!.fillhome(3,show!!.id)!!)
 

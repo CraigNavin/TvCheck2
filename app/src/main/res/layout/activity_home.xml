@@ -67,14 +67,14 @@
                 app:srcCompat="@drawable/ic_default_search_image"
                 android:id="@+id/img_view"
                 android:layout_below="@+id/Similar_txt"
-                android:layout_alignParentStart="true"/>
+                android:layout_alignParentStart="true"
+                android:contentDescription="@string/similarImageDesc"/>
 
             <TextView
                 android:text="@string/emptyLists"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/emptyLists_txt"
-                android:layout_alignBottom="@+id/relLayout2"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="61dp"
                 android:textSize="20sp"

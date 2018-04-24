@@ -85,7 +85,7 @@ class SearchActivity : AppCompatActivity(){
 	 * Is called when the search button is pressed. Performs the search and sets the adapter to the search result list.
 	 */
 	fun search(term: String){
-		var results : ArrayList<TVBasic> = ArrayList()
+		val results : ArrayList<TVBasic> = ArrayList()
 		results.addAll(AsyncTasker(applicationContext).searchShows(term)!!)
 		val adapter = SearchListAdapter(this,results,applicationContext)
 		searchList_lv.adapter = adapter

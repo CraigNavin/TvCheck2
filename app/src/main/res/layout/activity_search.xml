@@ -44,7 +44,8 @@
             app:srcCompat="@drawable/ic_search_img"
             android:layout_above="@+id/searchList_lv"
             android:layout_alignParentEnd="true"
-            android:id="@+id/search_button"/>
+            android:id="@+id/search_button"
+            android:contentDescription="@string/SearchImageDesc"/>
 
 
     </RelativeLayout>

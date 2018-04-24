@@ -30,7 +30,8 @@
             android:layout_height="350px"
             android:id="@+id/PosterView"
             android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true"/>
+            android:layout_alignParentStart="true"
+            android:contentDescription="@string/SeasonImageDesc"/>
 
         <TextView
             android:layout_width="230dp"

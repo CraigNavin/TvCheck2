@@ -73,6 +73,7 @@
         android:layout_width="200px"
         android:layout_height="200px"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"/>
+        android:layout_alignParentEnd="true"
+        android:contentDescription="@string/ApiCredit"/>
 
 </RelativeLayout>

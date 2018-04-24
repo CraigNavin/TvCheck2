@@ -11,7 +11,8 @@
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="225px"
-        android:layout_height="325px"/>
+        android:layout_height="325px"
+        android:contentDescription="@string/ListItemDesc"/>
 
     <TextView
         android:id="@+id/Name"

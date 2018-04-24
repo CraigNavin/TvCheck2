@@ -23,7 +23,8 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
-            android:layout_height="650px"/>
+            android:layout_height="650px"
+            android:contentDescription="@string/EpImageDesc"/>
 
         <TextView
             android:layout_width="230dp"

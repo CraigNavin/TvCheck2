@@ -30,5 +30,6 @@
         style="@style/Widget.AppCompat.ImageButton"
         android:theme="@style/AppTheme"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"/>
+        android:layout_alignParentStart="true"
+        android:contentDescription="@string/BackBtnDesc"/>
 </RelativeLayout>

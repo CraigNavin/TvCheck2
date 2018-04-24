@@ -1,6 +1,5 @@
 package uk.ac.tees.p4061644.tvcheck_redo.models
 
-import android.util.Log
 import com.parse.ParseClassName
 
 /**

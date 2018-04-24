@@ -39,5 +39,16 @@
     <string name="voteAvg">Vote Average: </string>
     <string name="Cast">Cast</string>
     <string name="Name">Name</string>
+    <string name="ListItemDesc">Image of list item</string>
+    <string name="crewpicDesc">Picture of Crew member</string>
+    <string name="EpImageDesc">Episode Image</string>
+    <string name="BackBtnDesc">Back Button</string>
+    <string name="SeasonImageDesc">Season Image</string>
+    <string name="ShowImageDesc">Show Image</string>
+    <string name="SearchImageDesc">Search Button</string>
+    <string name="similarImageDesc">Image of similar show to list shows</string>
+    <string name="ApiCredit">Image to show that the app is powered by TMDB Api</string>
+
+
 
 </resources>

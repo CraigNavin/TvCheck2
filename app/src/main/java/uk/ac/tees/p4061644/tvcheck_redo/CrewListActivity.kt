@@ -55,7 +55,7 @@ class CrewListActivity : AppCompatActivity() {
 			val intent = Intent(applicationContext,CrewActivity::class.java)
 			intent.putExtra("Member",item)
 			intent.putExtra("User", Gson().toJson(user))
-			var person = AsyncTasker(applicationContext).getPerson(castList!![position].id)
+			val person = AsyncTasker(applicationContext).getPerson(castList!![position].id)
 			intent.putExtra("Person",Gson().toJson(person))
 			applicationContext.startActivity(intent)
 			load_pgrbar.visibility = View.GONE
