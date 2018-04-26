@@ -1,5 +1,6 @@
 package uk.ac.tees.p4061644.tvcheck_redo
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -29,6 +30,10 @@ class LoginActivity : AppCompatActivity(){
 
 		Login_TVsignUp.setOnClickListener { startActivity(Intent(this, SignUpActivity::class.java)) }
 		Login_Btn.setOnClickListener{ login() }
+
+		val prefs = getSharedPreferences("UserData", Context.MODE_PRIVATE)
+		Login_email.setText(prefs.getString("Email", ""))
+		Login_Pass.setText(prefs.getString("Password",""))
 	}
 
 	/**
@@ -63,6 +68,12 @@ class LoginActivity : AppCompatActivity(){
 			mAuth!!.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
 
 				if (task.isSuccessful) {
+
+					val prefs = getSharedPreferences("UserData", Context.MODE_PRIVATE)
+					val editor = prefs.edit()
+					editor.putString("Email",email)
+					editor.putString("Password",password)
+					editor.apply()
 					Toast.makeText(applicationContext, "Login Successful", Toast.LENGTH_LONG).show()
 					val user = dbh!!.retrievefirst(mAuth!!.currentUser!!.uid)
 					val i = Intent(baseContext, HomeActivity::class.java)
